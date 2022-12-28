@@ -1,0 +1,53 @@
+server:
+  port: 8090
+
+spring:
+
+  #数据库
+  datasource:
+    url: jdbc:mysql://localhost:3306/sms?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123
+
+  #配置邮箱发送
+  mail:
+    #邮件编码
+    default-encoding: utf-8
+    #配置smtp服务主机地址
+    host: smtp.qq.com
+    #发送者邮箱
+    username: 2785021810@qq.com
+    #授权码
+    password: nkhmrtnqxtskdfbe
+    #端口号
+    port: 587
+    #其他参数
+    properties:
+      mail:
+        #配置SSL 加密工厂
+        smtp:
+          ssl:
+            #本地测试，先放开ssl
+            enable: false
+            required: false
+        #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
+        ebug: true
+
+  #Redis配置
+  redis:
+    host: 192.168.88.110
+    port: 6379
+    timeout: 5000ms
+
+  #rabbitMQ
+  #  rabbitmq:
+  #    port: 5672
+  #    host: 192.168.88.110
+  #    username: admin
+  #    password: 123456
+  #    virtual-host: /
+
+Logging:
+  level:
+    com.sms: debug
