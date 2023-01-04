@@ -1,6 +1,7 @@
 package com.back.common.utils.Wxutils;
 
 import com.back.common.constant.WXConstant;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -8,6 +9,7 @@ import java.util.*;
 /**
  * 验证微信服务器token接入
  */
+@Slf4j
 public class EchostrCheckUtil {
 
     /**
@@ -27,6 +29,8 @@ public class EchostrCheckUtil {
         String nonce = request.getParameter(WXConstant.WX_NONCE);
         //随机字符串
         String echostr = request.getParameter(WXConstant.WX_ECHOSTR);
+        //打印日志
+        log.info("校验token，signature：{}，timestamp：{}，nonce：{}，echostr：{}",signature,timestamp,nonce,echostr);
         String[] str = new String[]{WXConstant.WX_TOKEN, timestamp, nonce};
         //排序
         Arrays.sort(str);

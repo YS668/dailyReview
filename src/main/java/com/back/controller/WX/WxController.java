@@ -20,4 +20,9 @@ public class WxController {
         return EchostrCheckUtil.checkSignature(request);
     }
 
+    @GetMapping("/test")
+    public String test(HttpServletRequest request){
+        return "test";
+    }
+
 }

@@ -5,12 +5,18 @@ import com.back.common.constant.WXConstant;
 import com.back.common.utils.Wxutils.MessageUtil;
 import com.back.common.utils.Wxutils.TextMessageUtil;
 import com.back.service.MessageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
+@Service
 public class MessageServiceImpl implements MessageService {
+
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 回复微信消息
@@ -23,6 +29,7 @@ public class MessageServiceImpl implements MessageService {
         response.setCharacterEncoding(CommonConstant.CHARACTER_ENCODE);
         //将微信请求xml转为map格式，获取所需的参数
         Map<String,String> map = MessageUtil.xmlToMap(request);
+        log.info("接受的微信消息：{}",map);
         //开发者微信号
         String ToUserName = map.get(WXConstant.WX_TO_USERNAME);
         // 发送方帐号（一个OpenID）
