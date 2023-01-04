@@ -117,24 +117,43 @@
 
     </dependencies>
 
+    <!-- 指定maven编译方式为jdk1.8版本 -->
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
+                        <phase>package</phase>
                         <goals>
-                            <goal>repackage</goal>
+                            <goal>single</goal>
                         </goals>
-                        <configuration>
-                            <classifier>spring-boot</classifier>
-                            <mainClass>
-                                com.back.App
-                            </mainClass>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.back.App</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
