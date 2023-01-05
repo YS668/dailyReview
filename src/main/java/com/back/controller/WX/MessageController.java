@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@RestController
+@RestController("/back")
 public class MessageController {
 
     @Resource
