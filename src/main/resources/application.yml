@@ -2,10 +2,9 @@ server:
   port: 8090
 
 spring:
-
   #数据库
   datasource:
-    url: jdbc:mysql://localhost:3306/sms?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/DailyReview?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123
@@ -47,6 +46,10 @@ spring:
   #    username: admin
   #    password: 123456
   #    virtual-host: /
+
+  mybatis-plus:
+    #xml文件位置
+    mapper-locations: classpath:/mapper/*.xml
 
 Logging:
   level:
