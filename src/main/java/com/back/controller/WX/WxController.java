@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class WxController {
+
     @Resource
     private MessageService messageService;
 

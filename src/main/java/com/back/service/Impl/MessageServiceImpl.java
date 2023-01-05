@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-@Service
+@Service("messageService")
 public class MessageServiceImpl implements MessageService {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
