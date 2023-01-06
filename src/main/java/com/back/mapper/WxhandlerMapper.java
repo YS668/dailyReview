@@ -3,6 +3,9 @@ package com.back.mapper;
 import com.back.entity.pojo.Wxhandler;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +18,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface WxhandlerMapper extends BaseMapper<Wxhandler> {
 
+    @Select("select * from wxhandler")
+    List<Wxhandler> getAll();
 }

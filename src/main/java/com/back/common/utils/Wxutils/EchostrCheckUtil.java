@@ -39,15 +39,14 @@ public class EchostrCheckUtil {
         for (int i = 0; i < str.length; i++) {
             buffer.append(str[i]);
         }
-//        //进行sha1加密
-//        String temp = SHA1.encode(buffer.toString());
-//        log.info("sha1加密temp：{}",temp);
-//        //与微信提供的signature进行匹对
-//        if ( signature!= null && signature.equals(temp)) {
-//            return echostr;
-//        } else {
-//            return null;
-//        }
-        return echostr;
+        //进行sha1加密
+        String temp = SHA1.getSHA1(buffer.toString());
+        log.info("sha1加密temp：{}",temp);
+        //与微信提供的signature进行匹对
+        if ( signature!= null && signature.equals(temp)) {
+            return echostr;
+        } else {
+            return null;
+        }
     }
 }

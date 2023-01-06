@@ -1,5 +1,6 @@
 package com.back.service;
 
+import com.back.common.Result;
 import com.back.entity.pojo.Wxhandler;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface WxhandlerService extends IService<Wxhandler> {
 
+    Result add(Wxhandler wxhandler);
+
+    Result updateByKeyWords(Wxhandler wxhandler);
 }

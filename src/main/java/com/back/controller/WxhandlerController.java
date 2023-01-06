@@ -1,9 +1,16 @@
 package com.back.controller;
 
 
+import com.back.common.Result;
+import com.back.entity.pojo.Wxhandler;
+import com.back.service.WxhandlerService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -16,5 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/wxhandler")
 public class WxhandlerController {
+
+    @Resource
+    private WxhandlerService wxhandlerService;
+
+    @PostMapping("/add")
+    public Result add(Wxhandler wxhandler){
+        return wxhandlerService.add(wxhandler);
+    }
+
+    @PostMapping("/update")
+    public Result update(Wxhandler wxhandler){
+        return wxhandlerService.updateByKeyWords(wxhandler);
+    }
 
 }
