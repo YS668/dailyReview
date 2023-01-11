@@ -2,8 +2,8 @@ package com.back.service.impl;
 
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.WXConstant;
-import com.back.common.utils.Wxutils.MessageUtil;
-import com.back.common.utils.Wxutils.TextMessageUtil;
+import com.back.common.wx.Wxutils.MessageUtil;
+import com.back.common.wx.Wxutils.TextMessageUtil;
 import com.back.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class MessageServiceImpl implements MessageService {
             return TextMessageUtil.initMessage(FromUserName, ToUserName,Content);
         }else {
             //无法处理
-            return TextMessageUtil.failMessage(FromUserName, ToUserName);
+            return TextMessageUtil.failMsgType(FromUserName, ToUserName);
         }
     }
 }

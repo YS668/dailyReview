@@ -1,6 +1,6 @@
 package com.back.controller.WX;
 
-import com.back.common.utils.Wxutils.EchostrCheckUtil;
+import com.back.common.wx.Wxutils.EchostrCheckUtil;
 import com.back.service.MessageService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

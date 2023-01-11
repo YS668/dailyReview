@@ -17,4 +17,10 @@ public interface WxhandlerService extends IService<Wxhandler> {
     Result add(Wxhandler wxhandler);
 
     Result updateByKeyWords(Wxhandler wxhandler);
+
+    Result del(String keyWords);
+
+    Result getAll();
+
+    Result getPage(String keywords, String channel, int pageNum, int pageSize);
 }

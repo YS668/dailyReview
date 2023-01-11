@@ -1,8 +1,9 @@
 package com.back.service.impl;
 
-import com.back.entity.pojo.Review;
-import com.back.mapper.ReviewMapper;
-import com.back.service.ReviewService;
+
+import com.back.entity.pojo.ReviewPlan;
+import com.back.mapper.ReviewPlanMapper;
+import com.back.service.ReviewPlanService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-01-05
  */
 @Service
-public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> implements ReviewService {
+public class ReviewPlanServiceImpl extends ServiceImpl<ReviewPlanMapper, ReviewPlan> implements ReviewPlanService {
 
 }

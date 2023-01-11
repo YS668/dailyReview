@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,8 +21,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Review对象", description="复盘表")
-public class Review extends basePojo implements Serializable {
+@ApiModel(value="reviewplan对象", description="复盘表")
+@TableName(value = "reviewplan")
+public class ReviewPlan extends basePojo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,6 +32,9 @@ public class Review extends basePojo implements Serializable {
 
     @ApiModelProperty(value = "复盘用户")
     private Long uid;
+
+    @ApiModelProperty(value = "微信标识")
+    private String openId;
 
     @ApiModelProperty(value = "复盘主题")
     private Long topic;

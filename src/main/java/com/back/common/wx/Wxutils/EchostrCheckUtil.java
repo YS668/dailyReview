@@ -1,4 +1,4 @@
-package com.back.common.utils.Wxutils;
+package com.back.common.wx.Wxutils;
 
 import com.back.common.constant.WXConstant;
 import lombok.extern.slf4j.Slf4j;

@@ -4,11 +4,8 @@ package com.back.controller;
 import com.back.common.Result;
 import com.back.entity.pojo.Wxhandler;
 import com.back.service.WxhandlerService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -35,6 +32,24 @@ public class WxhandlerController {
     @PostMapping("/update")
     public Result update(Wxhandler wxhandler){
         return wxhandlerService.updateByKeyWords(wxhandler);
+    }
+
+    @GetMapping("/del")
+    public Result del(String keyWords){
+        return wxhandlerService.del(keyWords);
+    }
+
+    @GetMapping("/get/page")
+    public Result getPage(@RequestParam(required = false,value = "keywords") String keywords,
+                          @RequestParam(required = false,value = "channel") String channel,
+                          @RequestParam(required = false,value = "pageNum",defaultValue = "1") int pageNum,
+                          @RequestParam(required = false,value = "pageSize",defaultValue = "10") int pageSize){
+        return wxhandlerService.getPage(keywords,channel,pageNum,pageSize);
+    }
+
+    @GetMapping("/get/all")
+    public Result getAll(){
+        return wxhandlerService.getAll();
     }
 
 }

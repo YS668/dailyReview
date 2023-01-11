@@ -21,4 +21,16 @@
         id, keywords, content, channel, extra, create_person, create_time, update_person, update_time, dr
     </sql>
 
+    <select id="page" resultType="com.back.entity.pojo.Wxhandler">
+        select * from wxhandler
+        <where>
+            <if test="keywords != null and keywords != ''">
+                AND keywords = #{keywords}
+            </if>
+            <if test="channel != null and channel != ''">
+                AND channel = #{channel}
+            </if>
+        </where>
+    </select>
+
 </mapper>

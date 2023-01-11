@@ -1,4 +1,4 @@
-package com.back.common.utils.Wxutils;
+package com.back.common.wx.Wxutils;
 
 import java.io.IOException;
 import java.io.InputStream;

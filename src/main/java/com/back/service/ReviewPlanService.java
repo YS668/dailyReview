@@ -1,6 +1,7 @@
 package com.back.service;
 
-import com.back.entity.pojo.Review;
+
+import com.back.entity.pojo.ReviewPlan;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author DR-back
  * @since 2023-01-05
  */
-public interface ReviewService extends IService<Review> {
+public interface ReviewPlanService extends IService<ReviewPlan> {
 
 }
