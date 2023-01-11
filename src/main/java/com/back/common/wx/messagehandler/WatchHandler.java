@@ -21,9 +21,9 @@ public class WatchHandler implements WxMessageHandler{
     public String handler(String openId,String content) {
         //content：查看 股票名称 股票名称
         String[] split = content.split(" ");
-        if (WXConstant.HANDLER_PLAN.equals(split[CommonConstant.ZERO])){
+        if (WXConstant.HANDLER_WATCH.equals(split[CommonConstant.ZERO])){
             //回复模板
-            String resContent = TextMessageUtil.handMap.get(content).getContent();
+            String resContent = TextMessageUtil.handMap.get(split[CommonConstant.ZERO]).getContent();
             //查看的股票名称
             List<String> list = new ArrayList<>();
             for (int i = 1; i < split.length; i++) {

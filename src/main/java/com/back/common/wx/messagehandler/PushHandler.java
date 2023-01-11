@@ -27,7 +27,7 @@ public class PushHandler implements WxMessageHandler{
 
     @Override
     public String handler(String openId,String content) {
-        if (content.equals(WXConstant.HANDLER_PLAN)){
+        if (content.equals(WXConstant.HANDLER_PUSH)){
             //回复模板
             String resContent = TextMessageUtil.handMap.get(content).getContent();
             //自选股

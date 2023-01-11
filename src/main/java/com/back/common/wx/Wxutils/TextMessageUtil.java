@@ -84,15 +84,21 @@ public class TextMessageUtil {
                     //需要进行操作
                     /** 绑定 */
                     case WXConstant.HANDLER_BINDING:
+                        channel = handMap.get(WXConstant.HANDLER_BINDING).getChannel();
                         /** 解绑 */
                     case WXConstant.HANDLER_UNBIND:
+                        channel = handMap.get(WXConstant.HANDLER_UNBIND).getChannel();
                         /** 推送 */
                     case WXConstant.HANDLER_PUSH:
+                        channel = handMap.get(WXConstant.HANDLER_PUSH).getChannel();
                         /** 复盘计划 */
                     case WXConstant.HANDLER_PLAN:
+                        channel = handMap.get(WXConstant.HANDLER_PLAN).getChannel();
                         /** 查看 */
                     case WXConstant.HANDLER_WATCH:
-                        channel = handMap.get(WXConstant.HANDLER_HELP).getChannel();
+                        if (channel == null){
+                            channel = handMap.get(WXConstant.HANDLER_WATCH).getChannel();
+                        }
                         handler = (WxMessageHandler)BeanUtil.getBeanByName(channel);
                         text.setContent(handler.handler(FromUserName,Content));
                         break;
@@ -151,12 +157,11 @@ public class TextMessageUtil {
     public static String fillMessage(String content, List<String> fillList) {
         String[] split = content.split("\\$");
         StringBuilder builder = new StringBuilder();
-        if (split.length == fillList.size() + CommonConstant.ONE){
-            for (int i = 0; i < split.length-1; i++) {
+        if (split.length == fillList.size()){
+            for (int i = 0; i < split.length; i++) {
                 builder.append(split[i]);
                 builder.append(fillList.get(i));
             }
-            builder.append(split[split.length-1]);
             String res = builder.toString();
             //存在尚未填充的值，需要修复
             if (res.contains("$")){
