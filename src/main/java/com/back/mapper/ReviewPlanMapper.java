@@ -20,6 +20,6 @@ import java.util.List;
 @Mapper
 public interface ReviewPlanMapper extends BaseMapper<ReviewPlan> {
 
-    @Select("select * from reviewplan where openId = #{openId} ord")
+    @Select("select * from reviewplan where openId = #{openId} ")
     List<ReviewPlan> getByOpenId(@Param("openId") String openId);
 }

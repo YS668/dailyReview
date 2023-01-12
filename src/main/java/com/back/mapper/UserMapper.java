@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * <p>
@@ -17,9 +18,12 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
-    @Select("select * from where userName = #{userName}")
+    @Select("select * from user where userName = #{userName}")
     User getByuserName(@Param("userName") String userName);
 
-    @Select("select * from where openId = #{openId}")
+    @Select("select * from user where openId = #{openId}")
     User getByOpenId(@Param("openId") String openId);
+
+    @Update("update user set openId = ' ' where uid = #{uid}")
+    boolean cancelBindByuid(@Param("uid")Long uid);
 }

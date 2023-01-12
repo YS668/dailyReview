@@ -32,23 +32,26 @@ public class TextMessageUtil {
     @Resource
     private WxhandlerMapper wxhandlerMapper;
 
-    /** bean初始化时注入*/
+    /**
+     * bean初始化时注入
+     */
     public static Map<String, Wxhandler> handMap = new HashMap<>();
 
     /**
      * 初始化时，注入文本信息
      */
     @PostConstruct
-    private void init(){
+    private void init() {
         List<Wxhandler> list = wxhandlerMapper.getAll();
         list.stream().forEach((wxhandler) -> {
-            handMap.put(wxhandler.getKeywords(),wxhandler);
+            handMap.put(wxhandler.getKeywords(), wxhandler);
         });
-        log.info("初始化的微信指令：{}",JSON.toJSON(handMap));
+        log.info("初始化的微信指令：{}", JSON.toJSON(handMap));
     }
 
     /**
      * 把对象转成微信回复需要的xml格式对应的字符串
+     *
      * @param message
      * @return
      */
@@ -60,58 +63,62 @@ public class TextMessageUtil {
 
     /**
      * 初始化一条回复信息
-     * @param FromUserName
-     *        openId
-     * @param ToUserName
-     *        开发者微信
+     *
+     * @param FromUserName openId
+     * @param ToUserName   开发者微信
      * @param Content
      * @return
      */
     public static String initMessage(String FromUserName, String ToUserName, String Content) {
         TextMessage text = getMessage(FromUserName, ToUserName);
         //分解接收的微信消息
-        if (Content == null){
+        if (Content == null) {
             text.setContent(WXConstant.WX_FAIL_CONTENT);
             return messageToxml(text);
         }
         String[] split = Content.split(" ");
         String channel = null;
         WxMessageHandler handler = null;
-        if (split != null && split.length >= CommonConstant.ONE){
-            if (split[CommonConstant.ZERO] != null && !split[CommonConstant.ZERO].equals(" ")){
+        if (split != null && split.length >= CommonConstant.ONE) {
+            if (split[CommonConstant.ZERO] != null && !split[CommonConstant.ZERO].equals(" ")) {
                 //存在指令
-                switch (split[CommonConstant.ZERO]){
+                String str = split[CommonConstant.ZERO];
+                switch (str) {
                     //需要进行操作
                     /** 绑定 */
                     case WXConstant.HANDLER_BINDING:
                         channel = handMap.get(WXConstant.HANDLER_BINDING).getChannel();
-                        /** 解绑 */
+                        break;
+                    /** 解绑 */
                     case WXConstant.HANDLER_UNBIND:
                         channel = handMap.get(WXConstant.HANDLER_UNBIND).getChannel();
-                        /** 推送 */
+                        break;
+                    /** 推送 */
                     case WXConstant.HANDLER_PUSH:
                         channel = handMap.get(WXConstant.HANDLER_PUSH).getChannel();
-                        /** 复盘计划 */
+                        break;
+                    /** 复盘计划 */
                     case WXConstant.HANDLER_PLAN:
                         channel = handMap.get(WXConstant.HANDLER_PLAN).getChannel();
-                        /** 查看 */
+                        break;
+                    /** 查看 */
                     case WXConstant.HANDLER_WATCH:
-                        if (channel == null){
-                            channel = handMap.get(WXConstant.HANDLER_WATCH).getChannel();
-                        }
-                        handler = (WxMessageHandler)BeanUtil.getBeanByName(channel);
-                        text.setContent(handler.handler(FromUserName,Content));
+                        channel = handMap.get(WXConstant.HANDLER_WATCH).getChannel();
                         break;
                     //无需操作或者指令错误
                     default:
-                        if (handMap.containsKey(Content)){
+                        if (handMap.containsKey(Content)) {
                             text.setContent(handMap.get(Content).getContent());
-                        }else {
+                        } else {
                             text.setContent(WXConstant.WX_FAIL_CONTENT);
                         }
                         break;
                 }
-            }else {
+                if (channel != null){
+                    handler = (WxMessageHandler)BeanUtil.getBeanByName(channel);
+                    text.setContent(handler.handler(FromUserName,Content));
+                }
+            } else {
                 text.setContent(WXConstant.WX_FAIL_CONTENT);
             }
         } else {
@@ -123,6 +130,7 @@ public class TextMessageUtil {
 
     /**
      * 接收非文本消息的回复
+     *
      * @param fromUserName
      * @param toUserName
      * @return
@@ -135,6 +143,7 @@ public class TextMessageUtil {
 
     /**
      * 回复消息基础封装
+     *
      * @param FromUserName
      * @param ToUserName
      * @return
@@ -150,6 +159,7 @@ public class TextMessageUtil {
 
     /**
      * 消息填充类，填充{}
+     *
      * @param content
      * @param fillList
      * @return
@@ -157,18 +167,18 @@ public class TextMessageUtil {
     public static String fillMessage(String content, List<String> fillList) {
         String[] split = content.split("\\$");
         StringBuilder builder = new StringBuilder();
-        if (split.length == fillList.size()){
+        if (split.length == fillList.size()) {
             for (int i = 0; i < split.length; i++) {
                 builder.append(split[i]);
                 builder.append(fillList.get(i));
             }
             String res = builder.toString();
             //存在尚未填充的值，需要修复
-            if (res.contains("$")){
+            if (res.contains("$")) {
                 return WXConstant.WX_FAIl_HANDLER;
             }
             return builder.toString();
-        }else {
+        } else {
             return WXConstant.WX_FAIl_HANDLER;
         }
     }

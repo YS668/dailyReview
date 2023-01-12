@@ -32,6 +32,7 @@ public class PushHandler implements WxMessageHandler{
             String resContent = TextMessageUtil.handMap.get(content).getContent();
             //自选股
             List<Mystock> list = mystockMapper.getByOpenId(openId);
+            if (list == null || list.size() == CommonConstant.ZERO)
             //没有自选股
             if(list == null || list.size() == CommonConstant.ZERO){
                 return WXConstant.WX_NO_MY_STOCK;

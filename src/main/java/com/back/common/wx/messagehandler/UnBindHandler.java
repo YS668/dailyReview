@@ -28,8 +28,19 @@ public class UnBindHandler implements WxMessageHandler{
         //开始解绑
         String userName= split[CommonConstant.ONE];
         User user = userMapper.getByuserName(userName);
+        //用户不存在
+        if (user == null){
+            return WXConstant.WX_NO_USER;
+        }
+        //解绑
         if (user.getOpenid() != null && user.getOpenid().equals(openId)){
-            return TextMessageUtil.handMap.get(content).getContent();
+            //解绑操作
+            if (userMapper.cancelBindByuid(user.getUid())){
+                return TextMessageUtil.handMap.get(content).getContent();
+            }else {
+                return WXConstant.WX_AGAIN;
+            }
+
         //不存在绑定关系
         }else {
             return WXConstant.WX_FAIL_UNBINDING;
