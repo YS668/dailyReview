@@ -35,7 +35,7 @@ public class UnBindHandler implements WxMessageHandler{
         //解绑
         if (user.getOpenid() != null && user.getOpenid().equals(openId)){
             //解绑操作
-            if (userMapper.cancelBindByuid(user.getUid())){
+            if (userMapper.cancelBindByuid(user.getUid()) > CommonConstant.ZERO){
                 return TextMessageUtil.handMap.get(content).getContent();
             }else {
                 return WXConstant.WX_AGAIN;

@@ -25,5 +25,5 @@ public interface UserMapper extends BaseMapper<User> {
     User getByOpenId(@Param("openId") String openId);
 
     @Update("update user set openId = ' ' where uid = #{uid}")
-    boolean cancelBindByuid(@Param("uid")Long uid);
+    int cancelBindByuid(@Param("uid")Long uid);
 }
