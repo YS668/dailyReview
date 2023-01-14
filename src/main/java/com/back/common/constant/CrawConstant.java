@@ -10,6 +10,7 @@ public class CrawConstant {
     public static String SH_JS = "C:\\Users\\admin\\Desktop\\sh.js";
     /** 深交所excel文件*/
     public static String SZ_EXCEL = "C:\\Users\\admin\\Desktop\\SZStock.xlsx";
+    public static String HE_XIN_V = "C:\\Users\\admin\\Desktop\\hexin-v.js";
     /** 深交所*/
     public static String SZ = "SZ";
     /** 上交所*/
