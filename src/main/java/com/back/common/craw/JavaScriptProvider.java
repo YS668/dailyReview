@@ -7,6 +7,8 @@ import javax.script.ScriptException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
+import com.back.common.constant.CrawConstant;
+
 /**
  * js脚本文件执行器
  * @param <T>
@@ -31,7 +33,7 @@ public class JavaScriptProvider<T> {
         String str =null;
         try {
             JavaScriptProvider jsProvider = new JavaScriptProvider();
-            JSMethods jsMethods = pr.loadJs(Thread.currentThread().getClass().getResource("/").getPath() + "hexin-v.js",JSMethods.class);
+            JSMethods jsMethods = pr.loadJs(CrawConstant.HE_XIN_V,JSMethods.class);
             str = jsMethods.v();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
