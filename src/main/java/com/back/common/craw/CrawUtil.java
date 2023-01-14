@@ -154,7 +154,7 @@ public class CrawUtil {
         String url = "https://xueqiu.com/S/"+stockCode;
         Document document = null;
         List<String> list = new ArrayList<>();
-        StockPushVo res = new StockPushVo(stockCode);
+        StockPushVo vo = null;
         log.info("开始爬取个股信息：股票编码{}",stockCode);
         try {
             document = Jsoup.connect(url).get();
@@ -173,17 +173,17 @@ public class CrawUtil {
             String turnover = elements.first().getElementsByTag("td")
                     .get(CommonConstant.THREE).text().split("：")[CommonConstant.ONE];
             //填充信息
-            StockPushVo vo = StockCodeMap.get(stockCode);
+            vo = StockCodeMap.get(stockCode);
             vo.setStockName(stockName);
             vo.setNowPrice(nowPrice);
             vo.setTrend(trend);
             vo.setTurnover(turnover);
             vo.setXueQiuLink(url);
-            log.info("个股爬取结果：{}",res.toString());
+            log.info("个股爬取结果：{}",vo.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return res;
+        return vo;
     }
 
     /**
