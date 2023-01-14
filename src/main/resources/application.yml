@@ -53,4 +53,4 @@ spring:
 
 Logging:
   level:
-    com.sms: debug
+    com.back: debug
