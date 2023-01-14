@@ -11,6 +11,7 @@ public class ExceptionHander {
     @ExceptionHandler(value = Exception.class)
     public Result handler(Exception e){
         log.info("发生异常：{},{}",e.toString(),e.getStackTrace().toString());
+        e.printStackTrace();
         return Result.fail();
     }
 }

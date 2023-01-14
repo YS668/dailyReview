@@ -7,7 +7,7 @@ spring:
     url: jdbc:mysql://localhost:3306/DailyReview?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: 123
+    password: 12345678
 
   #配置邮箱发送
   mail:

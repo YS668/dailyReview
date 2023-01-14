@@ -1,6 +1,11 @@
 package com.back.controller.WX;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import com.back.common.craw.CrawUtil;
 import com.back.common.wx.Wxutils.EchostrCheckUtil;
+import com.back.entity.vo.StockPushVo;
 import com.back.service.MessageService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,8 +44,23 @@ public class WxController {
 
 
     @GetMapping("/test")
-    public String test(HttpServletRequest request){
-        return "test";
+    public void test(HttpServletRequest request){
+        List<StockPushVo> historyHigh = CrawUtil.getHistoryHigh();
+        List<StockPushVo> yearHigh = CrawUtil.getYearHigh();
+        List<StockPushVo> yearLow = CrawUtil.getYearLow();
+        List<StockPushVo> downLimit = CrawUtil.getDownLimit();
+        Integer downFive = CrawUtil.getDownFive();
+        List<StockPushVo> upLimit = CrawUtil.getUpLimit();
+        Integer upFive = CrawUtil.getUpFive();
+        List<StockPushVo> noOneUp = CrawUtil.getNoOneUp();
+        int upAllToNineTwentyFive = CrawUtil.getUpAllToNineTwentyFive();
+        int upAllToTen = CrawUtil.getUpAllToTen();
+        int upAllToElevenThirty = CrawUtil.getUpAllToElevenThirty();
+        int upAllToFourteen = CrawUtil.getUpAllToFourteen();
+        int upAll = CrawUtil.getUpAllToDay();
+        String turnOver = CrawUtil.getTurnOver();
+        String szIndex = CrawUtil.getSzIndex();
+        String busIndex = CrawUtil.getBusIndex();
     }
 
 }

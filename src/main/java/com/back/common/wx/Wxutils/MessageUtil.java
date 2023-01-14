@@ -1,5 +1,7 @@
 package com.back.common.wx.Wxutils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import org.dom4j.io.SAXReader;
 /**
  * 消息工具类，转换xml文件
  */
+@Slf4j
 public class MessageUtil {
 
     /**
@@ -28,6 +31,7 @@ public class MessageUtil {
         InputStream in = null;
         try {
             in = request.getInputStream();
+            log.info("接受的微信消息：{}",in.toString());
             Document doc = reader.read(in);
             Element root = doc.getRootElement();
             List<Element> list = root.elements();

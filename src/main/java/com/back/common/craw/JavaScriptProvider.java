@@ -8,17 +8,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 /**
- * 执行js脚本，获取hexin-V
+ * js脚本文件执行器
+ * @param <T>
  */
-public class JavaScriptProvider {
+public class JavaScriptProvider<T> {
 
-    private static JSMethods loadJs(Class<JSMethods> clazz) throws FileNotFoundException, ScriptException {
+    private static final JavaScriptProvider<JSMethods> pr = new JavaScriptProvider<>();
+
+    public   T loadJs(String jsName, Class<T> clazz) throws FileNotFoundException, ScriptException {
         //创建一个脚本引擎管理器
         ScriptEngineManager manager = new ScriptEngineManager();
         //获取一个指定的名称的脚本管理器
         ScriptEngine engine = manager.getEngineByName("js");
         //获取js文件所在的目录的路径
-        String jsName = Thread.currentThread().getClass().getResource("/").getPath() + "/hexin-v.js";
         engine.eval(new FileReader(jsName));
         //从脚本引擎中返回一个给定接口的实现
         Invocable invocable = (Invocable) engine;
@@ -29,7 +31,7 @@ public class JavaScriptProvider {
         String str =null;
         try {
             JavaScriptProvider jsProvider = new JavaScriptProvider();
-            JSMethods jsMethods = jsProvider.loadJs(JSMethods.class);
+            JSMethods jsMethods = pr.loadJs(Thread.currentThread().getClass().getResource("/").getPath() + "hexin-v.js",JSMethods.class);
             str = jsMethods.v();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -39,5 +41,7 @@ public class JavaScriptProvider {
             return str;
         }
     }
+
+
 
 }
