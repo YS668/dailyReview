@@ -105,6 +105,9 @@ public class TextMessageUtil {
                     case WXConstant.HANDLER_WATCH:
                         channel = handMap.get(WXConstant.HANDLER_WATCH).getChannel();
                         break;
+                    case  WXConstant.HANDLER_REVIEW_DATA:
+
+                        break;
                     //无需操作或者指令错误
                     default:
                         if (handMap.containsKey(Content)) {

@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
- * 复盘数据vo类
+ * 复盘总体数据vo类
  */
 @Data
 @NoArgsConstructor
@@ -36,13 +33,31 @@ public class ReviewDataVo {
     /** 上涨家数 */
     private int upAll;
     /** 上证指数涨跌 */
-    private BigDecimal SZ_INDEX;
+    private String SZ_INDEX;
     /** 创业扳指涨跌 */
-    private BigDecimal Business_INDEX;
+    private String Business_INDEX;
     /** 成交额 */
     private String turnOver;
     /** 最高标 */
     private StockPushVo highest;
     /** 今日强力板块前五 */
     private Map<String,StockPushVo> plateFive;
+
+
+    public String show() {
+        return  "今日历史新高数：" + historyHigh.size() + "\n"+
+                "今日一年新高数：" + yearHigh.size() + "\n"+
+                "今日一年新低数：" + yearLow.size() + "\n"+
+                "今日跌停数：" + downLimit.size() + "\n"+
+                "今日跌幅超5%：" + downFive + "\n"+
+                "今日涨停数：" + upLimit.size() + "\n"+
+                "今日非一字涨停：" + noOneUp.size() + "\n"+
+                "今日涨幅超5%：" + upFive + "\n"+
+                "今日上涨家数：" + upAll + "\n"+
+                "上涨指数：" + SZ_INDEX + "\n"+
+                "创业扳指：" + Business_INDEX + "\n"+
+                "成交额：" + turnOver + '\n' +
+                "最高标：" + highest + "\n"+
+                "板块涨幅前五：" + plateFive + "\n";
+    }
 }

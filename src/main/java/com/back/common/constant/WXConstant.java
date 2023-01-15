@@ -20,8 +20,10 @@ public class WXConstant {
     public static final String HANDLER_PUSH = "推送";
     public static final String HANDLER_WATCH = "查看";
     public static final String HANDLER_PLAN = "复盘计划";
+    public static final String HANDLER_REVIEW_DATA = "复盘数据";
 
     public static final String WX_FAIL_CONTENT = "抱歉，指令有误，请输入帮助查看指令";
+    public static final String WX_NO_WATCH = "抱歉，请输入你想查看的股票名称，并用空格隔开";
     public static final String WX_FAIL_MSG_TYPE = "抱歉，目前支持文字类型的指令";
     public static final String WX_FAIL_BINDING = "抱歉，绑定失败，请确认绑定的用户名是否正确";
     public static final String WX_FAIL_UNBINDING = "抱歉，解绑失败，请确认绑定的用户名是否正确";

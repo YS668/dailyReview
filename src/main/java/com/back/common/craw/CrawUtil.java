@@ -242,6 +242,7 @@ public class CrawUtil {
      */
     public static JSONObject ResolutionIndex(ResponseEntity<String> entity){
         JSONObject json = JSONObject.parseObject(entity.getBody());
+        log.info("爬取结果：{}",json.toString());
         JSONObject data = (JSONObject) json.get("data");
         JSONObject parser_data = (JSONObject) data.get("parser_data");
         JSONObject market_data = (JSONObject) parser_data.get("market_data");
@@ -255,6 +256,7 @@ public class CrawUtil {
      */
     public static JSONObject baseResolution(ResponseEntity<String> entity){
         JSONObject json = JSONObject.parseObject(entity.getBody());
+        log.info("爬取结果：{}",json.toString());
         JSONObject data = (JSONObject) json.get("data");
         JSONArray answer = (JSONArray) data.get("answer");
         JSONObject answerZero = (JSONObject) answer.get(0);
@@ -310,7 +312,7 @@ public class CrawUtil {
      * 今日创一年新高
      */
     public static List<StockPushVo> getYearHigh(){
-        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_HISTORY_HIGH,CrawConstant.STOCK);
+        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_YEAR_HIGH,CrawConstant.STOCK);
         return resolution(entity);
     }
 
@@ -318,7 +320,7 @@ public class CrawUtil {
      * 今日创一年新低
      */
     public static List<StockPushVo> getYearLow(){
-        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_HISTORY_HIGH,CrawConstant.STOCK);
+        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_YEAR_LOW,CrawConstant.STOCK);
         return resolution(entity);
 
     }
@@ -327,7 +329,7 @@ public class CrawUtil {
      * 今日跌停
      */
     public static List<StockPushVo> getDownLimit(){
-        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_HISTORY_HIGH,CrawConstant.STOCK);
+        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_DOWN_LIMIT,CrawConstant.STOCK);
         return resolution(entity);
     }
 
@@ -335,7 +337,7 @@ public class CrawUtil {
      * 今日跌幅超5%
      */
     public static Integer getDownFive(){
-        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_HISTORY_HIGH,CrawConstant.STOCK);
+        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_DOWN_FIVE,CrawConstant.STOCK);
         return resolutionNum(entity);
     }
 
@@ -343,7 +345,7 @@ public class CrawUtil {
      * 今日涨停
      */
     public static List<StockPushVo> getUpLimit(){
-        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_HISTORY_HIGH,CrawConstant.STOCK);
+        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_UP_LIMIT,CrawConstant.STOCK);
         return resolution(entity);
     }
 
@@ -351,7 +353,7 @@ public class CrawUtil {
      * 今日非一字涨停
      */
     public static List<StockPushVo> getNoOneUp(){
-        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_HISTORY_HIGH,CrawConstant.STOCK);
+        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_NO_ONE_UP,CrawConstant.STOCK);
         return resolution(entity);
     }
 
@@ -359,7 +361,7 @@ public class CrawUtil {
      * 今日涨幅大于5%
      */
     public static Integer getUpFive(){
-        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_HISTORY_HIGH,CrawConstant.STOCK);
+        ResponseEntity<String> entity = getWenCai(CrawConstant.QUESTION_UP_FIVE,CrawConstant.STOCK);
         return resolutionNum(entity);
     }
 
