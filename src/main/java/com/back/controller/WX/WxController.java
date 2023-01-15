@@ -46,26 +46,8 @@ public class WxController {
 
 
     @GetMapping("/test")
-    public String test(HttpServletRequest request){
-        ReviewDataVo vo = new ReviewDataVo();
-        vo.setHistoryHigh(CrawUtil.getHistoryHigh().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
-        vo.setYearHigh(CrawUtil.getYearHigh().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
-        vo.setYearLow(CrawUtil.getYearLow().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
-        vo.setDownLimit(CrawUtil.getDownLimit().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
-        vo.setUpLimit(CrawUtil.getUpLimit().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
-        vo.setNoOneUp(CrawUtil.getNoOneUp().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
-        vo.setDownFive(CrawUtil.getDownFive());
-        vo.setUpFive(CrawUtil.getUpFive());
-        vo.setTurnOver(CrawUtil.getTurnOver());
-        vo.setSZ_INDEX(CrawUtil.getSzIndex());
-        vo.setBusiness_INDEX(CrawUtil.getBusIndex());
-        vo.setUpAll(CrawUtil.getUpAllToDay());
-        
-        int upAllToNineTwentyFive = CrawUtil.getUpAllToNineTwentyFive();
-        int upAllToTen = CrawUtil.getUpAllToTen();
-        int upAllToElevenThirty = CrawUtil.getUpAllToElevenThirty();
-        int upAllToFourteen = CrawUtil.getUpAllToFourteen();
-        return vo.show();
+    public void test(HttpServletRequest request){
+
     }
 
 }

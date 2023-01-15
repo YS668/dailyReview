@@ -54,10 +54,12 @@ public class ReviewDataVo {
                 "今日非一字涨停：" + noOneUp.size() + "\n"+
                 "今日涨幅超5%：" + upFive + "\n"+
                 "今日上涨家数：" + upAll + "\n"+
-                "上涨指数：" + SZ_INDEX + "\n"+
+                "上证指数：" + SZ_INDEX + "\n"+
                 "创业扳指：" + Business_INDEX + "\n"+
                 "成交额：" + turnOver + '\n' +
                 "最高标：" + highest + "\n"+
                 "板块涨幅前五：" + plateFive + "\n";
     }
+
+
 }

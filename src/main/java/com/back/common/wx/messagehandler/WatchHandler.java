@@ -56,10 +56,12 @@ public class WatchHandler implements WxMessageHandler{
             for (int i = 0; i < codeList.size(); i++) {
                 //填充值，第一个为股票名称，第二个为股票涨跌，第三个为现价，第四个为成交额，第五个为雪球链接
                 List<String> fillList = new ArrayList<>();
+                String stockCode = codeList.get(i);
                 //股票名称/股票代码转换器
-                StockPushVo crawRes = CrawUtil.getOne(codeList.get(i));
+                StockPushVo crawRes = CrawUtil.getOne(stockCode);
                 if (crawRes == null){
-                    return WXConstant.WX_FAIl_HANDLER;
+                    mistakeList.add(stockCode);
+                    continue;
                 }
                 /** 股票名称 */
                 fillList.add(crawRes.getStockName());
