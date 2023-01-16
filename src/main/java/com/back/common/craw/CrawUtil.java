@@ -279,7 +279,8 @@ public class CrawUtil {
         JSONObject componentsZeroData = (JSONObject) componentsZero.get("data");
         JSONArray datas = (JSONArray) componentsZeroData.get("datas");
         List<Map> map = datas.toJavaList(Map.class);
-        List<StockPushVo> res = map.stream().map(StockPushVo::reviewData).collect(Collectors.toList());
+        //转换并过滤非上交与深交的股票
+        List<StockPushVo> res = map.stream().map(StockPushVo::reviewData).filter(e -> e != null).collect(Collectors.toList());
         return res;
     }
 
