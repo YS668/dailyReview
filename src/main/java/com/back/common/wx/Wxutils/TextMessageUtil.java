@@ -105,21 +105,22 @@ public class TextMessageUtil {
                     case WXConstant.HANDLER_WATCH:
                         channel = handMap.get(WXConstant.HANDLER_WATCH).getChannel();
                         break;
-                    case  WXConstant.HANDLER_REVIEW_DATA:
-
+                    /** 复盘数据 */
+                    case WXConstant.HANDLER_REVIEW_DATA:
+                        channel = handMap.get(WXConstant.HANDLER_REVIEW_DATA).getChannel();
                         break;
-                    //无需操作或者指令错误
+                    /** 帮助*/
+                    case WXConstant.HANDLER_HELP:
+                        text.setContent(handMap.get(Content).getContent());
+                        break;
+                     /** 错误指令 */
                     default:
-                        if (handMap.containsKey(Content)) {
-                            text.setContent(handMap.get(Content).getContent());
-                        } else {
-                            text.setContent(WXConstant.WX_FAIL_CONTENT);
-                        }
+                        text.setContent(WXConstant.WX_FAIL_CONTENT);
                         break;
                 }
-                if (channel != null){
-                    handler = (WxMessageHandler)BeanUtil.getBeanByName(channel);
-                    text.setContent(handler.handler(FromUserName,Content));
+                if (channel != null) {
+                    handler = (WxMessageHandler) BeanUtil.getBeanByName(channel);
+                    text.setContent(handler.handler(FromUserName, Content));
                 }
             } else {
                 text.setContent(WXConstant.WX_FAIL_CONTENT);
@@ -170,7 +171,7 @@ public class TextMessageUtil {
     public static String fillMessage(String content, List<String> fillList) {
         String[] split = content.split("\\$");
         StringBuilder builder = new StringBuilder();
-        if (split.length == fillList.size()) {
+        if (split.length == fillList.size() ) {
             for (int i = 0; i < split.length; i++) {
                 builder.append(split[i]);
                 builder.append(fillList.get(i));

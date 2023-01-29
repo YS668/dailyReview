@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.CrawConstant;
+import com.back.entity.vo.ReviewDataVo;
 import com.back.entity.vo.StockPushVo;
 
 import io.swagger.models.auth.In;
@@ -278,7 +279,8 @@ public class CrawUtil {
         JSONObject componentsZeroData = (JSONObject) componentsZero.get("data");
         JSONArray datas = (JSONArray) componentsZeroData.get("datas");
         List<Map> map = datas.toJavaList(Map.class);
-        List<StockPushVo> res = map.stream().map(StockPushVo::reviewData).collect(Collectors.toList());
+        //转换并过滤非上交与深交的股票
+        List<StockPushVo> res = map.stream().map(StockPushVo::reviewData).filter(e -> e != null).collect(Collectors.toList());
         return res;
     }
 
@@ -459,6 +461,31 @@ public class CrawUtil {
         JSONObject json = JSONObject.parseObject(entity.getBody());
         JSONObject data = (JSONObject) json.get("data");
 
+    }
+
+    /**
+     * 今日数据
+     */
+    public static ReviewDataVo getReviewData(){
+        ReviewDataVo vo = new ReviewDataVo();
+        vo.setHistoryHigh(CrawUtil.getHistoryHigh().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
+        vo.setYearHigh(CrawUtil.getYearHigh().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
+        vo.setYearLow(CrawUtil.getYearLow().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
+        vo.setDownLimit(CrawUtil.getDownLimit().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
+        vo.setUpLimit(CrawUtil.getUpLimit().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
+        vo.setNoOneUp(CrawUtil.getNoOneUp().stream().collect(Collectors.toMap(StockPushVo::getStockCode,i -> i)));
+        vo.setDownFive(CrawUtil.getDownFive());
+        vo.setUpFive(CrawUtil.getUpFive());
+        vo.setTurnOver(CrawUtil.getTurnOver());
+        vo.setSZ_INDEX(CrawUtil.getSzIndex());
+        vo.setBusiness_INDEX(CrawUtil.getBusIndex());
+        vo.setUpAll(CrawUtil.getUpAllToDay());
+
+        int upAllToNineTwentyFive = CrawUtil.getUpAllToNineTwentyFive();
+        int upAllToTen = CrawUtil.getUpAllToTen();
+        int upAllToElevenThirty = CrawUtil.getUpAllToElevenThirty();
+        int upAllToFourteen = CrawUtil.getUpAllToFourteen();
+        return vo;
     }
 
 }
