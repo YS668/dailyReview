@@ -4,6 +4,8 @@ public class CrawConstant {
 
     /** 上交所股票url*/
     public static String SH_URL = "http://www.sse.com.cn/js/common/ssesuggestdata.js?v=20231130";
+    /** 深交所xlsx下载url*/
+    public static String SZ_URL = "http://www.szse.cn/api/report/ShowReport?SHOWTYPE=xlsx&CATALOGID=1110&TABKEY=tab1&random=0.29676899312443084";
     /** 问财URL*/
     public static String WENCAI_URL = "http://www.iwencai.com/customized/chart/get-robot-data";
     /** 上交所js文件*/
