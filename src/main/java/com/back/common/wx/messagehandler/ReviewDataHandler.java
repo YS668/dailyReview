@@ -43,7 +43,7 @@ public class ReviewDataHandler implements WxMessageHandler{
         /** 上涨家数 */
         fillList.add(String.valueOf(data.getUpAll()));
         /** 上证指数 */
-        fillList.add(String.valueOf(data.getSZ_INDEX()));
+        fillList.add(String.valueOf(data.getSH_INDEX()));
         /** 创业板指 */
         fillList.add(String.valueOf(data.getBusiness_INDEX()));
         /** 成交额 */
