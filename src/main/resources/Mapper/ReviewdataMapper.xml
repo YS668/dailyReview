@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.back.mapper.ReviewdataMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.back.entity.pojo.Reviewdata">
+        <id column="id" property="id" />
+        <result column="rdid" property="rdid" />
+        <result column="history_high" property="historyHigh" />
+        <result column="year_high" property="yearHigh" />
+        <result column="year_low" property="yearLow" />
+        <result column="down_limit" property="downLimit" />
+        <result column="down_five" property="downFive" />
+        <result column="up_limit" property="upLimit" />
+        <result column="no_one_up" property="noOneUp" />
+        <result column="up_five" property="upFive" />
+        <result column="up_all" property="upAll" />
+        <result column="sh_index" property="shIndex" />
+        <result column="sz_index" property="szIndex" />
+        <result column="business_index" property="businessIndex" />
+        <result column="turn_over" property="turnOver" />
+        <result column="extra" property="extra" />
+        <result column="create_person" property="createPerson" />
+        <result column="create_time" property="createTime" />
+        <result column="update_person" property="updatePerson" />
+        <result column="update_time" property="updateTime" />
+        <result column="dr" property="dr" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, rdid, history_high, year_high, year_low, down_limit, down_five, up_limit, no_one_up, up_five, up_all, sh_index, sz_index, business_index, turn_over, extra, create_person, create_time, update_person, update_time, dr
+    </sql>
+
+</mapper>

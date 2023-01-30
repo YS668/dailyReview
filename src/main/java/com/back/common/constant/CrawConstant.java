@@ -44,8 +44,10 @@ public class CrawConstant {
     public static String QUESTION_UP_ALL = "上涨个股";
     public static String NINE_TWENTY_FIVE = "9点25分";
     public static String TEN = "10点";
-    public static String ELEVEN_THIRTY = "11点30分";
+    public static String ELEVEN = "11点";
+    public static String THIRTEENT = "13点";
     public static String FOURTEEN = "14点";
+    public static final String FOURTEENTHE = "14点30分";
     public static String QUESTION_DAY = "今天";
     public static String QUESTION_SZ_INDEX = "上证指数";
     public static String SZ_INDEX_code = "000001";
@@ -64,6 +66,10 @@ public class CrawConstant {
     public static String STOCK = "stock";
     public static String ZHI_SHU = "zhishu";
 
+
+    public static String REVIEW = "review";
+    public static String NORTH = "north";
+    public static String UP = "up";
 
 
 }

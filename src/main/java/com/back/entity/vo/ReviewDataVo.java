@@ -1,5 +1,6 @@
 package com.back.entity.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class ReviewDataVo {
 
+    @ApiModelProperty(value = "标识")
+    private String rdid;
     /** 创历史新高 <代码，行情>*/
     private Map<String,StockPushVo> historyHigh;
     /** 创一年新高 <代码，行情>*/
@@ -23,13 +26,13 @@ public class ReviewDataVo {
     /** 跌停家数 <代码，行情>*/
     private Map<String,StockPushVo> downLimit;
     /** 跌幅超5% */
-    private int downFive;
+    private Map<String,StockPushVo> downFive;
     /** 涨停家数 <代码，行情>*/
     private Map<String,StockPushVo> upLimit;
     /** 非一字涨停 <代码，行情>*/
     private Map<String,StockPushVo> noOneUp;
     /** 涨幅超5% */
-    private int upFive;
+    private Map<String,StockPushVo> upFive;
     /** 上涨家数 */
     private int upAll;
     /** 上证指数涨跌 */

@@ -20,7 +20,10 @@ public class CrawTask extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         //TODO 这里写定时任务的执行逻辑
+        //定时爬取复盘信息
         CrawUtil.getReviewData();
+        //获取复盘信息
+
         System.out.println("简单的定时任务执行时间："+new Date().toLocaleString());
     }
 }

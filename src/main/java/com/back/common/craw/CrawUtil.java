@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.CrawConstant;
+import com.back.entity.vo.NorthVo;
 import com.back.entity.vo.ReviewDataVo;
 import com.back.entity.vo.StockPushVo;
 
+import com.back.entity.vo.UpVo;
 import com.back.service.ReviewdataService;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +62,11 @@ public class CrawUtil {
 	public static Map<String, StockPushVo> StockCodeMap = new HashMap<>();
 	/** <股票名称,股票信息> */
 	public static Map<String, StockPushVo> StockNameMap = new HashMap<>();
+	/**
+	 * 每日复盘数据
+	 */
+	public static Map<String, Object> dayReviewDataMap = new HashMap<>();
+
 
 	/**
 	 * 周一到周五凌晨5点 初始化股票map缓存及每日更新 避免新股出现
@@ -194,48 +202,79 @@ public class CrawUtil {
 	/**
 	 * 今日数据
 	 */
-	public static ReviewDataVo getReviewData() {
-		ReviewDataVo vo = new ReviewDataVo();
+	public static void getReviewData() {
+		ReviewDataVo reviewDataVo = new ReviewDataVo();
+		NorthVo northVo = new NorthVo();
+		UpVo upVo = new UpVo();
 		//历史新高
-		vo.setHistoryHigh(
+		reviewDataVo.setHistoryHigh(
 				CrawUtil.getDayData(CrawConstant.QUESTION_HISTORY_HIGH, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
 		//一年新高
-		vo.setYearHigh(CrawUtil.getDayData(CrawConstant.QUESTION_YEAR_HIGH, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setYearHigh(CrawUtil.getDayData(CrawConstant.QUESTION_YEAR_HIGH, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
 		//一年新低
-		vo.setYearLow(CrawUtil.getDayData(CrawConstant.QUESTION_YEAR_LOW, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setYearLow(CrawUtil.getDayData(CrawConstant.QUESTION_YEAR_LOW, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
 		//今日跌停
-		vo.setDownLimit(CrawUtil.getDayData(CrawConstant.QUESTION_DOWN_LIMIT, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setDownLimit(CrawUtil.getDayData(CrawConstant.QUESTION_DOWN_LIMIT, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
 		//今日涨停
-		vo.setUpLimit(CrawUtil.getDayData(CrawConstant.QUESTION_UP_LIMIT, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setUpLimit(CrawUtil.getDayData(CrawConstant.QUESTION_UP_LIMIT, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
 		//今日非一字涨停
-		vo.setNoOneUp(CrawUtil.getDayData(CrawConstant.QUESTION_NO_ONE_UP, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setNoOneUp(CrawUtil.getDayData(CrawConstant.QUESTION_NO_ONE_UP, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
 		//今日跌幅超5%
-		vo.setDownFive(CrawUtil.getNum(CrawConstant.QUESTION_DOWN_FIVE, CrawConstant.STOCK));
+		reviewDataVo.setDownFive(CrawUtil.getDayData(CrawConstant.QUESTION_DOWN_FIVE, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
 		//今日涨幅超5%
-		vo.setUpFive(CrawUtil.getNum(CrawConstant.QUESTION_UP_FIVE, CrawConstant.STOCK));
+		reviewDataVo.setUpFive(CrawUtil.getDayData(CrawConstant.QUESTION_UP_FIVE, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
 		//总成交额
-		vo.setTurnOver(CrawUtil.getTurnOver());
+		reviewDataVo.setTurnOver(CrawUtil.getTurnOver());
 		//上证指数涨跌
-		vo.setSH_INDEX(CrawUtil.getIndex(CrawConstant.SH_INDEX_URL).getTrend());
+		String shTrend = CrawUtil.getIndex(CrawConstant.SH_INDEX_URL).getTrend();
+		reviewDataVo.setSH_INDEX(shTrend);
 		//深证成指涨跌
-		vo.setBusiness_INDEX(CrawUtil.getIndex(CrawConstant.BUS_INDEX_URL).getTrend());
+		reviewDataVo.setBusiness_INDEX(CrawUtil.getIndex(CrawConstant.BUS_INDEX_URL).getTrend());
 		//创业扳指涨跌
-		vo.setBusiness_INDEX(CrawUtil.getIndex(CrawConstant.BUS_INDEX_URL).getTrend());
+		reviewDataVo.setBusiness_INDEX(CrawUtil.getIndex(CrawConstant.BUS_INDEX_URL).getTrend());
 		//上涨家数
-		vo.setUpAll(CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK));
+		Integer upAll = CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK);
+		reviewDataVo.setUpAll(upAll);
+
+		upVo.setFifteenup(upAll);
 		// 09:25上涨家数
-		CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.NINE_TWENTY_FIVE + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK);
+		upVo.setNinetfup(CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.NINE_TWENTY_FIVE + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK));
 		// 10:00上涨家数
-		CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.TEN + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK);
+		upVo.setTenup(CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.TEN + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK));
 		// 11:00上涨家数
-		CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.ELEVEN_THIRTY + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK);
+		upVo.setElevenup(CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.ELEVEN + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK));
+		// 13:00上涨家数
+		upVo.setThirteenup(CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.THIRTEENT + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK));
 		// 14:00上涨家数
-		CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.FOURTEEN + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK);
+		upVo.setFourteenup(CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.FOURTEEN + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK));
+		// 14:30上涨家数
+		upVo.setFourteentheup(CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.FOURTEENTHE + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK));
+
 		//沪股通
-		CrawUtil.getNorth(CrawConstant.HGTB_URL);
+		String hg = CrawUtil.getNorth(CrawConstant.HGTB_URL);
+		northVo.setHgtb(hg);
 		//深股通
-		CrawUtil.getNorth(CrawConstant.SGTB_URL);
-		return vo;
+		String sg = CrawUtil.getNorth(CrawConstant.SGTB_URL);
+		northVo.setSgtb(sg);
+		//总计
+		northVo.setNorthAll(BigDecimal.valueOf(Float.valueOf(hg)).add(BigDecimal.valueOf(Float.valueOf(sg))).setScale(CommonConstant.TWO).toString());
+		northVo.setShIndex(shTrend);
+
+		//日期
+		Calendar c=Calendar.getInstance();
+		int i = c.get(Calendar.YEAR);
+		int month=c.get(Calendar.MONTH)+1;
+		int date=c.get(Calendar.DATE);
+		String rdid = i+""+month+""+date;
+		reviewDataVo.setRdid(rdid);
+		northVo.setRdid(rdid);
+		upVo.setRdid(rdid);
+		//复盘数据
+		dayReviewDataMap.put(CrawConstant.REVIEW,reviewDataVo);
+		//北向资金
+		dayReviewDataMap.put(CrawConstant.NORTH,northVo);
+		//上涨家数
+		dayReviewDataMap.put(CrawConstant.UP,upVo);
 	}
 
 
