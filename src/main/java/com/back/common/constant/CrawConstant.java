@@ -23,10 +23,10 @@ public class CrawConstant {
     /** 同花顺龙虎榜 */
     public static String Long_Hu_URL= "http://data.10jqka.com.cn/market/longhu/";
     /** 上交所js文件*/
-    public static String SH_JS = "C:\\Users\\admin\\Desktop\\sh.js";
+    public static String SH_JS = "D:\\test\\sh.js";
     /** 深交所excel文件*/
-    public static String SZ_EXCEL = "C:\\Users\\admin\\Desktop\\SZStock.xlsx";
-    public static String HE_XIN_V = "C:\\Users\\admin\\Desktop\\hexin-v.js";
+    public static String SZ_EXCEL = "D:\\test\\SZStock.xlsx";
+    public static String HE_XIN_V = "D:\\test\\hexin-v.js";
     /** 深交所*/
     public static String SZ = "SZ";
     /** 上交所*/
