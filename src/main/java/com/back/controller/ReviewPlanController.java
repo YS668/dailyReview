@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-01-05
  */
 @RestController
-@RequestMapping("/review")
+@RequestMapping("/review/plan")
 public class ReviewPlanController {
 
 }

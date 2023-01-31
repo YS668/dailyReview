@@ -17,7 +17,7 @@ import com.back.common.Result;
  */
 @RestController
 @RequestMapping("/trigger")
-public class CrawController {
+public class TriggerController {
 
     //注入任务调度
     @Autowired
