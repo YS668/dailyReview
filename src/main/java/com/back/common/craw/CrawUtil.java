@@ -39,6 +39,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -462,7 +463,9 @@ public class CrawUtil {
 	public static Integer getNum(String question,String secondary_intent) {
 		log.info("开始爬取：条件{}",question);
 		ResponseEntity<String> entity = getWenCai(question, secondary_intent,CommonConstant.ONE);
-		return resolutionNum(entity);
+		int res = resolutionNum(entity);
+		log.info("结果：{}",res);
+		return res;
 	}
 
 
@@ -470,6 +473,7 @@ public class CrawUtil {
 	public static StockPushVo getIndex(String url){
 		Document document = null;
 		StockPushVo stockPushVo = new StockPushVo();
+		log.info("爬取：url：{}",url);
 		try {
 			document = Jsoup.connect(url).get();
 			// 获取主体，本质是个list
@@ -486,6 +490,7 @@ public class CrawUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		log.info("结果：{}",stockPushVo);
 		return stockPushVo;
 	}
 
@@ -498,6 +503,7 @@ public class CrawUtil {
 	public static String getNorth(String url){
 		Document document = null;
 		String num = null;
+		log.info("爬取：url：{}",url);
 		try {
 			num = Jsoup.connect(url).get().getElementsByTag("body").first()
 					.getElementsByClass("m-table J-ajax-table").first()
@@ -509,6 +515,7 @@ public class CrawUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally {
+			log.info("结果：{}",num);
 			return num;
 		}
 	}
@@ -522,5 +529,6 @@ public class CrawUtil {
 		String content = (String) data.get("text_answer");
 		return content.split(CrawConstant.TURNOVER)[CommonConstant.ONE].replace(CrawConstant.PERIOD, "");
 	}
+
 
 }
