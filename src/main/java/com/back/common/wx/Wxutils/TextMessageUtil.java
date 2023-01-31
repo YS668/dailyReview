@@ -4,15 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.back.common.BeanUtil;
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.WXConstant;
-import com.back.common.wx.messagehandler.WxMessageHandler;
-import com.back.controller.WX.WxController;
-import com.back.entity.pojo.Wxhandler;
+import com.back.common.wx.WxHandlerEnum;
+import com.back.common.wx.messagehandler.HandlerAdapter;
 import com.back.entity.wx.TextMessage;
-import com.back.mapper.WxhandlerMapper;
-import com.back.service.WxhandlerService;
 import com.thoughtworks.xstream.XStream;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -29,25 +25,18 @@ import java.util.Map;
 @Component("textMessageUtil")
 public class TextMessageUtil {
 
-    @Resource
-    private WxhandlerMapper wxhandlerMapper;
-
     /**
-     * bean初始化时注入
+     * spring自动注入
      */
-    public static Map<String, Wxhandler> handMap = new HashMap<>();
+    public static Map<String, HandlerAdapter> handMap = new HashMap<>();
 
     /**
      * 初始化时，注入文本信息
      */
-    @PostConstruct
-    private void init() {
-        List<Wxhandler> list = wxhandlerMapper.getAll();
-        list.stream().forEach((wxhandler) -> {
-            handMap.put(wxhandler.getKeywords(), wxhandler);
-        });
-        log.info("初始化的微信指令：{}", JSON.toJSON(handMap));
-    }
+//    @PostConstruct
+//    private void init() {
+//        log.info("初始化的微信指令：{}", JSON.toJSON(handMap));
+//    }
 
     /**
      * 把对象转成微信回复需要的xml格式对应的字符串
@@ -78,48 +67,15 @@ public class TextMessageUtil {
         }
         String[] split = Content.split(" ");
         String channel = null;
-        WxMessageHandler handler = null;
+        HandlerAdapter handler = null;
         if (split != null && split.length >= CommonConstant.ONE) {
             if (split[CommonConstant.ZERO] != null && !split[CommonConstant.ZERO].equals(" ")) {
                 //存在指令
                 String str = split[CommonConstant.ZERO];
-                switch (str) {
-                    //需要进行操作
-                    /** 绑定 */
-                    case WXConstant.HANDLER_BINDING:
-                        channel = handMap.get(WXConstant.HANDLER_BINDING).getChannel();
-                        break;
-                    /** 解绑 */
-                    case WXConstant.HANDLER_UNBIND:
-                        channel = handMap.get(WXConstant.HANDLER_UNBIND).getChannel();
-                        break;
-                    /** 推送 */
-                    case WXConstant.HANDLER_PUSH:
-                        channel = handMap.get(WXConstant.HANDLER_PUSH).getChannel();
-                        break;
-                    /** 复盘计划 */
-                    case WXConstant.HANDLER_PLAN:
-                        channel = handMap.get(WXConstant.HANDLER_PLAN).getChannel();
-                        break;
-                    /** 查看 */
-                    case WXConstant.HANDLER_WATCH:
-                        channel = handMap.get(WXConstant.HANDLER_WATCH).getChannel();
-                        break;
-                    /** 复盘数据 */
-                    case WXConstant.HANDLER_REVIEW_DATA:
-                        channel = handMap.get(WXConstant.HANDLER_REVIEW_DATA).getChannel();
-                        break;
-                    /** 帮助*/
-                    case WXConstant.HANDLER_HELP:
-                        text.setContent(handMap.get(Content).getContent());
-                        break;
-                     /** 错误指令 */
-                    default:
-                        text.setContent(WXConstant.WX_FAIL_CONTENT);
-                        break;
-                }
-                if (channel != null) {
-                    handler = (WxMessageHandler) BeanUtil.getBeanByName(channel);
+                //找适配器
+                Class<? extends HandlerAdapter> handlerBean = WxHandlerEnum.getHandlerBean(str);
+                if (handlerBean != null) {
+                    handler = (HandlerAdapter) BeanUtil.getBeanByName(handlerBean.getSimpleName());
                     text.setContent(handler.handler(FromUserName, Content));
                 }
             } else {

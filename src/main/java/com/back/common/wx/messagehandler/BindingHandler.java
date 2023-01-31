@@ -13,8 +13,8 @@ import javax.annotation.Resource;
 /**
  * 微信绑定
  */
-@Component("bindingHandler")
-public class BindingHandler implements WxMessageHandler{
+@Component
+public class BindingHandler extends HandlerAdapter {
 
     @Resource
     private UserMapper userMapper;
@@ -38,7 +38,7 @@ public class BindingHandler implements WxMessageHandler{
             //开始绑定
             user.setOpenid(openID);
             if (userMapper.updateById(user) > CommonConstant.ZERO){
-                return TextMessageUtil.handMap.get(split[CommonConstant.ZERO]).getContent();
+                return  WXConstant.BINDING_TEXT;
             }else {
                 return WXConstant.WX_AGAIN;
             }

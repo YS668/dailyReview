@@ -2,6 +2,7 @@ package com.back.common.wx.messagehandler;
 
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.CrawConstant;
+import com.back.common.constant.WXConstant;
 import com.back.common.craw.CrawUtil;
 import com.back.common.wx.Wxutils.TextMessageUtil;
 import com.back.entity.vo.ReviewDataVo;
@@ -14,14 +15,14 @@ import java.util.List;
 /**
  * 复盘数据操作类
  */
-@Component("reviewDataHandler")
-public class ReviewDataHandler implements WxMessageHandler{
+@Component
+public class ReviewDataHandler extends HandlerAdapter {
 
 
     @Override
     public String handler(String openId, String handler) {
         //回复模板
-        String resContent = TextMessageUtil.handMap.get(handler).getContent();
+        String resContent = WXConstant.REVIEW_DATA_TEXT;
         //准备填充数据
         List<String> fillList = new ArrayList<>();
         ReviewDataVo data = (ReviewDataVo) CrawUtil.dayReviewMap.get(CrawConstant.REVIEW);

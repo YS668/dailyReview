@@ -13,8 +13,8 @@ import javax.annotation.Resource;
 /**
  * 解除绑定
  */
-@Component("unBindHandler")
-public class UnBindHandler implements WxMessageHandler{
+@Component
+public class UnBindHandler extends HandlerAdapter {
 
     @Resource
     private UserMapper userMapper;
@@ -36,7 +36,7 @@ public class UnBindHandler implements WxMessageHandler{
         if (user.getOpenid() != null && user.getOpenid().equals(openId)){
             //解绑操作
             if (userMapper.cancelBindByuid(user.getUid()) > CommonConstant.ZERO){
-                return TextMessageUtil.handMap.get(content).getContent();
+                return WXConstant.UNBIND_TEXT;
             }else {
                 return WXConstant.WX_AGAIN;
             }

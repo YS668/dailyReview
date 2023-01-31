@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * 查看股票
  */
-@Component("watchHandler")
+@Component
 @Slf4j
-public class WatchHandler implements WxMessageHandler{
+public class WatchHandler extends HandlerAdapter {
 
     @Override
     public String handler(String openId,String content) {
@@ -28,7 +28,7 @@ public class WatchHandler implements WxMessageHandler{
         }
         if (WXConstant.HANDLER_WATCH.equals(split[CommonConstant.ZERO])){
             //回复模板
-            String resContent = TextMessageUtil.handMap.get(split[CommonConstant.ZERO]).getContent();
+            String resContent =  WXConstant.WATCH_TEXT;
             //查看的正确股票代码
             List<String> codeList = new ArrayList<>();
             //查看的错误输入

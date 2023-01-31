@@ -17,8 +17,8 @@ import java.util.List;
 /**
  * 推送自选股
  */
-@Component("pushHandler")
-public class PushHandler implements WxMessageHandler{
+@Component
+public class PushHandler extends HandlerAdapter {
 
     @Resource
     private  MystockMapper mystockMapper;
@@ -29,7 +29,7 @@ public class PushHandler implements WxMessageHandler{
     public String handler(String openId,String content) {
         if (content.equals(WXConstant.HANDLER_PUSH)){
             //回复模板
-            String resContent = TextMessageUtil.handMap.get(content).getContent();
+            String resContent = WXConstant.PUSH_TEXT;
             //自选股
             List<Mystock> list = mystockMapper.getByOpenId(openId);
             if (list == null || list.size() == CommonConstant.ZERO)

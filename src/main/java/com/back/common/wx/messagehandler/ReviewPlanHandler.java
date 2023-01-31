@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 /**
  * 推送复盘计划
  */
-@Component("reviewPlanHandler")
-public class ReviewPlanHandler implements WxMessageHandler{
+@Component
+public class ReviewPlanHandler extends HandlerAdapter {
 
     @Resource
     private ReviewPlanMapper reviewPlanMapper;
@@ -31,7 +31,7 @@ public class ReviewPlanHandler implements WxMessageHandler{
     public String handler(String openId,String content) {
         if (content.equals(WXConstant.HANDLER_PLAN)){
             //回复模板，进行填充
-            String resContent = TextMessageUtil.handMap.get(content).getContent();
+            String resContent = WXConstant.PLAN_TEXT;
             List<ReviewPlan> eos = reviewPlanMapper.getByOpenId(openId);
             //0代表日复盘
             List<ReviewPlan> cl = eos.stream().filter((rp -> rp.getType() == CommonConstant.ZERO)).collect(Collectors.toList());
