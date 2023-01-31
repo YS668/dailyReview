@@ -291,7 +291,6 @@ public class CrawUtil {
 		Document document = null;
 		List<String> list = new ArrayList<>();
 		StockPushVo vo = null;
-		log.info("开始爬取个股信息：股票编码{}", stockCode);
 		try {
 			document = Jsoup.connect(url).get();
 			// 获取主体，本质是个list
@@ -315,7 +314,6 @@ public class CrawUtil {
 			vo.setTrend(trend);
 			vo.setTurnover(turnover);
 			vo.setXueQiuLink(url);
-			log.info("个股爬取结果：{}", vo.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -454,6 +452,7 @@ public class CrawUtil {
 				res.addAll(resolution(getWenCai(question, secondary_intent,i)));
 			}
 		}
+		log.info("结果{}",res);
 		return res;
 	}
 
