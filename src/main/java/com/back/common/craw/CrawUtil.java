@@ -229,7 +229,7 @@ public class CrawUtil {
 		String shTrend = CrawUtil.getIndex(CrawConstant.SH_INDEX_URL).getTrend();
 		reviewDataVo.setSH_INDEX(shTrend);
 		//深证成指涨跌
-		reviewDataVo.setBusiness_INDEX(CrawUtil.getIndex(CrawConstant.BUS_INDEX_URL).getTrend());
+		reviewDataVo.setSZ_INDEX(CrawUtil.getIndex(CrawConstant.SZ_INDEX_URL).getTrend());
 		//创业扳指涨跌
 		reviewDataVo.setBusiness_INDEX(CrawUtil.getIndex(CrawConstant.BUS_INDEX_URL).getTrend());
 		//上涨家数
@@ -262,10 +262,10 @@ public class CrawUtil {
 
 		//日期
 		Calendar c=Calendar.getInstance();
-		int i = c.get(Calendar.YEAR);
+		int year = c.get(Calendar.YEAR);
 		int month=c.get(Calendar.MONTH)+1;
 		int date=c.get(Calendar.DATE);
-		String rdid = i+""+month+""+date;
+		String rdid = year+""+month+""+date;
 		reviewDataVo.setRdid(rdid);
 		northVo.setRdid(rdid);
 		upVo.setRdid(rdid);
