@@ -1,9 +1,12 @@
 package com.back.entity.vo;
 
+import com.alibaba.fastjson.JSON;
+import com.back.entity.pojo.Reviewdata;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.Map;
 
@@ -65,6 +68,41 @@ public class ReviewDataVo {
                 "成交额：" + turnOver + '\n' +
                 "最高标：" + highest + "\n"+
                 "板块涨幅前五：" + plateFive + "\n";
+    }
+
+    //vo转换
+    public static ReviewDataVo of(Reviewdata data){
+        ReviewDataVo vo = new ReviewDataVo();
+        //json转map
+        //标识
+        vo.setRdid(data.getRdid());
+        //历史新高
+        vo.setHistoryHigh(JSONObject.parseObject(data.getHistoryHigh(),Map.class));
+        //一年新高
+        vo.setYearHigh(JSONObject.parseObject(data.getYearHigh(),Map.class));
+        //一年新低
+        vo.setYearLow(JSONObject.parseObject(data.getYearLow(),Map.class));
+        //今日跌停
+        vo.setDownLimit(JSONObject.parseObject(data.getDownLimit(),Map.class));
+        //今日跌幅超5%
+        vo.setDownFive(JSONObject.parseObject(data.getDownFive(),Map.class));
+        //今日涨停
+        vo.setUpLimit(JSONObject.parseObject(data.getUpLimit(),Map.class));
+        //今日非一字涨停
+        vo.setNoOneUp(JSONObject.parseObject(data.getNoOneUp(),Map.class));
+        //今日涨幅超5%
+        vo.setUpFive(JSONObject.parseObject(data.getUpFive(),Map.class));
+        //上涨家数
+        vo.setUpAll(data.getUpAll());
+        //上证指数
+        vo.setSH_INDEX(data.getShIndex());
+        //深证成指
+        vo.setSZ_INDEX(data.getSzIndex());
+        //创业扳指
+        vo.setBusiness_INDEX(data.getBusinessIndex());
+        //成交额
+        vo.setTurnOver(data.getTurnOver());
+        return vo;
     }
 
 

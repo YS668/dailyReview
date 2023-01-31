@@ -1,5 +1,7 @@
 package com.back.entity.pojo;
 
+import com.back.entity.vo.NorthVo;
+import com.back.entity.vo.UpVo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
@@ -62,5 +64,26 @@ public class Up  extends basePojo  implements Serializable {
     @ApiModelProperty(value = "额外字段")
     private String extra;
 
+    //vo转换
+    public static Up of(UpVo vo){
+        Up up = new Up();
+        //标识
+        up.setRdid(vo.getRdid());
+        //9.25上涨家数
+        up.setNinetfup(vo.getNinetfup());
+        //10.00上涨家数
+        up.setTenup(vo.getTenup());
+        //11.00上涨家数
+        up.setElevenup(vo.getElevenup());
+        //13.00上涨家数
+        up.setThirteenup(vo.getThirteenup());
+        //14.00上涨家数
+        up.setFourteenup(vo.getFourteenup());
+        //14.30上涨家数
+        up.setFourteentheup(vo.getFourteentheup());
+        //15.00上涨家数
+        up.setFifteenup(vo.getFifteenup());
+        return up;
+    }
 
 }

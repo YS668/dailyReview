@@ -69,15 +69,13 @@ public class StockPushVo  {
      * @param map
      * @return
      */
-    public static StockPushVo reviewData(Map map) {
+    public static StockPushVo of(Map map) {
         Object o = map.get(CrawConstant.STOCK_NAME);
         StockPushVo vo = CrawUtil.StockNameMap.get(map.get(CrawConstant.STOCK_NAME));
         if(vo == null){
             return null;
         }
-        vo.setNowPrice( (String) map.get(CrawConstant.NOW_PRICE));
-        vo.setTrend( (String) map.get(CrawConstant.NOW_TREND));
-        return vo;
+        return CrawUtil.getOne(vo.getStockCode());
     }
 
 

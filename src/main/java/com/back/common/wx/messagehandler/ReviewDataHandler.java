@@ -24,7 +24,7 @@ public class ReviewDataHandler implements WxMessageHandler{
         String resContent = TextMessageUtil.handMap.get(handler).getContent();
         //准备填充数据
         List<String> fillList = new ArrayList<>();
-        ReviewDataVo data = (ReviewDataVo) CrawUtil.dayReviewDataMap.get(CrawConstant.REVIEW);
+        ReviewDataVo data = (ReviewDataVo) CrawUtil.dayReviewMap.get(CrawConstant.REVIEW);
         /** 历史新高数 */
         fillList.add(String.valueOf(data.getHistoryHigh().size()));
         /** 一年新高数 */

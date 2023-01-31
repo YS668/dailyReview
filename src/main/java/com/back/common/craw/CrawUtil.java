@@ -65,7 +65,7 @@ public class CrawUtil {
 	/**
 	 * 每日复盘数据
 	 */
-	public static Map<String, Object> dayReviewDataMap = new HashMap<>();
+	public static Map<String, Object> dayReviewMap = new HashMap<>();
 
 
 	/**
@@ -257,7 +257,7 @@ public class CrawUtil {
 		String sg = CrawUtil.getNorth(CrawConstant.SGTB_URL);
 		northVo.setSgtb(sg);
 		//总计
-		northVo.setNorthAll(BigDecimal.valueOf(Float.valueOf(hg)).add(BigDecimal.valueOf(Float.valueOf(sg))).setScale(CommonConstant.TWO).toString());
+		northVo.setNorthAll(BigDecimal.valueOf(Float.valueOf(hg)).add(BigDecimal.valueOf(Float.valueOf(sg))).setScale(CommonConstant.TWO,BigDecimal.ROUND_DOWN).toString());
 		northVo.setShIndex(shTrend);
 
 		//日期
@@ -270,11 +270,11 @@ public class CrawUtil {
 		northVo.setRdid(rdid);
 		upVo.setRdid(rdid);
 		//复盘数据
-		dayReviewDataMap.put(CrawConstant.REVIEW,reviewDataVo);
+		dayReviewMap.put(CrawConstant.REVIEW,reviewDataVo);
 		//北向资金
-		dayReviewDataMap.put(CrawConstant.NORTH,northVo);
+		dayReviewMap.put(CrawConstant.NORTH,northVo);
 		//上涨家数
-		dayReviewDataMap.put(CrawConstant.UP,upVo);
+		dayReviewMap.put(CrawConstant.UP,upVo);
 	}
 
 
@@ -406,7 +406,7 @@ public class CrawUtil {
 		JSONArray datas = (JSONArray) componentsZeroData.get("datas");
 		List<Map> map = datas.toJavaList(Map.class);
 		// 转换并过滤非上交与深交的股票
-		List<StockPushVo> res = map.stream().map(StockPushVo::reviewData).filter(e -> e != null)
+		List<StockPushVo> res = map.stream().map(StockPushVo::of).filter(e -> e != null)
 				.collect(Collectors.toList());
 		return res;
 	}
@@ -477,7 +477,7 @@ public class CrawUtil {
 			// 获取主体，本质是个list
 			Elements body = document.getElementsByTag("body");
 			//现值
-			String nowPrice = body.first().getElementsByClass("board-xj arr-rise").first().text();
+			String nowPrice = body.first().getElementsByClass("board-hq").first().getElementsByTag("span").last().text();
 			stockPushVo.setNowPrice(nowPrice);
 			//成交额
 			Elements dd = body.first().getElementsByClass("board-infos").first().getElementsByTag("dd");
@@ -506,7 +506,7 @@ public class CrawUtil {
 					.getElementsByTag("tbody").first()
 					.getElementsByTag("tr").first()
 					.getElementsByClass("tc").first().nextElementSibling()
-					.text();
+					.text().split(CrawConstant.YI)[CommonConstant.ZERO];
 
 		} catch (IOException e) {
 			e.printStackTrace();

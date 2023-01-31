@@ -1,5 +1,7 @@
 package com.back.entity.pojo;
 
+import com.alibaba.fastjson.JSON;
+import com.back.entity.vo.ReviewDataVo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
@@ -72,5 +74,40 @@ public class Reviewdata extends basePojo implements Serializable {
 
     @ApiModelProperty(value = "额外字段")
     private String extra;
+
+    //vo转换
+    public static Reviewdata of(ReviewDataVo vo){
+        Reviewdata data = new Reviewdata();
+        //map转json
+        //标识
+        data.setRdid(vo.getRdid());
+        //历史新高
+        data.setHistoryHigh(JSON.toJSON(vo.getHistoryHigh()).toString());
+        //一年新高
+        data.setYearHigh(JSON.toJSON(vo.getYearHigh()).toString());
+        //一年新低
+        data.setYearLow(JSON.toJSON(vo.getYearLow()).toString());
+        //今日跌停
+        data.setDownLimit(JSON.toJSON(vo.getDownLimit()).toString());
+        //今日跌幅超5%
+        data.setDownFive(JSON.toJSON(vo.getDownFive()).toString());
+        //今日涨停
+        data.setUpLimit(JSON.toJSON(vo.getUpLimit()).toString());
+        //今日非一字涨停
+        data.setNoOneUp(JSON.toJSON(vo.getNoOneUp()).toString());
+        //今日涨幅超5%
+        data.setUpFive(JSON.toJSON(vo.getUpFive()).toString());
+        //上涨家数
+        data.setUpAll(vo.getUpAll());
+        //上证指数
+        data.setShIndex(vo.getSH_INDEX());
+        //深证成指
+        data.setSzIndex(vo.getSZ_INDEX());
+        //创业扳指
+        data.setBusinessIndex(vo.getBusiness_INDEX());
+        //成交额
+        data.setTurnOver(vo.getTurnOver());
+        return data;
+    }
 
 }

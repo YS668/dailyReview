@@ -1,5 +1,6 @@
 package com.back.controller;
 
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerKey;
@@ -16,7 +17,7 @@ import com.back.common.Result;
  */
 @RestController
 @RequestMapping("/trigger")
-public class TriggerController {
+public class CrawController {
 
     //注入任务调度
     @Autowired
@@ -47,6 +48,22 @@ public class TriggerController {
         //根据触发器中的withIdentity认证信息对任务进行暂停
         try {
             scheduler.resumeTrigger(TriggerKey.triggerKey("craw"));
+            return Result.suc();
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        return Result.fail();
+    }
+
+    /**
+     * 执行一次定时任务(爬取复盘数据)
+     * @return
+     */
+    @GetMapping("/run/one")
+    public Result runOne(){
+        //根据触发器中的withIdentity认证信息对任务进行暂停
+        try {
+            scheduler.triggerJob(JobKey.jobKey("craw"));
             return Result.suc();
         } catch (SchedulerException e) {
             e.printStackTrace();

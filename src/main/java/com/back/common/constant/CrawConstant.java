@@ -65,6 +65,7 @@ public class CrawConstant {
     public static String PERIOD = "。";
     public static String STOCK = "stock";
     public static String ZHI_SHU = "zhishu";
+    public static String YI = "亿";
 
 
     public static String REVIEW = "review";

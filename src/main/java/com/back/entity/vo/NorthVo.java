@@ -1,5 +1,7 @@
 package com.back.entity.vo;
 
+import com.back.entity.pojo.North;
+import com.back.entity.pojo.Reviewdata;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,4 +34,20 @@ public class NorthVo {
 
     @ApiModelProperty(value = "额外字段")
     private String extra;
+
+    //vo转换
+    public static NorthVo of(North north){
+        NorthVo vo = new NorthVo();
+        //标识
+        vo.setRdid(north.getRdid());
+        //北向净买入
+        vo.setNorthAll(north.getNorthAll());
+        //上证指数
+        vo.setShIndex(north.getShIndex());
+        //沪股通
+        vo.setSgtb(north.getSgtb());
+        //深股通
+        vo.setHgtb(north.getHgtb());
+        return vo;
+    }
 }
