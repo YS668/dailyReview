@@ -1,7 +1,9 @@
 package com.back.common.wx.messagehandler;
 
 import com.back.common.constant.WXConstant;
+import org.springframework.stereotype.Component;
 
+@Component
 public class HelpHandler extends HandlerAdapter{
 
     @Override

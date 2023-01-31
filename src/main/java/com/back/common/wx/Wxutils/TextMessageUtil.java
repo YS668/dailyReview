@@ -25,18 +25,6 @@ import java.util.Map;
 @Component("textMessageUtil")
 public class TextMessageUtil {
 
-    /**
-     * spring自动注入
-     */
-    public static Map<String, HandlerAdapter> handMap = new HashMap<>();
-
-    /**
-     * 初始化时，注入文本信息
-     */
-//    @PostConstruct
-//    private void init() {
-//        log.info("初始化的微信指令：{}", JSON.toJSON(handMap));
-//    }
 
     /**
      * 把对象转成微信回复需要的xml格式对应的字符串
@@ -66,24 +54,22 @@ public class TextMessageUtil {
             return messageToxml(text);
         }
         String[] split = Content.split(" ");
-        String channel = null;
-        HandlerAdapter handler = null;
+        HandlerAdapter beanHandler = null;
         if (split != null && split.length >= CommonConstant.ONE) {
             if (split[CommonConstant.ZERO] != null && !split[CommonConstant.ZERO].equals(" ")) {
                 //存在指令
                 String str = split[CommonConstant.ZERO];
                 //找适配器
-                Class<? extends HandlerAdapter> handlerBean = WxHandlerEnum.getHandlerBean(str);
-                if (handlerBean != null) {
-                    handler = (HandlerAdapter) BeanUtil.getBeanByName(handlerBean.getSimpleName());
-                    text.setContent(handler.handler(FromUserName, Content));
+                Class<? extends HandlerAdapter> handlerClass = WxHandlerEnum.getHandlerBean(str);
+                if (handlerClass != null) {
+                    //获取适配器
+                    beanHandler = (HandlerAdapter) BeanUtil.getBeanByClass(handlerClass);
+                    text.setContent(beanHandler.handler(FromUserName, Content));
+                    return messageToxml(text);
                 }
-            } else {
-                text.setContent(WXConstant.WX_FAIL_CONTENT);
             }
-        } else {
-            text.setContent(WXConstant.WX_FAIL_CONTENT);
         }
+        text.setContent(WXConstant.WX_FAIL_CONTENT);
         log.info("回复的微信消息：{}", JSON.toJSON(text));
         return messageToxml(text);
     }
@@ -124,7 +110,7 @@ public class TextMessageUtil {
      * @param fillList
      * @return
      */
-    public static String fillMessage(String content, List<String> fillList) {
+    public static String fillMsg(String content, List<String> fillList) {
         String[] split = content.split("\\$");
         StringBuilder builder = new StringBuilder();
         if (split.length == fillList.size() ) {
@@ -141,18 +127,5 @@ public class TextMessageUtil {
         } else {
             return WXConstant.WX_FAIl_HANDLER;
         }
-    }
-
-    public static void main(String[] args) {
-        String str = "您好，这是$的复盘计划\n" +
-                "$\n" +
-                "今天记得按计划行事哦";
-        System.out.println(str.contains("$"));
-        List<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("test");
-        String res = fillMessage(str, list);
-        System.out.println(res);
-        System.out.println(res.contains("$"));
     }
 }

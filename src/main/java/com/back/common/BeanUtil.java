@@ -18,4 +18,8 @@ public class BeanUtil implements BeanFactoryAware {
     public static Object getBeanByName(String name){
         return beanFactory.getBean(name);
     }
+
+    public static Object getBeanByClass(Class cl){
+        return beanFactory.getBean(cl);
+    }
 }

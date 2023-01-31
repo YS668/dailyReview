@@ -1,18 +1,12 @@
 package com.back.common.wx;
 
-import com.back.common.wx.messagehandler.BindingHandler;
-import com.back.common.wx.messagehandler.HandlerAdapter;
-import com.back.common.wx.messagehandler.PushHandler;
-import com.back.common.wx.messagehandler.ReviewDataHandler;
-import com.back.common.wx.messagehandler.ReviewPlanHandler;
-import com.back.common.wx.messagehandler.UnBindHandler;
-import com.back.common.wx.messagehandler.WatchHandler;
+import com.back.common.wx.messagehandler.*;
 
 /**
  * 微信操作枚举类
  */
 public enum WxHandlerEnum {
-     HELP("帮助",null),
+     HELP("帮助", HelpHandler.class),
      BINDING("绑定", BindingHandler.class),
      UNBIND("解绑", UnBindHandler.class),
      PUSH("推送", PushHandler.class),
@@ -46,7 +40,7 @@ public enum WxHandlerEnum {
 
     public static Class<? extends HandlerAdapter> getHandlerBean(String name) {
         for (WxHandlerEnum value : WxHandlerEnum.values()) {
-            if (value.getName() == name){
+            if (value.getName().equals(name)){
                 return value.getHandlerBean();
             }
         }

@@ -51,11 +51,8 @@ public class WatchHandler extends HandlerAdapter {
                 //输入不正确的
                 mistakeList.add(str);
             }
-            //开始填充
             StringBuilder resBulider = new StringBuilder();
             for (int i = 0; i < codeList.size(); i++) {
-                //填充值，第一个为股票名称，第二个为股票涨跌，第三个为现价，第四个为成交额，第五个为雪球链接
-                List<String> fillList = new ArrayList<>();
                 String stockCode = codeList.get(i);
                 //股票名称/股票代码转换器
                 StockPushVo crawRes = CrawUtil.getOne(stockCode);
@@ -63,18 +60,7 @@ public class WatchHandler extends HandlerAdapter {
                     mistakeList.add(stockCode);
                     continue;
                 }
-                /** 股票名称 */
-                fillList.add(crawRes.getStockName());
-                /** 股票涨跌 */
-                fillList.add(crawRes.getTrend());
-                /** 现价 */
-                fillList.add(crawRes.getNowPrice());
-                /** 成交额 */
-                fillList.add(crawRes.getTurnover());
-                /** 雪球链接 */
-                fillList.add(crawRes.getXueQiuLink());
-                String str = TextMessageUtil.fillMessage(resContent,fillList );
-                resBulider.append(str+"\n");
+                resBulider.append(crawRes.show()+"\n");
             }
             //最后加上不正确的提示
             for (String mistake : mistakeList) {

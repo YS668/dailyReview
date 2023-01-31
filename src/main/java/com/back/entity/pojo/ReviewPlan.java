@@ -30,6 +30,10 @@ public class ReviewPlan extends basePojo implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    /**以日期为标记，如2023-1-30，则为20230130*/
+    @ApiModelProperty(value = "标识")
+    private String rdid;
+
     @ApiModelProperty(value = "复盘用户")
     private Long uid;
 

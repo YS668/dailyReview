@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 /**
  * 微信绑定
  */
-@Component
+@Component("BindingHandler")
 public class BindingHandler extends HandlerAdapter {
 
     @Resource

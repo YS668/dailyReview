@@ -42,6 +42,14 @@ public class StockPushVo  {
         this.stortName = stortName;
     }
 
+    public  String show() {
+        return "股票名称：" + stockName+"\n"+
+                "涨跌：" + trend+"\n"+
+                "现价：" + nowPrice+"\n"+
+                "成交额：" + turnover+"\n"+
+                "雪球链接：" + xueQiuLink;
+    }
+
     @Override
     public String toString() {
         return "StockPushVo{" +

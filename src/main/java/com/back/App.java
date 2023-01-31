@@ -14,6 +14,5 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class,args);
-        log.info("初始化的微信指令：{}", JSON.toJSON(TextMessageUtil.handMap));
     }
 }

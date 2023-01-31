@@ -57,17 +57,15 @@ public class ReviewDataVo {
                 "今日一年新高数：" + yearHigh.size() + "\n"+
                 "今日一年新低数：" + yearLow.size() + "\n"+
                 "今日跌停数：" + downLimit.size() + "\n"+
-                "今日跌幅超5%：" + downFive + "\n"+
+                "今日跌幅超5%：" + downFive.size() + "\n"+
                 "今日涨停数：" + upLimit.size() + "\n"+
                 "今日非一字涨停：" + noOneUp.size() + "\n"+
-                "今日涨幅超5%：" + upFive + "\n"+
+                "今日涨幅超5%：" + upFive.size() + "\n"+
                 "今日上涨家数：" + upAll + "\n"+
                 "上证指数：" + SH_INDEX + "\n"+
                 "上证指数：" + SZ_INDEX + "\n"+
                 "创业扳指：" + Business_INDEX + "\n"+
-                "成交额：" + turnOver + '\n' +
-                "最高标：" + highest + "\n"+
-                "板块涨幅前五：" + plateFive + "\n";
+                "成交额：" + turnOver;
     }
 
     //vo转换

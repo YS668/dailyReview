@@ -37,27 +37,13 @@ public class PushHandler extends HandlerAdapter {
             if(list == null || list.size() == CommonConstant.ZERO){
                 return WXConstant.WX_NO_MY_STOCK;
             }
-            //开始填充
             StringBuilder resBulider = new StringBuilder();
             for (int i = 0; i < list.size(); i++) {
-                //填充值，第一个为股票名称，第二个为股票涨跌，第三个为现价，第四个为成交额，第五个为雪球链接
-                List<String> fillList = new ArrayList<>();
                 StockPushVo crawRes = CrawUtil.getOne(list.get(i).getStockcode());
                 if (crawRes == null){
                     return WXConstant.WX_FAIl_HANDLER;
                 }
-                /** 股票名称 */
-                fillList.add(crawRes.getStockName());
-                /** 股票涨跌 */
-                fillList.add(crawRes.getTrend());
-                /** 现价 */
-                fillList.add(crawRes.getNowPrice());
-                /** 成交额 */
-                fillList.add(crawRes.getTurnover());
-                /** 雪球链接 */
-                fillList.add(crawRes.getXueQiuLink());
-                String str = TextMessageUtil.fillMessage(resContent,fillList );
-                resBulider.append(str+"\n");
+                resBulider.append(crawRes.show()+"\n");
             }
             return resBulider.toString();
         }else {

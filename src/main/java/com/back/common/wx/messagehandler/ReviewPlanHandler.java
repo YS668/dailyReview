@@ -5,6 +5,7 @@ import com.back.common.constant.WXConstant;
 import com.back.common.wx.Wxutils.TextMessageUtil;
 import com.back.entity.pojo.ReviewPlan;
 import com.back.entity.pojo.User;
+import com.back.entity.vo.ReviewPlanVo;
 import com.back.mapper.ReviewPlanMapper;
 import com.back.mapper.ReviewPlanMapper;
 import com.back.mapper.UserMapper;
@@ -37,17 +38,13 @@ public class ReviewPlanHandler extends HandlerAdapter {
             List<ReviewPlan> cl = eos.stream().filter((rp -> rp.getType() == CommonConstant.ZERO)).collect(Collectors.toList());
             //目标记录，最近的一条复盘记录
             if (cl.size() != 0){
-                List<String> fillList = new ArrayList<>();
                 //用户名
                 User user = userMapper.getByOpenId(openId);
                 //没有绑定
                 if(user == null){
                     return WXConstant.WX_NO_BINDING;
                 }
-                fillList.add(user.getUsername());
-                //复盘计划
-                fillList.add(cl.get(CommonConstant.ZERO).getContent());
-                return TextMessageUtil.fillMessage(resContent,fillList);
+                return new ReviewPlanVo().of(cl.get(CommonConstant.ZERO)).show(user.getUsername());
             }
             //没找到日复盘
             return WXConstant.WX_NO_PLAN;

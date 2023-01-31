@@ -22,12 +22,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.CrawConstant;
+import com.back.entity.pojo.North;
+import com.back.entity.pojo.Reviewdata;
+import com.back.entity.pojo.Up;
 import com.back.entity.vo.NorthVo;
 import com.back.entity.vo.ReviewDataVo;
 import com.back.entity.vo.StockPushVo;
 
 import com.back.entity.vo.UpVo;
+import com.back.service.NorthService;
 import com.back.service.ReviewdataService;
+import com.back.service.UpService;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,6 +63,13 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class CrawUtil {
 
+	@Autowired
+	private ReviewdataService reviewdataService;
+	@Autowired
+	private NorthService northService;
+	@Autowired
+	private UpService upService;
+
 	private static final JavaScriptProvider<ShJS> shPr = new JavaScriptProvider<>();
 	/** <股票代码,股票信息> */
 	public static Map<String, StockPushVo> StockCodeMap = new HashMap<>();
@@ -68,6 +80,18 @@ public class CrawUtil {
 	 */
 	public static Map<String, Object> dayReviewMap = new HashMap<>();
 
+	@PostConstruct
+	public void init() throws Exception {
+		Reviewdata reviewdata = reviewdataService.list().get(CommonConstant.ZERO);
+		North north = northService.list().get(CommonConstant.ZERO);
+		Up up = upService.list().get(CommonConstant.ZERO);
+		//复盘数据
+		dayReviewMap.put(CrawConstant.REVIEW, ReviewDataVo.of(reviewdata));
+		//北向资金
+		dayReviewMap.put(CrawConstant.NORTH,NorthVo.of(north));
+		//上涨家数
+		dayReviewMap.put(CrawConstant.UP,UpVo.of(up));
+	}
 
 	/**
 	 * 周一到周五凌晨5点 初始化股票map缓存及每日更新 避免新股出现
