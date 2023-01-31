@@ -380,7 +380,6 @@ public class CrawUtil {
 	 */
 	public static JSONObject baseResolution(ResponseEntity<String> entity) {
 		JSONObject json = JSONObject.parseObject(entity.getBody());
-		log.info("爬取结果：{}", json.toString());
 		JSONObject data = (JSONObject) json.get("data");
 		JSONArray answer = (JSONArray) data.get("answer");
 		JSONObject answerZero = (JSONObject) answer.get(0);
