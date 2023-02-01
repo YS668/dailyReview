@@ -25,6 +25,6 @@ public class ReviewDataHandler extends HandlerAdapter {
         String resContent = WXConstant.REVIEW_DATA_TEXT;
         ReviewDataVo vo = (ReviewDataVo) CrawUtil.dayReviewMap.get(CrawConstant.REVIEW);
         String str = vo.show();
-        return str+"\n";
+        return str;
     }
 }

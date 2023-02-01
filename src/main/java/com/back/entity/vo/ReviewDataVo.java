@@ -1,6 +1,8 @@
 package com.back.entity.vo;
 
 import com.alibaba.fastjson.JSON;
+import com.back.common.constant.CommonConstant;
+import com.back.common.utils.DateUtil;
 import com.back.entity.pojo.Reviewdata;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -53,7 +56,9 @@ public class ReviewDataVo {
 
 
     public String show() {
-        return  "今日历史新高数：" + historyHigh.size() + "\n"+
+
+        return  "日期："+ DateUtil.getByRdid(rdid) + "\n"+
+                "今日历史新高数：" + historyHigh.size() + "\n"+
                 "今日一年新高数：" + yearHigh.size() + "\n"+
                 "今日一年新低数：" + yearLow.size() + "\n"+
                 "今日跌停数：" + downLimit.size() + "\n"+
@@ -63,7 +68,7 @@ public class ReviewDataVo {
                 "今日涨幅超5%：" + upFive.size() + "\n"+
                 "今日上涨家数：" + upAll + "\n"+
                 "上证指数：" + SH_INDEX + "\n"+
-                "上证指数：" + SZ_INDEX + "\n"+
+                "深证成指：" + SZ_INDEX + "\n"+
                 "创业扳指：" + Business_INDEX + "\n"+
                 "成交额：" + turnOver;
     }

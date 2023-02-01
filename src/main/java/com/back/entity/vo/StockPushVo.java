@@ -1,5 +1,7 @@
 package com.back.entity.vo;
 
+import com.back.common.constant.CommonConstant;
+import com.back.common.utils.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,7 +45,8 @@ public class StockPushVo  {
     }
 
     public  String show() {
-        return "股票名称：" + stockName+"\n"+
+        return  "日期："+ DateUtil.getRdid() + "\n"+
+                "股票名称：" + stockName+"\n"+
                 "涨跌：" + trend+"\n"+
                 "现价：" + nowPrice+"\n"+
                 "成交额：" + turnover+"\n"+

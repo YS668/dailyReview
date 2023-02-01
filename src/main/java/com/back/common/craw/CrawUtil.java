@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.CrawConstant;
+import com.back.common.utils.DateUtil;
 import com.back.entity.pojo.North;
 import com.back.entity.pojo.Reviewdata;
 import com.back.entity.pojo.Up;
@@ -285,12 +286,7 @@ public class CrawUtil {
 		northVo.setNorthAll(BigDecimal.valueOf(Float.valueOf(hg)).add(BigDecimal.valueOf(Float.valueOf(sg))).setScale(CommonConstant.TWO,BigDecimal.ROUND_DOWN).toString());
 		northVo.setShIndex(shTrend);
 
-		//日期
-		Calendar c=Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month=c.get(Calendar.MONTH)+1;
-		int date=c.get(Calendar.DATE);
-		String rdid = year+""+month+""+date;
+		String rdid = DateUtil.getRdid();
 		reviewDataVo.setRdid(rdid);
 		northVo.setRdid(rdid);
 		upVo.setRdid(rdid);
