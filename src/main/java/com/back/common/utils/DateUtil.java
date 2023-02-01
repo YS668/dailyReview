@@ -14,6 +14,14 @@ public class DateUtil {
 	}
 
 	// 返回格式：xxxx-xx-xx
+	public static String getFlmat() {
+		String rdid = getRdid();
+		return rdid.substring(CommonConstant.ZERO, CommonConstant.FOUR) + "-"
+				+ rdid.substring(CommonConstant.FOUR, CommonConstant.SIX) + "-"
+				+ rdid.substring(CommonConstant.SIX, CommonConstant.EIGHT);
+	}
+
+	// 返回格式：xxxxxxxx
 	public static String getRdid() {
 		// 日期
 		Calendar c = Calendar.getInstance();

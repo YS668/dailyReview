@@ -45,7 +45,7 @@ public class StockPushVo  {
     }
 
     public  String show() {
-        return  "日期："+ DateUtil.getRdid() + "\n"+
+        return  "日期："+ DateUtil.getFlmat() + "\n"+
                 "股票名称：" + stockName+"\n"+
                 "涨跌：" + trend+"\n"+
                 "现价：" + nowPrice+"\n"+
