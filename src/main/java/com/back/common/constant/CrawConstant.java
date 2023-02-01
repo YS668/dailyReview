@@ -22,11 +22,14 @@ public class CrawConstant {
     public static String SGTB_URL= "http://data.10jqka.com.cn/hgt/sgtb/";
     /** 同花顺龙虎榜 */
     public static String Long_Hu_URL= "http://data.10jqka.com.cn/market/longhu/";
+    /** 文件路径 */
+    public static String BASE_CD = "D:\\test\\";
     /** 上交所js文件*/
-    public static String SH_JS = "D:\\test\\sh.js";
+    public static String SH_JS = BASE_CD+"sh.js";
     /** 深交所excel文件*/
-    public static String SZ_EXCEL = "D:\\test\\SZStock.xlsx";
-    public static String HE_XIN_V = "D:\\test\\hexin-v.js";
+    public static String SZ_EXCEL = BASE_CD+"SZStock.xlsx";
+    /** hexin-v.js文件 */
+    public static String HE_XIN_V = BASE_CD+"hexin-v.js";
     /** 深交所*/
     public static String SZ = "SZ";
     /** 上交所*/
