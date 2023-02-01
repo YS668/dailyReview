@@ -24,6 +24,7 @@ public class CrawConstant {
     public static String Long_Hu_URL= "http://data.10jqka.com.cn/market/longhu/";
     /** 文件路径 */
     public static String BASE_CD = "D:\\test\\";
+    //public static String BASE_CD = "/www/wwwroot/DR/doc/";
     /** 上交所js文件*/
     public static String SH_JS = BASE_CD+"sh.js";
     /** 深交所excel文件*/
