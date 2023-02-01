@@ -10,6 +10,7 @@ public class CommonConstant {
     public static final Integer FIVE = 5;
     public static final Integer SIX = 6;
     public static final Integer EIGHT = 8;
+    public static final Integer TEN = 10;
     public static final Integer One_Hundred = 100;
 
     /** 编码 */

@@ -12,6 +12,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,9 +84,9 @@ public class CrawUtil {
 
 	@PostConstruct
 	public void init() throws Exception {
-		Reviewdata reviewdata = reviewdataService.list().get(CommonConstant.ZERO);
-		North north = northService.list().get(CommonConstant.ZERO);
-		Up up = upService.list().get(CommonConstant.ZERO);
+		Reviewdata reviewdata = reviewdataService.list().stream().sorted(Comparator.comparing(Reviewdata::getRdid).reversed()).collect(Collectors.toList()).get(CommonConstant.ZERO);
+		North north = northService.list().stream().sorted(Comparator.comparing(North::getRdid).reversed()).collect(Collectors.toList()).get(CommonConstant.ZERO);
+		Up up = upService.list().stream().sorted(Comparator.comparing(Up::getRdid).reversed()).collect(Collectors.toList()).get(CommonConstant.ZERO);
 		//复盘数据
 		dayReviewMap.put(CrawConstant.REVIEW, ReviewDataVo.of(reviewdata));
 		//北向资金

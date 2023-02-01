@@ -18,8 +18,14 @@ public class DateUtil {
 		// 日期
 		Calendar c = Calendar.getInstance();
 		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH) + 1;
-		int date = c.get(Calendar.DATE);
+		String month = String.valueOf(c.get(Calendar.MONTH) + 1);
+		if (Integer.valueOf(month) < CommonConstant.TEN){
+			month = CommonConstant.ZERO+""+month;
+		}
+		String date = String.valueOf(c.get(Calendar.DATE));
+		if (Integer.valueOf(date) < CommonConstant.TEN){
+			date = CommonConstant.ZERO+""+date;
+		}
 		return year + "" + month + "" + date;
 	}
 }
