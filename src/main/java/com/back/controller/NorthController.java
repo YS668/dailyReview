@@ -63,7 +63,7 @@ public class NorthController {
 
         Page<North> result = northService.page(page, wrapper);
 
-        return Result.suc(result.getTotal(),result.getRecords());
+        return Result.suc(result.getTotal(),result.getRecords().stream().map(NorthVo::of).collect(Collectors.toSet()));
     }
 
     //删除

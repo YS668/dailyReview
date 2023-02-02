@@ -61,7 +61,7 @@ public class ReviewdataController {
 
         Page<Reviewdata> result = reviewdataService.page(page, wrapper);
 
-        return Result.suc(result.getTotal(),result.getRecords());
+        return Result.suc(result.getTotal(),result.getRecords().stream().map(ReviewDataVo::of).collect(Collectors.toList()));
     }
 
     //删除

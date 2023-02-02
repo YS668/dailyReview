@@ -63,7 +63,7 @@ public class UpController {
 
         Page<Up> result = upService.page(page, wrapper);
 
-        return Result.suc(result.getTotal(),result.getRecords());
+        return Result.suc(result.getTotal(),result.getRecords().stream().map(UpVo::of).collect(Collectors.toSet()));
     }
 
     //删除
