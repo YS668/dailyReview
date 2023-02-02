@@ -76,14 +76,6 @@
             <classifier>jdk15</classifier>
         </dependency>
 
-        <!--分页插件-->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>5.1.2</version>
-        </dependency>
-
-
         <!--邮件依赖-->
         <!-- springboot 邮件mail -->
         <dependency>
