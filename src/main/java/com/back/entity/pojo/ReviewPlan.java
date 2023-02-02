@@ -41,7 +41,7 @@ public class ReviewPlan extends basePojo implements Serializable {
     private String openId;
 
     @ApiModelProperty(value = "复盘主题")
-    private Long topic;
+    private String topic;
 
     @ApiModelProperty(value = "复盘类型：0日复盘  1周复盘 2月复盘 3年复盘")
     private Integer type;
