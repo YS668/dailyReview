@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSONArray;
@@ -235,21 +237,21 @@ public class CrawUtil {
 		UpVo upVo = new UpVo();
 		//历史新高
 		reviewDataVo.setHistoryHigh(
-				CrawUtil.getDayData(CrawConstant.QUESTION_HISTORY_HIGH, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+				CrawUtil.getDayData(CrawConstant.QUESTION_HISTORY_HIGH, CrawConstant.STOCK).stream().collect(Collectors.toSet()));
 		//一年新高
-		reviewDataVo.setYearHigh(CrawUtil.getDayData(CrawConstant.QUESTION_YEAR_HIGH, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setYearHigh(CrawUtil.getDayData(CrawConstant.QUESTION_YEAR_HIGH, CrawConstant.STOCK).stream().collect(Collectors.toSet()));
 		//一年新低
-		reviewDataVo.setYearLow(CrawUtil.getDayData(CrawConstant.QUESTION_YEAR_LOW, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setYearLow(CrawUtil.getDayData(CrawConstant.QUESTION_YEAR_LOW, CrawConstant.STOCK).stream().collect(Collectors.toSet()));
 		//今日跌停
-		reviewDataVo.setDownLimit(CrawUtil.getDayData(CrawConstant.QUESTION_DOWN_LIMIT, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setDownLimit(CrawUtil.getDayData(CrawConstant.QUESTION_DOWN_LIMIT, CrawConstant.STOCK).stream().collect(Collectors.toSet()));
 		//今日涨停
-		reviewDataVo.setUpLimit(CrawUtil.getDayData(CrawConstant.QUESTION_UP_LIMIT, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setUpLimit(CrawUtil.getDayData(CrawConstant.QUESTION_UP_LIMIT, CrawConstant.STOCK).stream().collect(Collectors.toSet()));
 		//今日非一字涨停
-		reviewDataVo.setNoOneUp(CrawUtil.getDayData(CrawConstant.QUESTION_NO_ONE_UP, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setNoOneUp(CrawUtil.getDayData(CrawConstant.QUESTION_NO_ONE_UP, CrawConstant.STOCK).stream().collect(Collectors.toSet()));
 		//今日跌幅超5%
-		reviewDataVo.setDownFive(CrawUtil.getDayData(CrawConstant.QUESTION_DOWN_FIVE, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setDownFive(CrawUtil.getDayData(CrawConstant.QUESTION_DOWN_FIVE, CrawConstant.STOCK).stream().collect(Collectors.toSet()));
 		//今日涨幅超5%
-		reviewDataVo.setUpFive(CrawUtil.getDayData(CrawConstant.QUESTION_UP_FIVE, CrawConstant.STOCK).stream().collect(Collectors.toMap(StockPushVo::getStockCode, i -> i)));
+		reviewDataVo.setUpFive(CrawUtil.getDayData(CrawConstant.QUESTION_UP_FIVE, CrawConstant.STOCK).stream().collect(Collectors.toSet()));
 		//总成交额
 		reviewDataVo.setTurnOver(CrawUtil.getTurnOver());
 		//上证指数涨跌
@@ -453,9 +455,9 @@ public class CrawUtil {
 	 * 今日数据
 	 * 如：一年新高等
 	 */
-	public static List<StockPushVo> getDayData(String question,String secondary_intent) {
+	public static Set<StockPushVo> getDayData(String question,String secondary_intent) {
 		ResponseEntity<String> entity = getWenCai(question, secondary_intent,CommonConstant.ONE);
-		List<StockPushVo> res = new ArrayList<>();
+		Set<StockPushVo> res = new HashSet<>();
 		log.info("开始爬取：条件{}",question);
 		//总数量
 		int sum = resolutionNum(entity);

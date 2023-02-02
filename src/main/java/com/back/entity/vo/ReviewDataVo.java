@@ -1,7 +1,9 @@
 package com.back.entity.vo;
 
-import com.alibaba.fastjson.JSON;
-import com.back.common.constant.CommonConstant;
+import java.util.Set;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.back.common.utils.DateUtil;
 import com.back.entity.pojo.Reviewdata;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,8 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.Date;
-import java.util.Map;
+
 
 /**
  * 复盘总体数据vo类
@@ -24,21 +25,21 @@ public class ReviewDataVo {
     @ApiModelProperty(value = "标识")
     private String rdid;
     /** 创历史新高 <代码，行情>*/
-    private Map<String,StockPushVo> historyHigh;
+    private Set<StockPushVo> historyHigh;
     /** 创一年新高 <代码，行情>*/
-    private Map<String,StockPushVo> yearHigh;
+    private Set<StockPushVo> yearHigh;
     /** 创一年新低 <代码，行情>*/
-    private Map<String,StockPushVo> yearLow;
+    private Set<StockPushVo> yearLow;
     /** 跌停家数 <代码，行情>*/
-    private Map<String,StockPushVo> downLimit;
+    private Set<StockPushVo> downLimit;
     /** 跌幅超5% */
-    private Map<String,StockPushVo> downFive;
+    private Set<StockPushVo> downFive;
     /** 涨停家数 <代码，行情>*/
-    private Map<String,StockPushVo> upLimit;
+    private Set<StockPushVo> upLimit;
     /** 非一字涨停 <代码，行情>*/
-    private Map<String,StockPushVo> noOneUp;
+    private Set<StockPushVo> noOneUp;
     /** 涨幅超5% */
-    private Map<String,StockPushVo> upFive;
+    private Set<StockPushVo> upFive;
     /** 上涨家数 */
     private int upAll;
     /** 上证指数涨跌 */
@@ -80,21 +81,21 @@ public class ReviewDataVo {
         //标识
         vo.setRdid(data.getRdid());
         //历史新高
-        vo.setHistoryHigh(JSONObject.parseObject(data.getHistoryHigh(),Map.class));
+        vo.setHistoryHigh(JSONObject.parseObject(data.getHistoryHigh(),Set.class));
         //一年新高
-        vo.setYearHigh(JSONObject.parseObject(data.getYearHigh(),Map.class));
+        vo.setYearHigh(JSONObject.parseObject(data.getYearHigh(),Set.class));
         //一年新低
-        vo.setYearLow(JSONObject.parseObject(data.getYearLow(),Map.class));
+        vo.setYearLow(JSONObject.parseObject(data.getYearLow(),Set.class));
         //今日跌停
-        vo.setDownLimit(JSONObject.parseObject(data.getDownLimit(),Map.class));
+        vo.setDownLimit(JSONObject.parseObject(data.getDownLimit(),Set.class));
         //今日跌幅超5%
-        vo.setDownFive(JSONObject.parseObject(data.getDownFive(),Map.class));
+        vo.setDownFive(JSONObject.parseObject(data.getDownFive(),Set.class));
         //今日涨停
-        vo.setUpLimit(JSONObject.parseObject(data.getUpLimit(),Map.class));
+        vo.setUpLimit(JSONObject.parseObject(data.getUpLimit(),Set.class));
         //今日非一字涨停
-        vo.setNoOneUp(JSONObject.parseObject(data.getNoOneUp(),Map.class));
+        vo.setNoOneUp(JSONObject.parseObject(data.getNoOneUp(),Set.class));
         //今日涨幅超5%
-        vo.setUpFive(JSONObject.parseObject(data.getUpFive(),Map.class));
+        vo.setUpFive(JSONObject.parseObject(data.getUpFive(),Set.class));
         //上涨家数
         vo.setUpAll(data.getUpAll());
         //上证指数
@@ -107,6 +108,5 @@ public class ReviewDataVo {
         vo.setTurnOver(data.getTurnOver());
         return vo;
     }
-
 
 }
