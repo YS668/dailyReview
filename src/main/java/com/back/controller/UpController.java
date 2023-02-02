@@ -68,9 +68,9 @@ public class UpController {
 
     //删除
     @GetMapping("/del")
-    public Result del(@RequestParam String date){
+    public Result del(@RequestParam String rdid){
         LambdaQueryWrapper<Up> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Up::getRdid,date);
+        wrapper.eq(Up::getRdid,rdid);
         upService.remove(wrapper);
         return Result.suc();
     }

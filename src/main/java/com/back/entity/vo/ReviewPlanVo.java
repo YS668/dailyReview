@@ -36,7 +36,7 @@ public class ReviewPlanVo  {
     private String extra;
 
     //vo转换
-    public ReviewPlanVo of( ReviewPlan data) {
+    public static ReviewPlanVo of( ReviewPlan data) {
         ReviewPlanVo vo = new ReviewPlanVo();
         vo.setRdid(data.getRdid());
         vo.setUid(data.getUid());

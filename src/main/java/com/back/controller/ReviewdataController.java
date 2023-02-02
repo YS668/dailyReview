@@ -66,9 +66,9 @@ public class ReviewdataController {
 
     //删除
     @GetMapping("/del")
-    public Result del(@RequestParam String date){
+    public Result del(@RequestParam String rdid){
         LambdaQueryWrapper<Reviewdata> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Reviewdata::getRdid,date);
+        wrapper.eq(Reviewdata::getRdid,rdid);
         reviewdataService.remove(wrapper);
         return Result.suc();
     }

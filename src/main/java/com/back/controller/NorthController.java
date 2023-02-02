@@ -68,9 +68,9 @@ public class NorthController {
 
     //删除
     @GetMapping("/del")
-    public Result del(@RequestParam String date){
+    public Result del(@RequestParam String rdid){
         LambdaQueryWrapper<North> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(North::getRdid,date);
+        wrapper.eq(North::getRdid,rdid);
         northService.remove(wrapper);
         return Result.suc();
     }
