@@ -1,5 +1,6 @@
 package com.back.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.back.common.QueryPageParam;
 import com.back.common.Result;
 import com.back.entity.pojo.User;
 import com.back.service.UserService;
@@ -39,21 +41,21 @@ public class UserController {
 
     //分页查询
     @PostMapping("/page")
-    public Result listPage(@RequestParam(required = false,defaultValue = "1") int pageNum,
-                           @RequestParam(required = false,defaultValue = "10") int pageSize,
-                           @RequestBody(required = false) Map<String,String> map){
+    public Result listPage(@RequestBody QueryPageParam query){
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
 
         //分页
         Page<User> page = new Page<>();
-        page.setCurrent(pageNum);
-        page.setSize(pageSize);
+        page.setCurrent(query.getPageNum());
+        page.setSize(query.getPageSize());
+
+        HashMap param = query.getParam();
 
         //查询条件：性别、用户名、邮箱、手机号
-        String sex = map.get("sex");
-        String username = map.get("username");
-        String mail = map.get("mail");
-        String phone = map.get("phone");
+        String sex = (String) param.get("sex");
+        String username = (String) param.get("username");
+        String mail = (String) param.get("mail");
+        String phone = (String) param.get("phone");
         if (sex != null){
             wrapper.eq(User::getSex,sex);
         }

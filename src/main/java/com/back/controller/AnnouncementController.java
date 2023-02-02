@@ -1,6 +1,7 @@
 package com.back.controller;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.back.common.QueryPageParam;
 import com.back.common.Result;
 import com.back.entity.pojo.Announcement;
 import com.back.entity.pojo.Vip;
@@ -41,21 +43,21 @@ public class AnnouncementController {
 
     //分页查询
     @PostMapping("/page")
-    public Result listPage(@RequestParam(required = false,defaultValue = "1") int pageNum,
-                           @RequestParam(required = false,defaultValue = "10") int pageSize,
-                           @RequestBody(required = false) Map<String,String> map){
+    public Result listPage(@RequestBody QueryPageParam query){
         LambdaQueryWrapper<Announcement> wrapper = new LambdaQueryWrapper<>();
 
         //分页
         Page<Announcement> page = new Page<>();
-        page.setCurrent(pageNum);
-        page.setSize(pageSize);
+        page.setCurrent(query.getPageNum());
+        page.setSize(query.getPageSize());
+
+        HashMap param = query.getParam();
 
         //查询条件：公告编码、发公告的人、主题、时间
-        String code = map.get("code");
-        String uid = map.get("uid");
-        String topic = map.get("topic");
-        String time = map.get("time");
+        String code = (String) param.get("code");
+        String uid = (String) param.get("uid");
+        String topic = (String) param.get("topic");
+        String time = (String) param.get("time");
         if (code != null){
             wrapper.eq(Announcement::getCode,code);
         }

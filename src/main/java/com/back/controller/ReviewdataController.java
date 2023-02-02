@@ -2,6 +2,7 @@ package com.back.controller;
 
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.back.common.QueryPageParam;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.back.common.Result;
 import com.back.entity.pojo.Reviewdata;
@@ -42,19 +44,19 @@ public class ReviewdataController {
 
     //分页查询
     @PostMapping("/page")
-    public Result listPage(@RequestParam(required = false,defaultValue = "1") int pageNum,
-                           @RequestParam(required = false,defaultValue = "10") int pageSize,
-                           @RequestParam(required = false) String date){
+    public Result listPage(@RequestBody QueryPageParam query){
         LambdaQueryWrapper<Reviewdata> wrapper = new LambdaQueryWrapper<>();
 
         //分页
         Page<Reviewdata> page = new Page<>();
-        page.setCurrent(pageNum);
-        page.setSize(pageSize);
+        page.setCurrent(query.getPageNum());
+        page.setSize(query.getPageSize());
 
+        HashMap param = query.getParam();
+        String rdid = (String) param.get("rdid");
         //查询条件
-        if (date != null){
-            wrapper.eq(Reviewdata::getRdid,date);
+        if (rdid != null){
+            wrapper.eq(Reviewdata::getRdid,rdid);
         }
 
         Page<Reviewdata> result = reviewdataService.page(page, wrapper);

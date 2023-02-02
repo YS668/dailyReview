@@ -1,6 +1,7 @@
 package com.back.controller;
 
 
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.back.common.QueryPageParam;
 import com.back.common.Result;
+import com.back.entity.pojo.North;
 import com.back.entity.pojo.Reviewdata;
 import com.back.entity.pojo.Up;
 import com.back.entity.vo.ReviewDataVo;
@@ -43,19 +46,19 @@ public class UpController {
 
     //分页查询
     @PostMapping("/page")
-    public Result listPage(@RequestParam(required = false,defaultValue = "1") int pageNum,
-                           @RequestParam(required = false,defaultValue = "10") int pageSize,
-                           @RequestParam(required = false) String date){
+    public Result listPage(@RequestBody QueryPageParam query){
         LambdaQueryWrapper<Up> wrapper = new LambdaQueryWrapper<>();
 
         //分页
         Page<Up> page = new Page<>();
-        page.setCurrent(pageNum);
-        page.setSize(pageSize);
+        page.setCurrent(query.getPageNum());
+        page.setSize(query.getPageSize());
 
+        HashMap param = query.getParam();
+        String rdid = (String) param.get("rdid");
         //查询条件
-        if (date != null){
-            wrapper.eq(Up::getRdid,date);
+        if (rdid != null){
+            wrapper.eq(Up::getRdid,rdid);
         }
 
         Page<Up> result = upService.page(page, wrapper);
