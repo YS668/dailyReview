@@ -27,7 +27,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @since 2023-01-05
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired

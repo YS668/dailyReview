@@ -16,7 +16,7 @@ import com.back.common.Result;
  * 正常情况，周一到周五15.05爬取复盘信息
  */
 @RestController
-@RequestMapping("/trigger")
+@RequestMapping("/api/trigger")
 public class TriggerController {
 
     //注入任务调度

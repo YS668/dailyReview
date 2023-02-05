@@ -29,7 +29,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @since 2023-01-05
  */
 @RestController
-@RequestMapping("/vip")
+@RequestMapping("/api/vip")
 public class VipController {
 
     @Autowired

@@ -32,7 +32,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @since 2023-01-30
  */
 @RestController
-@RequestMapping("/up")
+@RequestMapping("/api/up")
 public class UpController {
 
     @Autowired

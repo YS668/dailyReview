@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-01-05
  */
 @RestController
-@RequestMapping("/wxuser")
+@RequestMapping("/api/wxuser")
 public class WxuserController {
 
 }

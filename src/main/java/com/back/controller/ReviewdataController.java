@@ -30,7 +30,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
  * @since 2023-01-30
  */
 @RestController
-@RequestMapping("/review/data")
+@RequestMapping("/api/review/data")
 public class ReviewdataController {
 
     @Autowired
