@@ -35,7 +35,7 @@ public class ReviewDataVo {
     /** 跌幅超5% */
     private Set<StockPushVo> downFive;
     /** 涨停家数 <代码，行情>*/
-    private Set<StockPushVo> upLimit;
+    private Set<UpLimitVo> upLimit;
     /** 非一字涨停 <代码，行情>*/
     private Set<StockPushVo> noOneUp;
     /** 涨幅超5% */

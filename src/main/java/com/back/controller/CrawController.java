@@ -78,6 +78,6 @@ public class CrawController {
      */
     @GetMapping("/up/limit")
     public Result getUpLimit(){
-        return Result.suc(CrawUtil.upLimits);
+        return Result.suc(CrawUtil.vo.getUpLimit());
     }
 }

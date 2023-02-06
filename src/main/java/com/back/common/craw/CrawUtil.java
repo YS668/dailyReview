@@ -86,11 +86,6 @@ public class CrawUtil {
 	 * 复盘数据
 	 */
 	public static ReviewDataVo vo = new ReviewDataVo();
-	/**
-	 * 每日涨停数据
-	 * @throws Exception
-	 */
-	public static Set<UpLimitVo> upLimits = new HashSet<>();
 
 	@PostConstruct
 	public void init() throws Exception {
@@ -98,7 +93,6 @@ public class CrawUtil {
 		vo = reviewdataService.list().stream()
 				.sorted(Comparator.comparing(Reviewdata::getRdid).reversed())
 				.map(ReviewDataVo::of).collect(Collectors.toList()).get(CommonConstant.ZERO);
-		upLimits = CrawUtil.getUpData(vo.getRdid()+CrawConstant.QUESTION_UP_LIMIT.substring(CommonConstant.TWO), CrawConstant.STOCK);
 	}
 
 	/**
@@ -255,9 +249,7 @@ public class CrawUtil {
 		reviewDataVo.setDownLimit(CrawUtil.getDayData(CrawConstant.QUESTION_DOWN_LIMIT, CrawConstant.STOCK));
 
 		//今日涨停
-		Set<UpLimitVo> upLimitVos = CrawUtil.getUpData(CrawConstant.QUESTION_UP_LIMIT, CrawConstant.STOCK);
-		upLimits = upLimitVos;
-		reviewDataVo.setUpLimit(upLimitVos.stream().map(UpLimitVo::toSuper).collect(Collectors.toSet()));
+		reviewDataVo.setUpLimit(CrawUtil.getUpData(CrawConstant.QUESTION_UP_LIMIT, CrawConstant.STOCK));
 
 		//今日非一字涨停
 		reviewDataVo.setNoOneUp(CrawUtil.getDayData(CrawConstant.QUESTION_NO_ONE_UP, CrawConstant.STOCK));
