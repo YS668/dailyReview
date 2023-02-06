@@ -43,8 +43,8 @@ public class WatchHandler extends HandlerAdapter {
                     continue;
                 }
                 //输入名称
-                if (CrawUtil.StockNameMap.containsKey(str)){
-                    String stockCode = CrawUtil.StockNameMap.get(str).getStockCode();
+                if (CrawUtil.StockNameCodeMap.containsKey(str)){
+                    String stockCode = CrawUtil.StockNameCodeMap.get(str);
                     codeList.add(stockCode);
                     continue;
                 }

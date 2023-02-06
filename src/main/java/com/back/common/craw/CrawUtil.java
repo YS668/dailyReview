@@ -12,6 +12,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,10 +34,12 @@ import com.back.entity.vo.NorthVo;
 import com.back.entity.vo.ReviewDataVo;
 import com.back.entity.vo.StockPushVo;
 
+import com.back.entity.vo.UpLimitVo;
 import com.back.entity.vo.UpVo;
 import com.back.service.NorthService;
 import com.back.service.ReviewdataService;
 import com.back.service.UpService;
+import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,26 +78,26 @@ public class CrawUtil {
 	private UpService upService;
 
 	private static final JavaScriptProvider<ShJS> shPr = new JavaScriptProvider<>();
-	/** <股票代码,股票信息> */
+	/** <股票代码,股票名称> */
 	public static Map<String, StockPushVo> StockCodeMap = new HashMap<>();
-	/** <股票名称,股票信息> */
-	public static Map<String, StockPushVo> StockNameMap = new HashMap<>();
+	/** <股票名称,股票代码> */
+	public static Map<String, String> StockNameCodeMap = new HashMap<>();
 	/**
-	 * 每日复盘数据
+	 * 复盘数据
 	 */
-	public static Map<String, Object> dayReviewMap = new HashMap<>();
+	public static ReviewDataVo vo = new ReviewDataVo();
+	/**
+	 * 每日涨停数据
+	 * @throws Exception
+	 */
+	public static Set<UpLimitVo> upLimits = new HashSet<>();
 
 	@PostConstruct
 	public void init() throws Exception {
-		Reviewdata reviewdata = reviewdataService.list().stream().sorted(Comparator.comparing(Reviewdata::getRdid).reversed()).collect(Collectors.toList()).get(CommonConstant.ZERO);
-		North north = northService.list().stream().sorted(Comparator.comparing(North::getRdid).reversed()).collect(Collectors.toList()).get(CommonConstant.ZERO);
-		Up up = upService.list().stream().sorted(Comparator.comparing(Up::getRdid).reversed()).collect(Collectors.toList()).get(CommonConstant.ZERO);
 		//复盘数据
-		dayReviewMap.put(CrawConstant.REVIEW, ReviewDataVo.of(reviewdata));
-		//北向资金
-		dayReviewMap.put(CrawConstant.NORTH,NorthVo.of(north));
-		//上涨家数
-		dayReviewMap.put(CrawConstant.UP,UpVo.of(up));
+		vo = reviewdataService.list().stream()
+				.sorted(Comparator.comparing(Reviewdata::getRdid).reversed())
+				.map(ReviewDataVo::of).collect(Collectors.toList()).get(CommonConstant.ZERO);
 	}
 
 	/**
@@ -106,14 +109,18 @@ public class CrawUtil {
 		DayRestShData();
 		DayRestSzData();
 		getShData().forEach(e -> {
-			StockCodeMap.put(e.getStockCode(), e);
-			// 去除空格
-			StockNameMap.put(e.getStockName().replace(" ", ""), e);
+			if (!StockCodeMap.containsKey(e.getStockCode())){
+				StockCodeMap.put(e.getStockCode(), e);
+				// 去除空格
+				StockNameCodeMap.put(e.getStockName().replace(" ", ""), e.getStockCode());
+			}
 		});
 		getSzData().forEach(e -> {
-			StockCodeMap.put(e.getStockCode(), e);
-			// 去除空格
-			StockNameMap.put(e.getStockName().replace(" ", ""), e);
+			if (!StockCodeMap.containsKey(e.getStockCode())){
+				StockCodeMap.put(e.getStockCode(), e);
+				// 去除空格
+				StockNameCodeMap.put(e.getStockName().replace(" ", ""), e.getStockCode());
+			}
 		});
 		log.info("初始/每日更新股票数据缓存成功");
 	}
@@ -231,7 +238,8 @@ public class CrawUtil {
 	/**
 	 * 今日数据
 	 */
-	public static void getReviewData() {
+	public static Map<String, Object> getReviewData() {
+		Map<String, Object> res = new HashMap<>();
 		ReviewDataVo reviewDataVo = new ReviewDataVo();
 		NorthVo northVo = new NorthVo();
 		UpVo upVo = new UpVo();
@@ -244,8 +252,12 @@ public class CrawUtil {
 		reviewDataVo.setYearLow(CrawUtil.getDayData(CrawConstant.QUESTION_YEAR_LOW, CrawConstant.STOCK));
 		//今日跌停
 		reviewDataVo.setDownLimit(CrawUtil.getDayData(CrawConstant.QUESTION_DOWN_LIMIT, CrawConstant.STOCK));
+
 		//今日涨停
-		reviewDataVo.setUpLimit(CrawUtil.getDayData(CrawConstant.QUESTION_UP_LIMIT, CrawConstant.STOCK));
+		Set<UpLimitVo> upLimitVos = CrawUtil.getUpData(CrawConstant.QUESTION_UP_LIMIT, CrawConstant.STOCK);
+		upLimits = upLimitVos;
+		reviewDataVo.setUpLimit(upLimitVos.stream().map(UpLimitVo::toSuper).collect(Collectors.toSet()));
+
 		//今日非一字涨停
 		reviewDataVo.setNoOneUp(CrawUtil.getDayData(CrawConstant.QUESTION_NO_ONE_UP, CrawConstant.STOCK));
 		//今日跌幅超5%
@@ -293,14 +305,16 @@ public class CrawUtil {
 		reviewDataVo.setRdid(rdid);
 		northVo.setRdid(rdid);
 		upVo.setRdid(rdid);
-		//复盘数据
-		dayReviewMap.put(CrawConstant.REVIEW,reviewDataVo);
-		//北向资金
-		dayReviewMap.put(CrawConstant.NORTH,northVo);
-		//上涨家数
-		dayReviewMap.put(CrawConstant.UP,upVo);
-	}
 
+		vo = reviewDataVo;
+		//复盘数据
+		res.put(CrawConstant.REVIEW,reviewDataVo);
+		//北向资金
+		res.put(CrawConstant.NORTH,northVo);
+		//上涨家数
+		res.put(CrawConstant.UP,upVo);
+		return res;
+	}
 
 	/**
 	 * 爬取雪球个股信息
@@ -337,7 +351,6 @@ public class CrawUtil {
 			vo.setNowPrice(nowPrice);
 			vo.setTrend(trend);
 			vo.setTurnover(turnover);
-			vo.setXueQiuLink(url);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -416,7 +429,7 @@ public class CrawUtil {
 	 * @param entity
 	 * @return
 	 */
-	public static List<StockPushVo> resolution(ResponseEntity<String> entity) {
+	public static List<Map> resolution(ResponseEntity<String> entity) {
 		JSONObject answerZero = baseResolution(entity);
 		JSONArray txt = (JSONArray) answerZero.get("txt");
 		JSONObject txtZero = (JSONObject) txt.get(0);
@@ -425,11 +438,9 @@ public class CrawUtil {
 		JSONObject componentsZero = (JSONObject) components.get(0);
 		JSONObject componentsZeroData = (JSONObject) componentsZero.get("data");
 		JSONArray datas = (JSONArray) componentsZeroData.get("datas");
-		List<Map> map = datas.toJavaList(Map.class);
+		List<Map> mapList = datas.toJavaList(Map.class);
 		// 转换并过滤非上交与深交的股票
-		List<StockPushVo> res = map.stream().map(StockPushVo::of).filter(e -> e != null)
-				.collect(Collectors.toList());
-		return res;
+		return mapList;
 	}
 
 	/**
@@ -463,16 +474,48 @@ public class CrawUtil {
 		int sum = resolutionNum(entity);
 		//小于100：一页
 		if (sum <= CommonConstant.One_Hundred){
-			res.addAll(resolution(entity));
+			res.addAll(resolution(entity).stream().map(StockPushVo::of).filter(e -> e != null)
+					.collect(Collectors.toList()));
 			//大于100：多页
 		}else {
 			//总页数
 			int pageSum = sum/CommonConstant.One_Hundred + CommonConstant.ONE;
 			//第一页
-			res.addAll(resolution(entity));
+			res.addAll(resolution(entity).stream().map(StockPushVo::of).filter(e -> e != null)
+					.collect(Collectors.toList()));
 			//从第二页开始遍历
 			for (int i = 2; i <= pageSum; i++) {
-				res.addAll(resolution(getWenCai(question, secondary_intent,i)));
+				res.addAll(resolution(getWenCai(question, secondary_intent,i)).stream().map(StockPushVo::of).filter(e -> e != null)
+						.collect(Collectors.toList()));
+			}
+		}
+		log.info("结果{}",res);
+		return res;
+	}
+	/**
+	 * 涨停数据
+	 */
+	public static Set<UpLimitVo> getUpData(String question,String secondary_intent) {
+		ResponseEntity<String> entity = getWenCai(question, secondary_intent,CommonConstant.ONE);
+		Set<UpLimitVo> res = new HashSet<>();
+		log.info("开始爬取：条件{}",question);
+		//总数量
+		int sum = resolutionNum(entity);
+		//小于100：一页
+		if (sum <= CommonConstant.One_Hundred){
+			res.addAll(resolution(entity).stream().map(UpLimitVo::ofUp).filter(e -> e != null)
+					.collect(Collectors.toList()));
+			//大于100：多页
+		}else {
+			//总页数
+			int pageSum = sum/CommonConstant.One_Hundred + CommonConstant.ONE;
+			//第一页
+			res.addAll(resolution(entity).stream().map(UpLimitVo::ofUp).filter(e -> e != null)
+					.collect(Collectors.toList()));
+			//从第二页开始遍历
+			for (int i = 2; i <= pageSum; i++) {
+				res.addAll(resolution(getWenCai(question, secondary_intent,i)).stream().map(UpLimitVo::ofUp).filter(e -> e != null)
+						.collect(Collectors.toList()));
 			}
 		}
 		log.info("结果{}",res);

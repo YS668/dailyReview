@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.back.common.Result;
+import com.back.common.craw.CrawUtil;
 
 /**
  * 定时任务控制器
@@ -16,8 +17,8 @@ import com.back.common.Result;
  * 正常情况，周一到周五15.05爬取复盘信息
  */
 @RestController
-@RequestMapping("/api/trigger")
-public class TriggerController {
+@RequestMapping("/api")
+public class CrawController {
 
     //注入任务调度
     @Autowired
@@ -27,7 +28,7 @@ public class TriggerController {
      * 暂停定时任务
      * @return
      */
-    @GetMapping("/pause")
+    @GetMapping("/trigger/pause")
     public Result pauseTrigger(){
         //根据触发器中的withIdentity认证信息对任务进行暂停
         try {
@@ -43,7 +44,7 @@ public class TriggerController {
      * 恢复定时任务
      * @return
      */
-    @GetMapping("/resume")
+    @GetMapping("/trigger/resume")
     public Result resumeTrigger(){
         //根据触发器中的withIdentity认证信息对任务进行暂停
         try {
@@ -59,7 +60,7 @@ public class TriggerController {
      * 执行一次定时任务(爬取复盘数据)
      * @return
      */
-    @GetMapping("/run/one")
+    @GetMapping("/trigger/run/one")
     public Result runOne(){
         //根据触发器中的withIdentity认证信息对任务进行暂停
         try {
@@ -69,5 +70,14 @@ public class TriggerController {
             e.printStackTrace();
         }
         return Result.fail();
+    }
+
+    /**
+     * 获取涨停数据
+     * @return
+     */
+    @GetMapping("/up/limit")
+    public Result getUpLimit(){
+        return Result.suc(CrawUtil.upLimits);
     }
 }

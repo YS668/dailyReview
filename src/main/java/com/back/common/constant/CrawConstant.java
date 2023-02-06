@@ -10,6 +10,12 @@ public class CrawConstant {
     public static String WENCAI_URL = "http://www.iwencai.com/customized/chart/get-robot-data";
     /** 雪球个股链接 */
     public static String XUE_QIU_ONE = "https://xueqiu.com/S/";
+    /** 淘股吧个股链接 */
+    public static String TAO_GU_ONE = "https://www.taoguba.com.cn/quotes/";
+    /** 同花顺个股链接 */
+    public static String TONG_HU_ONE = "http://www.iwencai.com/unifiedwap/result&w=";
+    /** 东方财富个股链接 */
+    public static String DONG_FANG_ONE ="https://so.eastmoney.com/web/s?keyword=";
     /** 上证指数 */
     public static String SH_INDEX_URL = "http://q.10jqka.com.cn/zs/detail/code/1A0001/";
     /** 深证成指*/
@@ -62,6 +68,7 @@ public class CrawConstant {
 
 
     public static String STOCK_NAME = "股票简称";
+    public static String STOCK_CODE = "股票代码";
     public static String NOW_PRICE = "最新价";
     public static String NOW_TREND = "最新涨跌幅";
     public static String TURNOVER = "成交额";
@@ -70,6 +77,32 @@ public class CrawConstant {
     public static String ZHI_SHU = "zhishu";
     public static String YI = "亿";
 
+
+    /**涨停相关*/
+    //a股市值(不含限售股)
+    public static  String VALUE = "a股市值(不含限售股)";
+    //几天几板[日期rdid]
+    public static String DAY_NUM = "几天几板";
+    //连续涨停天数[日期rdid]
+    public static String DAY = "连续涨停天数";
+    //涨停原因类别[日期rdid]
+    public static String REASON = "涨停原因类别";
+    //涨停封单量[日期rdid]
+    public static String UP_NUM = "涨停封单量";
+    //涨停封单额[日期rdid]
+    public static String UP_VALUE = "涨停封单额";
+    //涨停封单量占流通a股比
+    public static String CIRCULATION_PERCENTAGE = "涨停封单量占流通a股比";
+    //涨停封单量占成交量比
+    public static String ALL_PERCENTAGE = "涨停封单量占成交量比";
+    //涨停开板次数[日期rdid]
+    public static String OPEN_NUM = "涨停开板次数";
+    //涨停类型[日期rdid]
+    public static String UP_TYPE = "涨停类型";
+    //首次涨停时间[日期rdid]
+    public static String FIRST_UP = "首次涨停时间";
+    //最终涨停时间[日期rdid]
+    public static String LAST_UP = "最终涨停时间";
 
     public static String REVIEW = "review";
     public static String NORTH = "north";

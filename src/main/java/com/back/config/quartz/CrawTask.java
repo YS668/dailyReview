@@ -1,6 +1,7 @@
 package com.back.config.quartz;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -36,13 +37,13 @@ public class CrawTask extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.info("开始执行定时任务：爬取复盘信息");
         //定时爬取复盘信息
-        CrawUtil.getReviewData();
+        Map<String, Object> dayReviewMap = CrawUtil.getReviewData();
         //复盘数据
-        ReviewDataVo reviewDataVo = (ReviewDataVo) CrawUtil.dayReviewMap.get(CrawConstant.REVIEW);
+        ReviewDataVo reviewDataVo = (ReviewDataVo) dayReviewMap.get(CrawConstant.REVIEW);
         //北向资金
-        NorthVo northVo = (NorthVo) CrawUtil.dayReviewMap.get(CrawConstant.NORTH);
+        NorthVo northVo = (NorthVo) dayReviewMap.get(CrawConstant.NORTH);
         //上涨家数
-        UpVo upVo = (UpVo) CrawUtil.dayReviewMap.get(CrawConstant.UP);
+        UpVo upVo = (UpVo) dayReviewMap.get(CrawConstant.UP);
         //保存数据
         reviewdataService.save(Reviewdata.of(reviewDataVo));
         northService.save(North.of(northVo));

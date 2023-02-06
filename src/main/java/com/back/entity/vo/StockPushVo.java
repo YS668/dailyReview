@@ -2,10 +2,12 @@ package com.back.entity.vo;
 
 import com.back.common.constant.CommonConstant;
 import com.back.common.utils.DateUtil;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Locale;
 import java.util.Map;
 
 import com.back.common.constant.CrawConstant;
@@ -19,6 +21,8 @@ import com.back.common.craw.CrawUtil;
 @AllArgsConstructor
 public class StockPushVo  {
 
+    @ApiModelProperty(value = "标识")
+    private String rdid;
     /** 股票代码 */
     private String stockCode ;
     /** 股票名称 */
@@ -33,6 +37,13 @@ public class StockPushVo  {
     private String  turnover;
     /** 雪球链接 */
     private String  xueQiuLink;
+    /** 同花顺链接 */
+    private String  TongHLink;
+    /** 淘股吧链接 */
+    private String  taoGuLink;
+    /** 东方财富链接 */
+    private String dongFangLink;
+
 
     public StockPushVo(String stockCode) {
         this.stockCode = stockCode;
@@ -76,17 +87,38 @@ public class StockPushVo  {
     }
 
     /**
-     * 复盘数据转换
+     * 解析为复盘数据
      * @param map
      * @return
      */
     public static StockPushVo of(Map map) {
-        Object o = map.get(CrawConstant.STOCK_NAME);
-        StockPushVo vo = CrawUtil.StockNameMap.get(map.get(CrawConstant.STOCK_NAME));
-        if(vo == null){
-            return null;
+        String stockName = (String) map.get(CrawConstant.STOCK_NAME);
+        String temp =(String) map.get(CrawConstant.STOCK_CODE);
+        String stockCode = temp.substring(CommonConstant.SEVEN)+temp.substring(CommonConstant.ZERO,CommonConstant.SIX);
+        StockPushVo tempVo = CrawUtil.StockCodeMap.get(stockName);
+        if(tempVo == null){
+            tempVo = new StockPushVo();
+            tempVo.setStockName(stockName);
+            tempVo.setStockCode(stockCode);
+            CrawUtil.StockNameCodeMap.put(stockName,stockCode);
+            CrawUtil.StockCodeMap.put(stockCode,tempVo);
         }
-        return CrawUtil.getOne(vo.getStockCode());
+        StockPushVo res = CrawUtil.getOne(stockCode);
+        //雪球链接
+        //https://xueqiu.com/S/SZ000821
+        res.setXueQiuLink(CrawConstant.XUE_QIU_ONE+stockCode);
+        //淘股吧链接
+        //https://www.taoguba.com.cn/quotes/sz000821
+        res.setTaoGuLink(CrawConstant.TAO_GU_ONE+temp.substring(CommonConstant.SEVEN).toLowerCase()
+                +temp.substring(CommonConstant.ZERO,CommonConstant.SIX));
+        //东方财富
+        //https://so.eastmoney.com/web/s?keyword=%E4%BA%AC%E5%B1%B1%E8%BD%BB%E6%9C%BA
+        res.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
+        //同花顺
+        //http://www.iwencai.com/unifiedwap/result?w=京山轻机
+        res.setTongHLink(CrawConstant.TONG_HU_ONE+stockName);
+        res.setRdid(DateUtil.getRdid());
+        return res;
     }
 
 
