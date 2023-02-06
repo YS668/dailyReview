@@ -347,10 +347,6 @@ public class CrawUtil {
 			Elements elements = body.getElementsByClass("separateTop");
 			String turnover = elements.first().getElementsByTag("td").get(CommonConstant.THREE).text()
 					.split("：")[CommonConstant.ONE];
-			//市值
-			String value = body.getElementsByTag("tbody").first().getElementsByTag("tr")
-					.get(CommonConstant.FIVE).getElementsByTag("td").get(CommonConstant.THREE).text()
-					.split("：")[CommonConstant.ONE];
 			// 填充信息
 			vo = StockCodeMap.get(stockCode);
 			if (vo == null){
@@ -362,7 +358,6 @@ public class CrawUtil {
 			vo.setNowPrice(nowPrice);
 			vo.setTrend(trend);
 			vo.setTurnover(turnover);
-			vo.setValue(value);
 			//雪球链接
 			//https://xueqiu.com/S/SZ000821
 			vo.setXueQiuLink(CrawConstant.XUE_QIU_ONE+stockCode);

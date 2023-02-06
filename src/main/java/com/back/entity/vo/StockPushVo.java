@@ -33,8 +33,6 @@ public class StockPushVo  {
     private String  nowPrice;
     /** 成交额 */
     private String  turnover;
-    //a股市值(不含限售股)：流通值
-    private String value;
     /** 雪球链接 */
     private String  xueQiuLink;
     /** 同花顺链接 */
