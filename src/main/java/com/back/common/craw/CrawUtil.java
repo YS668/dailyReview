@@ -336,7 +336,8 @@ public class CrawUtil {
 			Element body = document.getElementsByTag("body").first();
 			// getElementsByClass根据类选择器，getElementsByTag根据标签选择器
 			// 股票名称
-			String stockName = body.getElementsByClass("stock-name").first().text();
+			String temp = body.getElementsByClass("stock-name").first().text();
+			String stockName = temp.substring(CommonConstant.ZERO, temp.lastIndexOf("("));
 			// 现价
 			String nowPrice = body.getElementsByClass("stock-current").first().text();
 			// 涨跌
@@ -362,6 +363,20 @@ public class CrawUtil {
 			vo.setTrend(trend);
 			vo.setTurnover(turnover);
 			vo.setValue(value);
+			//雪球链接
+			//https://xueqiu.com/S/SZ000821
+			vo.setXueQiuLink(CrawConstant.XUE_QIU_ONE+stockCode);
+			//淘股吧链接
+			//https://www.taoguba.com.cn/quotes/sz000821
+			vo.setTaoGuLink(CrawConstant.TAO_GU_ONE+stockCode.substring(CommonConstant.ZERO,CommonConstant.TWO).toLowerCase()
+					+stockCode.substring(CommonConstant.TWO));
+			//东方财富
+			//https://so.eastmoney.com/web/s?keyword=%E4%BA%AC%E5%B1%B1%E8%BD%BB%E6%9C%BA
+			vo.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
+			//同花顺
+			//http://www.iwencai.com/unifiedwap/result?w=京山轻机
+			vo.setTongHLink(CrawConstant.TONG_HU_ONE+stockName);
+			vo.setRdid(DateUtil.getRdid());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

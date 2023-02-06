@@ -60,7 +60,10 @@ public class StockPushVo  {
                 "涨跌：" + trend+"\n"+
                 "现价：" + nowPrice+"\n"+
                 "成交额：" + turnover+"\n"+
-                "雪球链接：" + xueQiuLink;
+                "雪球链接：" + xueQiuLink+"\n"+
+                "淘股吧链接：" + taoGuLink+"\n"+
+                "同花顺链接：" + tongHLink+"\n"+
+                "东方财富链接：" + dongFangLink;
     }
 
     @Override
@@ -103,20 +106,6 @@ public class StockPushVo  {
             CrawUtil.StockCodeMap.put(stockCode,tempVo);
         }
         StockPushVo res = CrawUtil.getOne(stockCode);
-        //雪球链接
-        //https://xueqiu.com/S/SZ000821
-        res.setXueQiuLink(CrawConstant.XUE_QIU_ONE+stockCode);
-        //淘股吧链接
-        //https://www.taoguba.com.cn/quotes/sz000821
-        res.setTaoGuLink(CrawConstant.TAO_GU_ONE+temp.substring(CommonConstant.SEVEN).toLowerCase()
-                +temp.substring(CommonConstant.ZERO,CommonConstant.SIX));
-        //东方财富
-        //https://so.eastmoney.com/web/s?keyword=%E4%BA%AC%E5%B1%B1%E8%BD%BB%E6%9C%BA
-        res.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
-        //同花顺
-        //http://www.iwencai.com/unifiedwap/result?w=京山轻机
-        res.setTongHLink(CrawConstant.TONG_HU_ONE+stockName);
-        res.setRdid(DateUtil.getRdid());
         return res;
     }
 
