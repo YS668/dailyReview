@@ -469,7 +469,6 @@ public class CrawUtil {
 	public static Set<StockPushVo> getDayData(String question,String secondary_intent) {
 		ResponseEntity<String> entity = getWenCai(question, secondary_intent,CommonConstant.ONE);
 		Set<StockPushVo> res = new HashSet<>();
-		log.info("开始爬取：条件{}",question);
 		//总数量
 		int sum = resolutionNum(entity);
 		//小于100：一页
@@ -489,7 +488,7 @@ public class CrawUtil {
 						.collect(Collectors.toList()));
 			}
 		}
-		log.info("结果{}",res);
+		log.info("结果长度：{}",res.size());
 		return res;
 	}
 	/**
@@ -498,7 +497,6 @@ public class CrawUtil {
 	public static Set<UpLimitVo> getUpData(String question,String secondary_intent) {
 		ResponseEntity<String> entity = getWenCai(question, secondary_intent,CommonConstant.ONE);
 		Set<UpLimitVo> res = new HashSet<>();
-		log.info("开始爬取：条件{}",question);
 		//总数量
 		int sum = resolutionNum(entity);
 		//小于100：一页
@@ -518,7 +516,7 @@ public class CrawUtil {
 						.collect(Collectors.toList()));
 			}
 		}
-		log.info("结果{}",res);
+		log.info("结果长度：{}",res.size());
 		return res;
 	}
 
