@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.back.common.constant.CrawConstant;
 import com.back.common.utils.DateUtil;
+import com.back.common.utils.MathUtil;
 import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -51,12 +52,12 @@ public class UpLimitVo extends StockPushVo{
     public static UpLimitVo ofUp(Map map) {
         UpLimitVo vo = new UpLimitVo(StockPushVo.of(map));
         String rdid = DateUtil.getRdid();
-        vo.setValue((String) map.get(CrawConstant.VALUE+"["+rdid+"]"));
+        vo.setValue(MathUtil.formatNum((String) map.get(CrawConstant.VALUE+"["+rdid+"]"),false));
         vo.setDay((Integer) map.get(CrawConstant.DAY+"["+rdid+"]"));
         vo.setDayNum((String) map.get(CrawConstant.DAY_NUM+"["+rdid+"]"));
         vo.setReason((String) map.get(CrawConstant.REASON+"["+rdid+"]"));
         vo.setUpNum((String) map.get(CrawConstant.UP_NUM+"["+rdid+"]"));
-        vo.setUpValue((String) map.get(CrawConstant.UP_VALUE+"["+rdid+"]"));
+        vo.setUpValue(MathUtil.formatNum((String) map.get(CrawConstant.UP_VALUE+"["+rdid+"]"),false));
         vo.setCirculationPercentage((BigDecimal) map.get(CrawConstant.CIRCULATION_PERCENTAGE+"["+rdid+"]"));
         vo.setAllPercentage((BigDecimal) map.get(CrawConstant.ALL_PERCENTAGE+"["+rdid+"]"));
         vo.setOpenNum((String) map.get(CrawConstant.OPEN_NUM+"["+rdid+"]"));
