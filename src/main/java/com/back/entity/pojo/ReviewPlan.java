@@ -1,6 +1,7 @@
 package com.back.entity.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -38,6 +39,7 @@ public class ReviewPlan extends basePojo implements Serializable {
     private Long uid;
 
     @ApiModelProperty(value = "微信标识")
+    @TableField("openId")
     private String openId;
 
     @ApiModelProperty(value = "复盘主题")

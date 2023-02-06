@@ -333,25 +333,35 @@ public class CrawUtil {
 		try {
 			document = Jsoup.connect(url).get();
 			// 获取主体，本质是个list
-			Elements body = document.getElementsByTag("body");
+			Element body = document.getElementsByTag("body").first();
 			// getElementsByClass根据类选择器，getElementsByTag根据标签选择器
 			// 股票名称
-			String stockName = body.first().getElementsByClass("stock-name").first().text();
+			String stockName = body.getElementsByClass("stock-name").first().text();
 			// 现价
-			String nowPrice = body.first().getElementsByClass("stock-current").first().text();
+			String nowPrice = body.getElementsByClass("stock-current").first().text();
 			// 涨跌
-			String trend = body.first().getElementsByClass("stock-change").first().text()
+			String trend = body.getElementsByClass("stock-change").first().text()
 					.split(" ")[CommonConstant.ONE];
 			// 成交额
-			Elements elements = body.first().getElementsByClass("separateTop");
+			Elements elements = body.getElementsByClass("separateTop");
 			String turnover = elements.first().getElementsByTag("td").get(CommonConstant.THREE).text()
+					.split("：")[CommonConstant.ONE];
+			//市值
+			String value = body.getElementsByTag("tbody").first().getElementsByTag("tr")
+					.get(CommonConstant.FIVE).getElementsByTag("td").get(CommonConstant.THREE).text()
 					.split("：")[CommonConstant.ONE];
 			// 填充信息
 			vo = StockCodeMap.get(stockCode);
+			if (vo == null){
+				vo = new StockPushVo(stockCode,stockName);
+				StockCodeMap.put(stockCode,vo);
+				StockNameCodeMap.put(stockName,stockCode);
+			}
 			vo.setStockName(stockName);
 			vo.setNowPrice(nowPrice);
 			vo.setTrend(trend);
 			vo.setTurnover(turnover);
+			vo.setValue(value);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

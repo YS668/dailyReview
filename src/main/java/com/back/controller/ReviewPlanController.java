@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.back.common.QueryPageParam;
 import com.back.common.Result;
+import com.back.common.utils.DateUtil;
 import com.back.entity.pojo.ReviewPlan;
 import com.back.entity.vo.ReviewPlanVo;
 import com.back.service.ReviewPlanService;
@@ -84,6 +85,7 @@ public class ReviewPlanController {
     //新增
     @PostMapping("/save")
     public Result save(@RequestBody ReviewPlan plan){
+        plan.setRdid(DateUtil.getRdid());
         reviewPlanService.save(plan);
         return Result.suc();
     }

@@ -27,14 +27,14 @@ public class StockPushVo  {
     private String stockCode ;
     /** 股票名称 */
     private String stockName ;
-    /** 拼音简写*/
-    public String stortName;
     /** 涨跌 */
     private String trend ;
     /** 现价 */
     private String  nowPrice;
     /** 成交额 */
     private String  turnover;
+    //a股市值(不含限售股)：流通值
+    private String value;
     /** 雪球链接 */
     private String  xueQiuLink;
     /** 同花顺链接 */
@@ -49,10 +49,9 @@ public class StockPushVo  {
         this.stockCode = stockCode;
     }
 
-    public StockPushVo(String stockCode, String stockName, String stortName) {
+    public StockPushVo(String stockCode, String stockName) {
         this.stockCode = stockCode;
         this.stockName = stockName;
-        this.stortName = stortName;
     }
 
     public  String show() {
@@ -83,7 +82,7 @@ public class StockPushVo  {
      */
     public static StockPushVo valueofSh(Map<String,String> map){
         return  new StockPushVo(CrawConstant.SH +(String) map.get("val"),
-                (String)map.get("val2"),(String)map.get("val3"));
+                (String)map.get("val2"));
     }
 
     /**

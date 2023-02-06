@@ -18,8 +18,6 @@ import lombok.NoArgsConstructor;
 public class UpLimitVo extends StockPushVo{
 
     /**最新价*/
-    //a股市值(不含限售股)
-    private String value;
     //几天几板
     private String dayNum;
     //连续涨停天数
@@ -44,8 +42,7 @@ public class UpLimitVo extends StockPushVo{
     private String lastUp;
 
     public UpLimitVo(StockPushVo sp){
-        super(sp.getRdid(),sp.getStockCode(),sp.getStockName(),
-                sp.getStortName(),sp.getTrend(),sp.getNowPrice(),sp.getTurnover(),
+        super(sp.getRdid(),sp.getStockCode(),sp.getStockName(),sp.getTrend(),sp.getNowPrice(),sp.getTurnover(),sp.getValue(),
                 sp.getXueQiuLink(),sp.getTongHLink(),sp.getTaoGuLink(),sp.getDongFangLink());
     }
 
@@ -75,8 +72,6 @@ public class UpLimitVo extends StockPushVo{
         res.setStockCode(vo.getStockCode());
         /** 股票名称 */
         res.setStockName(vo.getStockName());
-        /** 拼音简写*/
-        res.setStortName(vo.getStortName());
         /** 涨跌 */
         res.setTrend(vo.getTrend());
         /** 现价 */
