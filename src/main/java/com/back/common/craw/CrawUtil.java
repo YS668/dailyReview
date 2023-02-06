@@ -98,6 +98,7 @@ public class CrawUtil {
 		vo = reviewdataService.list().stream()
 				.sorted(Comparator.comparing(Reviewdata::getRdid).reversed())
 				.map(ReviewDataVo::of).collect(Collectors.toList()).get(CommonConstant.ZERO);
+		upLimits = CrawUtil.getUpData(vo.getRdid()+CrawConstant.QUESTION_UP_LIMIT, CrawConstant.STOCK);
 	}
 
 	/**
