@@ -38,7 +38,7 @@ public class StockPushVo  {
     /** 雪球链接 */
     private String  xueQiuLink;
     /** 同花顺链接 */
-    private String  TongHLink;
+    private String  tongHLink;
     /** 淘股吧链接 */
     private String  taoGuLink;
     /** 东方财富链接 */
