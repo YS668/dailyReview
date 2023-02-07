@@ -21,7 +21,7 @@ public class QuartzConfig {
     @Bean
     public Trigger uploadTaskTrigger() {
         //TODO 这里设定执行方式
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 5 15 ? * MON-FRI");
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 1 15 ? * MON-FRI");
         // 返回任务触发器
         return TriggerBuilder.newTrigger().forJob(uploadTaskDetail())
                 .withIdentity("craw") //认证信息：根据认证信息来启停定时任务

@@ -8,8 +8,12 @@ public class CrawConstant {
     public static String SZ_URL = "http://www.szse.cn/api/report/ShowReport?SHOWTYPE=xlsx&CATALOGID=1110&TABKEY=tab1&random=0.29676899312443084";
     /** 问财URL*/
     public static String WENCAI_URL = "http://www.iwencai.com/customized/chart/get-robot-data";
+    /** HTML后缀 */
+    public static String HTML_SUFFIX = ".html";
     /** 雪球个股链接 */
     public static String XUE_QIU_ONE = "https://xueqiu.com/S/";
+    /** 东方财富个股链接 */
+    public static String DF_ONE = "http://quote.eastmoney.com/";
     /** 淘股吧个股链接 */
     public static String TAO_GU_ONE = "https://www.taoguba.com.cn/quotes/";
     /** 同花顺个股链接 */
@@ -22,10 +26,8 @@ public class CrawConstant {
     public static String SZ_INDEX_URL = "http://q.10jqka.com.cn/zs/detail/code/399001/";
     /** 创业扳指 */
     public static String BUS_INDEX_URL = "http://q.10jqka.com.cn/zs/detail/code/399006/";
-    /** 沪股通 */
-    public static String HGTB_URL = "http://data.10jqka.com.cn/hgt/hgtb/";
-    /** 深股通 */
-    public static String SGTB_URL= "http://data.10jqka.com.cn/hgt/sgtb/";
+    /** 北向资金 */
+    public static String NORTH_JME_URL = "https://data.eastmoney.com/hsgt/index.html";
     /** 同花顺龙虎榜 */
     public static String Long_Hu_URL= "http://data.10jqka.com.cn/market/longhu/";
     /** 文件路径 */

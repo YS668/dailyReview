@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
+import java.net.SocketException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -39,6 +40,10 @@ import com.back.entity.vo.UpVo;
 import com.back.service.NorthService;
 import com.back.service.ReviewdataService;
 import com.back.service.UpService;
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
@@ -72,10 +77,6 @@ public class CrawUtil {
 
 	@Autowired
 	private ReviewdataService reviewdataService;
-	@Autowired
-	private NorthService northService;
-	@Autowired
-	private UpService upService;
 
 	private static final JavaScriptProvider<ShJS> shPr = new JavaScriptProvider<>();
 	/** <股票代码,股票名称> */
@@ -87,12 +88,15 @@ public class CrawUtil {
 	 */
 	public static ReviewDataVo vo = new ReviewDataVo();
 
+	public static int crawSum ;
+
 	@PostConstruct
 	public void init() throws Exception {
 		//复盘数据
 		vo = reviewdataService.list().stream()
 				.sorted(Comparator.comparing(Reviewdata::getRdid).reversed())
 				.map(ReviewDataVo::of).collect(Collectors.toList()).get(CommonConstant.ZERO);
+		crawSum = 0;
 	}
 
 	/**
@@ -117,6 +121,7 @@ public class CrawUtil {
 				StockNameCodeMap.put(e.getStockName().replace(" ", ""), e.getStockCode());
 			}
 		});
+		crawSum = 0;
 		log.info("初始/每日更新股票数据缓存成功");
 	}
 
@@ -236,7 +241,6 @@ public class CrawUtil {
 	public static Map<String, Object> getReviewData() {
 		Map<String, Object> res = new HashMap<>();
 		ReviewDataVo reviewDataVo = new ReviewDataVo();
-		NorthVo northVo = new NorthVo();
 		UpVo upVo = new UpVo();
 		//历史新高
 		reviewDataVo.setHistoryHigh(
@@ -284,15 +288,8 @@ public class CrawUtil {
 		// 14:30上涨家数
 		upVo.setFourteentheup(CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.FOURTEENTHE + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK));
 
-		//沪股通
-		String hg = CrawUtil.getNorth(CrawConstant.HGTB_URL);
-		northVo.setHgtb(hg);
-		//深股通
-		String sg = CrawUtil.getNorth(CrawConstant.SGTB_URL);
-		northVo.setSgtb(sg);
-		//总计
-		northVo.setNorthAll(BigDecimal.valueOf(Float.valueOf(hg)).add(BigDecimal.valueOf(Float.valueOf(sg))).setScale(CommonConstant.TWO,BigDecimal.ROUND_DOWN).toString());
-		northVo.setShIndex(shTrend);
+		//北向资金
+		NorthVo northVo = new NorthVo();
 
 		String rdid = DateUtil.getRdid();
 		reviewDataVo.setRdid(rdid);
@@ -309,14 +306,57 @@ public class CrawUtil {
 		return res;
 	}
 
+	//北向资金净买入，渲染后的html爬取
+	public static NorthVo getNorthJme() {
+		NorthVo vo = new NorthVo();
+		String url = CrawConstant.NORTH_JME_URL;
+		final WebClient webClient = new WebClient(BrowserVersion.CHROME);//新建一个模拟谷歌Chrome浏览器的浏览器客户端对象
+
+		webClient.getOptions().setThrowExceptionOnScriptError(false);//当JS执行出错的时候是否抛出异常, 这里选择不需要
+		webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);//当HTTP的状态非200时是否抛出异常, 这里选择不需要
+		webClient.getOptions().setActiveXNative(false);//不启用ActiveX
+		webClient.getOptions().setCssEnabled(false);//是否启用CSS, 因为不需要展现页面, 所以不需要启用
+		webClient.getOptions().setJavaScriptEnabled(true); //很重要，启用JS
+		webClient.getOptions().setDownloadImages(false);//不下载图片
+		webClient.setAjaxController(new NicelyResynchronizingAjaxController());//很重要，设置支持AJAX
+
+		HtmlPage page = null;
+		try {
+			page = webClient.getPage(url);//尝试加载上面图片例子给出的网页
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			webClient.close();
+		}
+
+		webClient.waitForBackgroundJavaScript(8000);//异步JS执行需要耗时,所以这里线程要阻塞8秒,等待异步JS执行结束
+
+		String pageXml = page.asXml();//直接将加载完成的页面转换成xml格式的字符串
+		Document parse = Jsoup.parse(pageXml);
+		// 获取主体，本质是个list
+		Element body = parse.getElementsByTag("body").first();
+		// 北向资金净买额
+		vo.setNorthAll(body.getElementById("north_jme").text());
+		// 沪股通净买额
+		vo.setHgtb(body.getElementById("north_h_jme").text());
+		// 深股通净买额
+		vo.setSgtb(body.getElementById("north_s_jme").text());
+		return vo;
+	}
+
 	/**
-	 * 爬取雪球个股信息
+	 * 爬取个股信息
 	 *
 	 * @param stockCode
 	 *            股票代码
 	 * @return
 	 */
-	public static StockPushVo getOne(String stockCode) {
+	public static StockPushVo getOne(String stockCode){
+		return getXueQiuOne(stockCode);
+	}
+
+	/** 雪球个股 */
+	public static StockPushVo getXueQiuOne(String stockCode)  {
 		// 例如：https://xueqiu.com/S/SH600546
 		String url =  CrawConstant.XUE_QIU_ONE + stockCode;
 		Document document = null;
@@ -358,17 +398,26 @@ public class CrawUtil {
 			vo.setTaoGuLink(CrawConstant.TAO_GU_ONE+stockCode.substring(CommonConstant.ZERO,CommonConstant.TWO).toLowerCase()
 					+stockCode.substring(CommonConstant.TWO));
 			//东方财富
-			//https://so.eastmoney.com/web/s?keyword=%E4%BA%AC%E5%B1%B1%E8%BD%BB%E6%9C%BA
+			//https://so.eastmoney.com/web/s?keyword=京山轻机
 			vo.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
 			//同花顺
 			//http://www.iwencai.com/unifiedwap/result?w=京山轻机
 			vo.setTongHLink(CrawConstant.TONG_HU_ONE+stockName);
 			vo.setRdid(DateUtil.getRdid());
-		} catch (IOException e) {
+		}  catch (SocketException e){
+			try {
+				log.info("SocketException: {}  {}",e.getMessage(),e.getStackTrace().toString());
+				Thread.sleep(1000);
+				getXueQiuOne(stockCode);
+			} catch (InterruptedException interruptedException) {
+				interruptedException.printStackTrace();
+			}
+		} catch (Exception e){
 			e.printStackTrace();
 		}
 		return vo;
 	}
+
 
 	/**
 	 * 爬取问财信息
@@ -569,32 +618,6 @@ public class CrawUtil {
 		}
 		log.info("结果：{}",stockPushVo);
 		return stockPushVo;
-	}
-
-	/**
-	 * 北向资金
-	 * @param url
-	 *      沪股通/深股通
-	 * @return
-	 */
-	public static String getNorth(String url){
-		Document document = null;
-		String num = null;
-		log.info("爬取：url：{}",url);
-		try {
-			num = Jsoup.connect(url).get().getElementsByTag("body").first()
-					.getElementsByClass("m-table J-ajax-table").first()
-					.getElementsByTag("tbody").first()
-					.getElementsByTag("tr").first()
-					.getElementsByClass("tc").first().nextElementSibling()
-					.text().split(CrawConstant.YI)[CommonConstant.ZERO];
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}finally {
-			log.info("结果：{}",num);
-			return num;
-		}
 	}
 
 	/**

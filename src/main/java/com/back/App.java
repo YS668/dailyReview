@@ -2,6 +2,7 @@ package com.back;
 
 import com.alibaba.fastjson.JSON;
 import com.back.common.constant.CrawConstant;
+import com.back.common.craw.CrawUtil;
 import com.back.common.wx.Wxutils.TextMessageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
