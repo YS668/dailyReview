@@ -407,7 +407,8 @@ public class CrawUtil {
 		}  catch (SocketException e){
 			try {
 				log.info("SocketException: {}  {}",e.getMessage(),e.getStackTrace().toString());
-				Thread.sleep(1000);
+				//让当前线程睡眠1分钟
+				Thread.currentThread().sleep(60*1000);
 				getXueQiuOne(stockCode);
 			} catch (InterruptedException interruptedException) {
 				interruptedException.printStackTrace();
