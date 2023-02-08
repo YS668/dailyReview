@@ -55,7 +55,7 @@ public class WatchHandler extends HandlerAdapter {
             for (int i = 0; i < codeList.size(); i++) {
                 String stockCode = codeList.get(i);
                 //股票名称/股票代码转换器
-                StockPushVo crawRes = CrawUtil.getOne(stockCode);
+                StockPushVo crawRes = CrawUtil.getOneBySinA(stockCode);
                 if (crawRes == null){
                     mistakeList.add(stockCode);
                     continue;

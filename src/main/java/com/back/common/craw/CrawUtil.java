@@ -28,6 +28,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.CrawConstant;
 import com.back.common.utils.DateUtil;
+import com.back.common.utils.MathUtil;
 import com.back.entity.pojo.North;
 import com.back.entity.pojo.Reviewdata;
 import com.back.entity.pojo.Up;
@@ -62,6 +63,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -351,74 +353,63 @@ public class CrawUtil {
 	 *            股票代码
 	 * @return
 	 */
-	public static StockPushVo getOne(String stockCode){
-		return getXueQiuOne(stockCode);
-	}
-
-	/** 雪球个股 */
-	public static StockPushVo getXueQiuOne(String stockCode)  {
-		// 例如：https://xueqiu.com/S/SH600546
-		String url =  CrawConstant.XUE_QIU_ONE + stockCode;
-		Document document = null;
-		List<String> list = new ArrayList<>();
+	public static StockPushVo getOneBySinA(String stockCode){
+		RestTemplate restTemplate = new RestTemplate();
 		StockPushVo vo = null;
-		try {
-			document = Jsoup.connect(url).get();
-			// 获取主体，本质是个list
-			Element body = document.getElementsByTag("body").first();
-			// getElementsByClass根据类选择器，getElementsByTag根据标签选择器
-			// 股票名称
-			String temp = body.getElementsByClass("stock-name").first().text();
-			String stockName = temp.substring(CommonConstant.ZERO, temp.lastIndexOf("("));
-			// 现价
-			String nowPrice = body.getElementsByClass("stock-current").first().text();
-			// 涨跌
-			String trend = body.getElementsByClass("stock-change").first().text()
-					.split(" ")[CommonConstant.ONE];
-			// 成交额
-			Elements elements = body.getElementsByClass("separateTop");
-			String turnover = elements.first().getElementsByTag("td").get(CommonConstant.THREE).text()
-					.split("：")[CommonConstant.ONE];
-			// 填充信息
-			vo = StockCodeMap.get(stockCode);
-			if (vo == null){
-				vo = new StockPushVo(stockCode,stockName);
-				StockCodeMap.put(stockCode,vo);
-				StockNameCodeMap.put(stockName,stockCode);
-			}
-			vo.setStockName(stockName);
-			vo.setNowPrice(nowPrice);
-			vo.setTrend(trend);
-			vo.setTurnover(turnover);
-			//雪球链接
-			//https://xueqiu.com/S/SZ000821
-			vo.setXueQiuLink(CrawConstant.XUE_QIU_ONE+stockCode);
-			//淘股吧链接
-			//https://www.taoguba.com.cn/quotes/sz000821
-			vo.setTaoGuLink(CrawConstant.TAO_GU_ONE+stockCode.substring(CommonConstant.ZERO,CommonConstant.TWO).toLowerCase()
-					+stockCode.substring(CommonConstant.TWO));
-			//东方财富
-			//https://so.eastmoney.com/web/s?keyword=京山轻机
-			vo.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
-			//同花顺
-			//http://www.iwencai.com/unifiedwap/result?w=京山轻机
-			vo.setTongHLink(CrawConstant.TONG_HU_ONE+stockName);
-			vo.setRdid(DateUtil.getRdid());
-		}  catch (SocketException e){
-			try {
-				log.info("SocketException: {}  {}",e.getMessage(),e.getStackTrace().toString());
-				//让当前线程睡眠1分钟
-				Thread.currentThread().sleep(60*1000);
-				getXueQiuOne(stockCode);
-			} catch (InterruptedException interruptedException) {
-				interruptedException.printStackTrace();
-			}
-		} catch (Exception e){
-			e.printStackTrace();
+		//小写字母的代码
+		String lowwerCode = stockCode.substring(CommonConstant.ZERO, CommonConstant.TWO).toLowerCase()
+				+ stockCode.substring(CommonConstant.TWO);
+		//请求头
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Referer",CrawConstant.HEADER_REFERER.replace("$",lowwerCode));
+		HttpEntity httpEntity = new HttpEntity(null, headers);
+		ResponseEntity<String> entity = restTemplate.exchange(CrawConstant.SINA_ONE+lowwerCode, HttpMethod.GET, httpEntity, String.class);
+		//var hq_str_sh600519="贵州茅台,1800.010,1797.000,1784.000,1805.970,1775.000,1784.000,1784.100,1667577,
+		// 2980574806.000,54000,1784.000,100,1783.910,200,1783.890,200,1783.660,100,
+		// 1783.600,100,1784.100,100,1784.110,100,1784.160,200,1784.210,800,1784.300,2023-02-08,15:00:00,00,";
+		String body = entity.getBody();
+		String substring = body.substring(body.indexOf("\""), body.length() - CommonConstant.TWO);
+		String[] split = substring.split(",");
+		String stockName = split[CommonConstant.ZERO];
+		String nowPrice = split[CommonConstant.THREE];
+		String yesTodayPrice = split[CommonConstant.TWO];
+		String temp = String.valueOf(BigDecimal.valueOf((Float.valueOf(nowPrice)-Float.valueOf(yesTodayPrice))
+				/Float.valueOf(yesTodayPrice)*100).setScale(CommonConstant.TWO,BigDecimal.ROUND_HALF_DOWN));
+		String trend = null;
+		if (temp.startsWith("-")){
+			trend = temp.substring(CommonConstant.ZERO,CommonConstant.FIVE)+"%";
+		}else {
+			trend = temp.substring(CommonConstant.ZERO,CommonConstant.FOUR)+"%";
 		}
+
+		String turnover = MathUtil.formatNum(split[CommonConstant.NINE],false);
+
+		// 填充信息
+		vo = StockCodeMap.get(stockCode);
+		if (vo == null){
+			vo = new StockPushVo(stockCode,stockName);
+			StockCodeMap.put(stockCode,vo);
+			StockNameCodeMap.put(stockName,stockCode);
+		}
+		vo.setStockName(stockName);
+		vo.setNowPrice(nowPrice);
+		vo.setTrend(trend);
+		vo.setTurnover(turnover);
+		//雪球链接
+		//https://xueqiu.com/S/SZ000821
+		vo.setXueQiuLink(CrawConstant.XUE_QIU_ONE+stockCode);
+		//淘股吧链接
+		//https://www.taoguba.com.cn/quotes/sz000821
+		vo.setTaoGuLink(CrawConstant.TAO_GU_ONE+lowwerCode);
+		//东方财富
+		//https://so.eastmoney.com/web/s?keyword=京山轻机
+		vo.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
+		//同花顺
+		//http://www.iwencai.com/unifiedwap/result?w=京山轻机
+		vo.setTongHLink(CrawConstant.TONG_HU_ONE+stockName);
+		vo.setRdid(DateUtil.getRdid());
 		return vo;
 	}
-
 
 	/**
 	 * 爬取问财信息

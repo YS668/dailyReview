@@ -39,7 +39,7 @@ public class PushHandler extends HandlerAdapter {
             }
             StringBuilder resBulider = new StringBuilder();
             for (int i = 0; i < list.size(); i++) {
-                StockPushVo crawRes = CrawUtil.getOne(list.get(i).getStockcode());
+                StockPushVo crawRes = CrawUtil.getOneBySinA(list.get(i).getStockcode());
                 if (crawRes == null){
                     return WXConstant.WX_FAIl_HANDLER;
                 }

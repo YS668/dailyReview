@@ -103,7 +103,7 @@ public class StockPushVo  {
             CrawUtil.StockNameCodeMap.put(stockName,stockCode);
             CrawUtil.StockCodeMap.put(stockCode,tempVo);
         }
-        StockPushVo res = CrawUtil.getOne(stockCode);
+        StockPushVo res = CrawUtil.getOneBySinA(stockCode);
         return res;
     }
 
