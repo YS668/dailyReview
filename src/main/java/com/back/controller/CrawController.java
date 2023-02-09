@@ -1,5 +1,9 @@
 package com.back.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -9,7 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.back.common.Result;
+import com.back.common.constant.CrawConstant;
 import com.back.common.craw.CrawUtil;
+import com.back.entity.vo.BaseStockVo;
+import com.back.entity.vo.StockPushVo;
 
 /**
  * 定时任务控制器
@@ -79,5 +86,36 @@ public class CrawController {
     @GetMapping("/up/limit")
     public Result getUpLimit(){
         return Result.suc(CrawUtil.vo.getUpLimit());
+    }
+
+    /**
+     * 获取热股榜
+     */
+    @GetMapping("/hot")
+    public Result getHot(){
+        Map<String, Object> map= new HashMap<>();
+        //雪球1小时内热榜
+        List<BaseStockVo> oneXq = CrawUtil.getHotByXueQiu(CrawConstant.HOT_ONE_XUEQIU);
+        //雪球24小时内热榜
+        List<BaseStockVo> tfXq = CrawUtil.getHotByXueQiu(CrawConstant.HOT_TF_XUEQIU);
+        //淘股吧热榜
+        Map<String, List<BaseStockVo>> taoGuMap = CrawUtil.getHotByTaoGu();
+        //东方财富人气榜
+        List<BaseStockVo> dfRq = CrawUtil.getHotByDf(CrawConstant.HOT_DF_RENQI);
+        //东方财富飙升榜
+        List<BaseStockVo> dfUp = CrawUtil.getHotByDf(CrawConstant.HOT_DF_UP);
+        //同花顺1小时内热榜
+        List<BaseStockVo> thOne = CrawUtil.getHotByTh(CrawConstant.HOT_ONE_TH);
+        //同花顺24小时内热榜
+        List<BaseStockVo> thTfUp = CrawUtil.getHotByTh(CrawConstant.HOT_TF_TH);
+        map.put("xq_one",oneXq);
+        map.put("xq_tf",tfXq);
+        map.put("tg_sh",taoGuMap.get("sh"));
+        map.put("tg_sz",taoGuMap.get("sz"));
+        map.put("df_rq",dfRq);
+        map.put("df_up",dfUp);
+        map.put("th_one",thOne);
+        map.put("th_tf",thTfUp);
+        return Result.suc(map);
     }
 }

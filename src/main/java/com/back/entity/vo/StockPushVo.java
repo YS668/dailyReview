@@ -18,19 +18,11 @@ import com.back.common.craw.CrawUtil;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class StockPushVo  {
+public class StockPushVo extends BaseStockVo  {
 
     @ApiModelProperty(value = "标识")
     private String rdid;
-    /** 股票代码 */
-    private String stockCode ;
-    /** 股票名称 */
-    private String stockName ;
-    /** 涨跌 */
-    private String trend ;
-    /** 现价 */
-    private String  nowPrice;
+
     /** 成交额 */
     private String  turnover;
     /** 雪球链接 */
@@ -42,38 +34,44 @@ public class StockPushVo  {
     /** 东方财富链接 */
     private String dongFangLink;
 
+    public StockPushVo(String stockCode, String stockName, String trend, String nowPrice, String rdid, String turnover, String xueQiuLink, String tongHLink, String taoGuLink, String dongFangLink) {
+        super(stockCode, stockName, trend, nowPrice);
+        this.rdid = rdid;
+        this.turnover = turnover;
+        this.xueQiuLink = xueQiuLink;
+        this.tongHLink = tongHLink;
+        this.taoGuLink = taoGuLink;
+        this.dongFangLink = dongFangLink;
+    }
+
+    public StockPushVo(String rdid, String turnover, String xueQiuLink, String tongHLink, String taoGuLink, String dongFangLink) {
+        this.rdid = rdid;
+        this.turnover = turnover;
+        this.xueQiuLink = xueQiuLink;
+        this.tongHLink = tongHLink;
+        this.taoGuLink = taoGuLink;
+        this.dongFangLink = dongFangLink;
+    }
 
     public StockPushVo(String stockCode) {
-        this.stockCode = stockCode;
+        this.setStockCode(stockCode);
     }
 
     public StockPushVo(String stockCode, String stockName) {
-        this.stockCode = stockCode;
-        this.stockName = stockName;
+        this.setStockCode(stockCode);
+        this.setStockName(stockName);
     }
 
     public  String show() {
         return  "日期："+ DateUtil.getFlmat() + "\n"+
-                "股票名称：" + stockName+"\n"+
-                "涨跌：" + trend+"\n"+
-                "现价：" + nowPrice+"\n"+
+                "股票名称：" + this.getStockName()+"\n"+
+                "涨跌：" + this.getTrend()+"\n"+
+                "现价：" + this.getNowPrice()+"\n"+
                 "成交额：" + turnover+"\n"+
                 "雪球链接：" + xueQiuLink+"\n"+
                 "淘股吧链接：" + taoGuLink+"\n"+
                 "同花顺链接：" + tongHLink+"\n"+
                 "东方财富链接：" + dongFangLink;
-    }
-
-    @Override
-    public String toString() {
-        return "StockPushVo{" +
-                "stockCode='" + stockCode + '\'' +
-                ", stockName='" + stockName + '\'' +
-                ", trend='" + trend + '\'' +
-                ", nowPrice='" + nowPrice + '\'' +
-                ", turnover='" + turnover + '\'' +
-                ", xueQiuLink='" + xueQiuLink + '\'' +
-                '}';
     }
 
     /**

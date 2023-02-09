@@ -17,7 +17,7 @@ public class CrawConstant {
     /** 淘股吧个股链接 */
     public static String TAO_GU_ONE = "https://www.taoguba.com.cn/quotes/";
     /** 同花顺个股链接 */
-    public static String TONG_HU_ONE = "http://www.iwencai.com/unifiedwap/result?w=";
+    public static String TONG_HU_ONE = "http://stockpage.10jqka.com.cn/";
     /** 东方财富个股链接 */
     public static String DONG_FANG_ONE ="https://so.eastmoney.com/web/s?keyword=";
     /** 上证指数 */
@@ -42,6 +42,22 @@ public class CrawConstant {
     public static String SZ = "SZ";
     /** 上交所*/
     public static String SH = "SH";
+
+    /*************************热股****************/
+    /** 雪球1小时热榜 */
+    public static String HOT_ONE_XUEQIU= "https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=10&_type=10&type=20";
+    /** 雪球24小时热榜 */
+    public static String HOT_TF_XUEQIU= "https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=10&_type=10&type=20";
+    /** 淘股吧热榜 */
+    public static String HOT_TAOGU= "https://www.taoguba.com.cn/stock/moreHotStock";
+    /** 东方财富人气榜 */
+    public static String HOT_DF_RENQI= "https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&np=3&ut=a79f54e3d4c8d44e494efb8f748db291&invt=2&secids=1.601360,0.000977,1.601059,0.002547,0.002362,0.300114,0.002241,0.002882,0.300603,0.300317,0.300474,0.301358,1.601890,0.002400,0.002253,0.002717,0.002229,0.002328,0.301419,1.603019&fields=f1,f2,f3,f4,f12,f13,f14,f152,f15,f16";
+    /** 东方财富飙升榜 */
+    public static String HOT_DF_UP= "https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&np=3&ut=a79f54e3d4c8d44e494efb8f748db291&invt=2&secids=1.688045,1.688661,0.300449,1.688368,1.688416,1.688699,1.688571,1.688173,1.688668,1.688383,1.688386,1.688391,1.603306,1.688150,1.688683,1.688070,1.688325,0.300940,0.300606,0.300818&fields=f1,f2,f3,f4,f12,f13,f14,f152,f15,f16";
+    /** 同花顺1小时热榜 */
+    public static String HOT_ONE_TH= "https://eq.10jqka.com.cn/open/api/hot_list/v1/hot_stock/a/hour/data.txt";
+    /** 同花顺24小时热榜 */
+    public static String HOT_TF_TH= "https://eq.10jqka.com.cn/open/api/hot_list/v1/hot_stock/a/day/data.txt";
 
     /*************************复盘数据条件*****************/
     public static String QUESTION_HISTORY_HIGH = "今日创历史新高，非ST，非4和8开头";

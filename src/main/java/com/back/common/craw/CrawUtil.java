@@ -27,11 +27,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.CrawConstant;
+import com.back.common.utils.CodeUtil;
 import com.back.common.utils.DateUtil;
 import com.back.common.utils.MathUtil;
 import com.back.entity.pojo.North;
 import com.back.entity.pojo.Reviewdata;
 import com.back.entity.pojo.Up;
+import com.back.entity.vo.BaseStockVo;
 import com.back.entity.vo.NorthVo;
 import com.back.entity.vo.ReviewDataVo;
 import com.back.entity.vo.StockPushVo;
@@ -309,7 +311,10 @@ public class CrawUtil {
 		return res;
 	}
 
-	//北向资金净买入，渲染后的html爬取
+	/**
+	 *  北向资金净买入，渲染后的html爬取
+	 * @return
+	 */
 	public static NorthVo getNorthJme() {
 		NorthVo vo = new NorthVo();
 		String url = CrawConstant.NORTH_JME_URL;
@@ -407,10 +412,191 @@ public class CrawUtil {
 		//https://so.eastmoney.com/web/s?keyword=京山轻机
 		vo.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
 		//同花顺
-		//http://www.iwencai.com/unifiedwap/result?w=京山轻机
-		vo.setTongHLink(CrawConstant.TONG_HU_ONE+stockName);
+		//http://stockpage.10jqka.com.cn/600519
+		vo.setTongHLink(CrawConstant.TONG_HU_ONE+stockCode.substring(CommonConstant.TWO));
+		//日期
 		vo.setRdid(DateUtil.getRdid());
 		return vo;
+	}
+
+	/**
+	 * 爬取雪球个股信息
+	 *
+	 * @param stockCode
+	 *            股票代码
+	 * @return
+	 */
+	public static StockPushVo getOneByXueQiu(String stockCode) {
+		// 例如：https://xueqiu.com/S/SH600546
+		String url =  CrawConstant.XUE_QIU_ONE + stockCode;
+		Document document = null;
+		List<String> list = new ArrayList<>();
+		StockPushVo vo = null;
+		try {
+			document = Jsoup.connect(url).get();
+			// 获取主体，本质是个list
+			Element body = document.getElementsByTag("body").first();
+			// getElementsByClass根据类选择器，getElementsByTag根据标签选择器
+			// 股票名称
+			String temp = body.getElementsByClass("stock-name").first().text();
+			String stockName = temp.substring(CommonConstant.ZERO, temp.lastIndexOf("("));
+			// 现价
+			String nowPrice = body.getElementsByClass("stock-current").first().text();
+			// 涨跌
+			String trend = body.getElementsByClass("stock-change").first().text()
+					.split(" ")[CommonConstant.ONE];
+			// 成交额
+			Elements elements = body.getElementsByClass("separateTop");
+			String turnover = elements.first().getElementsByTag("td").get(CommonConstant.THREE).text()
+					.split("：")[CommonConstant.ONE];
+			// 填充信息
+			vo = StockCodeMap.get(stockCode);
+			if (vo == null){
+				vo = new StockPushVo(stockCode,stockName);
+				StockCodeMap.put(stockCode,vo);
+				StockNameCodeMap.put(stockName,stockCode);
+			}
+			vo.setStockName(stockName);
+			vo.setNowPrice(nowPrice);
+			vo.setTrend(trend);
+			vo.setTurnover(turnover);
+			//雪球链接
+			//https://xueqiu.com/S/SZ000821
+			vo.setXueQiuLink(CrawConstant.XUE_QIU_ONE+stockCode);
+			//淘股吧链接
+			//https://www.taoguba.com.cn/quotes/sz000821
+			vo.setTaoGuLink(CrawConstant.TAO_GU_ONE+stockCode.substring(CommonConstant.ZERO,CommonConstant.TWO).toLowerCase()
+					+stockCode.substring(CommonConstant.TWO));
+			//东方财富
+			//https://so.eastmoney.com/web/s?keyword=%E4%BA%AC%E5%B1%B1%E8%BD%BB%E6%9C%BA
+			vo.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
+			//同花顺
+			//http://stockpage.10jqka.com.cn/600519
+			vo.setTongHLink(CrawConstant.TONG_HU_ONE+stockCode.substring(CommonConstant.TWO));
+			//日期
+			vo.setRdid(DateUtil.getRdid());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return vo;
+	}
+
+	/**
+	 * 获取雪球热股
+	 * @param url
+	 * @return
+	 */
+	public static List<BaseStockVo>  getHotByXueQiu(String url) {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Cookie","device_id=34cff051773e8c372c1bcd3d177c0c13; s=bt12lj4g4l; bid=55f98a025015352661adabaed55fe6c2_lc43l8ar; Hm_lvt_1db88642e346389874251b5a1eded6e3=1675253209,1675253477,1675299587,1675386828; snbim_minify=true; xq_a_token=06c970814873215375f1cd02e4c8e64b740f6704; xqat=06c970814873215375f1cd02e4c8e64b740f6704; xq_r_token=9546eea976a2e2f78e2667bb2221518d5306c5b6; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOi0xLCJpc3MiOiJ1YyIsImV4cCI6MTY3NzM3MDg0NiwiY3RtIjoxNjc1NzY4MTQ0Nzg1LCJjaWQiOiJkOWQwbjRBWnVwIn0.YTmROb47LZSFJ5c3stxIF_ar0bVCsNmKZ0yOZyoAwPaGFlqK6J2EpmH_BMjs2fmrTDLJaLthmwYtj_cysm47fY7sMF6jRAgrh5Ze58NqThDYzXwWuek7IvrgCGfh8WWgjNzNCWGt5EDsbmySoJg1hI9kSakSl2rzUbcfhMDS-H16t52XcwdGRU_WBun8Tih82pzgGsHB1-6DMHQtweVSpgKf8vrDtv1GBDVUXE2tCgtm1k5dEoZldXLUciqjnRB5OP0cbxOmFTfUMKVWZT1DZAtMkQyr-9O2IEqvxgetIHOmydTWFHh0sBMazOQJ5-m6zpWzZw_EGBD68Syd8ZxAXg; u=571675768192753; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1675768216");
+		HttpEntity httpEntity = new HttpEntity(null, headers);
+		ResponseEntity<JSONObject> entity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, JSONObject.class);
+		JSONObject body = entity.getBody();
+		Map data = (Map) body.get("data");
+		List<Map> items =  (ArrayList)data.get("items");
+		//只包含
+		return items.stream().map((e) -> {
+			BaseStockVo vo = new BaseStockVo();
+			vo.setStockName( (String) e.get("name"));
+			vo.setStockCode( (String) e.get("symbol"));
+			vo.setNowPrice( String.valueOf(e.get("current")));
+			vo.setTrend( String.valueOf(e.get("percent"))+"%");
+			return vo;
+		}).collect(Collectors.toList());
+	}
+
+	/**
+	 * 获取同花顺热股
+	 * @param url
+	 * @return
+	 */
+	public static List<BaseStockVo>  getHotByTh(String url) {
+		List<BaseStockVo> res = new ArrayList<>();
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<JSONObject> entity = restTemplate.getForEntity(url, JSONObject.class);
+		JSONObject body = entity.getBody();
+
+
+		Map data = (Map) body.get("data");
+		List<Map> items =  (ArrayList)data.get("stock_list");
+		for (int i = 0; i < CommonConstant.TEN; i++) {
+			Map map = items.get(i);
+			BaseStockVo vo = new BaseStockVo();
+			String stockCode = CodeUtil.numToCode(String.valueOf(map.get("code")));
+			StockPushVo temp = getOneBySinA(stockCode);
+			vo.setStockName(String.valueOf(map.get("name")));
+			vo.setNowPrice(temp.getNowPrice());
+			vo.setTrend(temp.getTrend());
+			res.add(vo);
+		}
+		return res;
+	}
+
+	/**
+	 * 获取淘股吧热股
+	 * @return
+	 */
+	public static Map<String,List<BaseStockVo>>  getHotByTaoGu() {
+		Document document = null;
+		Map<String,List<BaseStockVo>> res = new HashMap<>();
+		List<BaseStockVo> shList = new ArrayList<>();
+		List<BaseStockVo> szList = new ArrayList<>();
+		try {
+			document = Jsoup.connect(CrawConstant.HOT_TAOGU).get();
+			// 获取主体，本质是个list
+			Element body = document.getElementsByTag("body").first();
+			// getElementsByClass根据类选择器，getElementsByTag根据标签选择器
+			// 沪市
+			Element sh = body.getElementsByClass("hot_hsnr_l left").first();
+			//深市
+			Element sz = body.getElementsByClass("hot_hsnr_l right b_rnone").first();
+
+			Elements shCode = sh.getElementsByTag("input");
+			for (Element element : shCode) {
+				String stockCode = element.attr("value");
+				StockPushVo vo = getOneBySinA(CodeUtil.toUp(stockCode));
+				shList.add(BaseStockVo.of(vo));
+			}
+			Elements szCode = sz.getElementsByTag("input");
+			for (Element element : szCode) {
+				String stockCode = element.attr("value");
+				StockPushVo vo = getOneBySinA(CodeUtil.toUp(stockCode));
+				szList.add(BaseStockVo.of(vo));
+			}
+			res.put("sh",shList);
+			res.put("sz",szList);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	/**
+	 * 获取东方财富热股
+	 */
+	public static List<BaseStockVo> getHotByDf(String url){
+		List<BaseStockVo> res = new ArrayList<>();
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		ResponseEntity<JSONObject> entity = restTemplate.getForEntity(url,JSONObject.class);
+		JSONObject body = entity.getBody();
+		Map data = (Map) body.get("data");
+		ArrayList<Map> list = (ArrayList<Map>) data.get("diff");
+		for (int i = 0; i < CommonConstant.TEN; i++) {
+			Map map = list.get(i);
+			BaseStockVo vo = new BaseStockVo();
+			String code = String.valueOf(map.get("f12"));
+			String stockCode = CodeUtil.numToCode(code);
+			if (stockCode != null){
+				vo.setStockCode(stockCode);
+			}
+			vo.setStockName(String.valueOf(map.get("f14")));
+			vo.setNowPrice(String.valueOf(map.get("f2")));
+			vo.setTrend(String.valueOf(map.get("f3"))+"%");
+			res.add(vo);
+		}
+		return res;
 	}
 
 	/**
