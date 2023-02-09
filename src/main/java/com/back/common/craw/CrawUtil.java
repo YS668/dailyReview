@@ -291,7 +291,8 @@ public class CrawUtil {
 		upVo.setFourteentheup(CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.FOURTEENTHE + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK));
 
 		//北向资金
-		NorthVo northVo = new NorthVo();
+		NorthVo northVo = getNorthJme();
+		northVo.setShIndex(shTrend);
 
 		String rdid = DateUtil.getRdid();
 		reviewDataVo.setRdid(rdid);
@@ -370,7 +371,8 @@ public class CrawUtil {
 		String body = entity.getBody();
 		String substring = body.substring(body.indexOf("\""), body.length() - CommonConstant.TWO);
 		String[] split = substring.split(",");
-		String stockName = split[CommonConstant.ZERO];
+		String nameTemp = split[CommonConstant.ZERO];
+		String stockName = nameTemp.substring(CommonConstant.ONE);
 		String nowPrice = split[CommonConstant.THREE];
 		String yesTodayPrice = split[CommonConstant.TWO];
 		String temp = String.valueOf(BigDecimal.valueOf((Float.valueOf(nowPrice)-Float.valueOf(yesTodayPrice))
