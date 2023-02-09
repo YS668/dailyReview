@@ -17,7 +17,7 @@ public class CrawConstant {
     /** 淘股吧个股链接 */
     public static String TAO_GU_ONE = "https://www.taoguba.com.cn/quotes/";
     /** 同花顺个股链接 */
-    public static String TONG_HU_ONE = "http://www.iwencai.com/unifiedwap/result&w=";
+    public static String TONG_HU_ONE = "http://www.iwencai.com/unifiedwap/result?w=";
     /** 东方财富个股链接 */
     public static String DONG_FANG_ONE ="https://so.eastmoney.com/web/s?keyword=";
     /** 上证指数 */
