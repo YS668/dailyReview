@@ -45,7 +45,7 @@ public class CrawConstant {
 
     /*************************热股****************/
     /** 雪球1小时热榜 */
-    public static String HOT_ONE_XUEQIU= "https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=10&_type=10&type=20";
+    public static String HOT_ONE_XUEQIU= "https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=10&_type=10&type=10";
     /** 雪球24小时热榜 */
     public static String HOT_TF_XUEQIU= "https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=10&_type=10&type=20";
     /** 淘股吧热榜 */
