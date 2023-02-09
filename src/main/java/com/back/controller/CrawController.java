@@ -95,19 +95,19 @@ public class CrawController {
     public Result getHot(){
         Map<String, Object> map= new HashMap<>();
         //雪球1小时内热榜
-        List<BaseStockVo> oneXq = CrawUtil.getHotByXueQiu(CrawConstant.HOT_ONE_XUEQIU);
+        List<StockPushVo> oneXq = CrawUtil.getHotByXueQiu(CrawConstant.HOT_ONE_XUEQIU);
         //雪球24小时内热榜
-        List<BaseStockVo> tfXq = CrawUtil.getHotByXueQiu(CrawConstant.HOT_TF_XUEQIU);
+        List<StockPushVo> tfXq = CrawUtil.getHotByXueQiu(CrawConstant.HOT_TF_XUEQIU);
         //淘股吧热榜
-        Map<String, List<BaseStockVo>> taoGuMap = CrawUtil.getHotByTaoGu();
+        Map<String, List<StockPushVo>> taoGuMap = CrawUtil.getHotByTaoGu();
         //东方财富人气榜
-        List<BaseStockVo> dfRq = CrawUtil.getHotByDf(CrawConstant.HOT_DF_RENQI);
+        List<StockPushVo> dfRq = CrawUtil.getHotByDf(CrawConstant.HOT_DF_RENQI);
         //东方财富飙升榜
-        List<BaseStockVo> dfUp = CrawUtil.getHotByDf(CrawConstant.HOT_DF_UP);
+        List<StockPushVo> dfUp = CrawUtil.getHotByDf(CrawConstant.HOT_DF_UP);
         //同花顺1小时内热榜
-        List<BaseStockVo> thOne = CrawUtil.getHotByTh(CrawConstant.HOT_ONE_TH);
+        List<StockPushVo> thOne = CrawUtil.getHotByTh(CrawConstant.HOT_ONE_TH);
         //同花顺24小时内热榜
-        List<BaseStockVo> thTfUp = CrawUtil.getHotByTh(CrawConstant.HOT_TF_TH);
+        List<StockPushVo> thTfUp = CrawUtil.getHotByTh(CrawConstant.HOT_TF_TH);
         map.put("xq_one",oneXq);
         map.put("xq_tf",tfXq);
         map.put("tg_sh",taoGuMap.get("sh"));

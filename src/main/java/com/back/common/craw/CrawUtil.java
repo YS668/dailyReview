@@ -402,18 +402,8 @@ public class CrawUtil {
 		vo.setNowPrice(nowPrice);
 		vo.setTrend(trend);
 		vo.setTurnover(turnover);
-		//雪球链接
-		//https://xueqiu.com/S/SZ000821
-		vo.setXueQiuLink(CrawConstant.XUE_QIU_ONE+stockCode);
-		//淘股吧链接
-		//https://www.taoguba.com.cn/quotes/sz000821
-		vo.setTaoGuLink(CrawConstant.TAO_GU_ONE+lowwerCode);
-		//东方财富
-		//https://so.eastmoney.com/web/s?keyword=京山轻机
-		vo.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
-		//同花顺
-		//http://stockpage.10jqka.com.cn/600519
-		vo.setTongHLink(CrawConstant.TONG_HU_ONE+stockCode.substring(CommonConstant.TWO));
+		//填充链接
+		vo.fillLink();
 		//日期
 		vo.setRdid(DateUtil.getRdid());
 		return vo;
@@ -460,19 +450,8 @@ public class CrawUtil {
 			vo.setNowPrice(nowPrice);
 			vo.setTrend(trend);
 			vo.setTurnover(turnover);
-			//雪球链接
-			//https://xueqiu.com/S/SZ000821
-			vo.setXueQiuLink(CrawConstant.XUE_QIU_ONE+stockCode);
-			//淘股吧链接
-			//https://www.taoguba.com.cn/quotes/sz000821
-			vo.setTaoGuLink(CrawConstant.TAO_GU_ONE+stockCode.substring(CommonConstant.ZERO,CommonConstant.TWO).toLowerCase()
-					+stockCode.substring(CommonConstant.TWO));
-			//东方财富
-			//https://so.eastmoney.com/web/s?keyword=%E4%BA%AC%E5%B1%B1%E8%BD%BB%E6%9C%BA
-			vo.setDongFangLink(CrawConstant.DONG_FANG_ONE+stockName);
-			//同花顺
-			//http://stockpage.10jqka.com.cn/600519
-			vo.setTongHLink(CrawConstant.TONG_HU_ONE+stockCode.substring(CommonConstant.TWO));
+			//填充链接
+			vo.fillLink();
 			//日期
 			vo.setRdid(DateUtil.getRdid());
 		} catch (IOException e) {
@@ -486,7 +465,7 @@ public class CrawUtil {
 	 * @param url
 	 * @return
 	 */
-	public static List<BaseStockVo>  getHotByXueQiu(String url) {
+	public static List<StockPushVo>  getHotByXueQiu(String url) {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Cookie","device_id=34cff051773e8c372c1bcd3d177c0c13; s=bt12lj4g4l; bid=55f98a025015352661adabaed55fe6c2_lc43l8ar; Hm_lvt_1db88642e346389874251b5a1eded6e3=1675253209,1675253477,1675299587,1675386828; snbim_minify=true; xq_a_token=06c970814873215375f1cd02e4c8e64b740f6704; xqat=06c970814873215375f1cd02e4c8e64b740f6704; xq_r_token=9546eea976a2e2f78e2667bb2221518d5306c5b6; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOi0xLCJpc3MiOiJ1YyIsImV4cCI6MTY3NzM3MDg0NiwiY3RtIjoxNjc1NzY4MTQ0Nzg1LCJjaWQiOiJkOWQwbjRBWnVwIn0.YTmROb47LZSFJ5c3stxIF_ar0bVCsNmKZ0yOZyoAwPaGFlqK6J2EpmH_BMjs2fmrTDLJaLthmwYtj_cysm47fY7sMF6jRAgrh5Ze58NqThDYzXwWuek7IvrgCGfh8WWgjNzNCWGt5EDsbmySoJg1hI9kSakSl2rzUbcfhMDS-H16t52XcwdGRU_WBun8Tih82pzgGsHB1-6DMHQtweVSpgKf8vrDtv1GBDVUXE2tCgtm1k5dEoZldXLUciqjnRB5OP0cbxOmFTfUMKVWZT1DZAtMkQyr-9O2IEqvxgetIHOmydTWFHh0sBMazOQJ5-m6zpWzZw_EGBD68Syd8ZxAXg; u=571675768192753; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1675768216");
@@ -497,11 +476,12 @@ public class CrawUtil {
 		List<Map> items =  (ArrayList)data.get("items");
 		//只包含
 		return items.stream().map((e) -> {
-			BaseStockVo vo = new BaseStockVo();
+			StockPushVo vo = new StockPushVo();
 			vo.setStockName( (String) e.get("name"));
 			vo.setStockCode( (String) e.get("symbol"));
 			vo.setNowPrice( String.valueOf(e.get("current")));
 			vo.setTrend( String.valueOf(e.get("percent"))+"%");
+			vo.fillLink();
 			return vo;
 		}).collect(Collectors.toList());
 	}
@@ -511,8 +491,8 @@ public class CrawUtil {
 	 * @param url
 	 * @return
 	 */
-	public static List<BaseStockVo>  getHotByTh(String url) {
-		List<BaseStockVo> res = new ArrayList<>();
+	public static List<StockPushVo>  getHotByTh(String url) {
+		List<StockPushVo> res = new ArrayList<>();
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<JSONObject> entity = restTemplate.getForEntity(url, JSONObject.class);
 		JSONObject body = entity.getBody();
@@ -522,12 +502,14 @@ public class CrawUtil {
 		List<Map> items =  (ArrayList)data.get("stock_list");
 		for (int i = 0; i < CommonConstant.TEN; i++) {
 			Map map = items.get(i);
-			BaseStockVo vo = new BaseStockVo();
+			StockPushVo vo = new StockPushVo();
 			String stockCode = CodeUtil.numToCode(String.valueOf(map.get("code")));
 			StockPushVo temp = getOneBySinA(stockCode);
+			vo.setStockCode(stockCode);
 			vo.setStockName(String.valueOf(map.get("name")));
 			vo.setNowPrice(temp.getNowPrice());
 			vo.setTrend(temp.getTrend());
+			vo.fillLink();
 			res.add(vo);
 		}
 		return res;
@@ -537,11 +519,11 @@ public class CrawUtil {
 	 * 获取淘股吧热股
 	 * @return
 	 */
-	public static Map<String,List<BaseStockVo>>  getHotByTaoGu() {
+	public static Map<String,List<StockPushVo>>  getHotByTaoGu() {
 		Document document = null;
-		Map<String,List<BaseStockVo>> res = new HashMap<>();
-		List<BaseStockVo> shList = new ArrayList<>();
-		List<BaseStockVo> szList = new ArrayList<>();
+		Map<String,List<StockPushVo>> res = new HashMap<>();
+		List<StockPushVo> shList = new ArrayList<>();
+		List<StockPushVo> szList = new ArrayList<>();
 		try {
 			document = Jsoup.connect(CrawConstant.HOT_TAOGU).get();
 			// 获取主体，本质是个list
@@ -556,13 +538,13 @@ public class CrawUtil {
 			for (Element element : shCode) {
 				String stockCode = element.attr("value");
 				StockPushVo vo = getOneBySinA(CodeUtil.toUp(stockCode));
-				shList.add(BaseStockVo.of(vo));
+				shList.add(vo);
 			}
 			Elements szCode = sz.getElementsByTag("input");
 			for (Element element : szCode) {
 				String stockCode = element.attr("value");
 				StockPushVo vo = getOneBySinA(CodeUtil.toUp(stockCode));
-				szList.add(BaseStockVo.of(vo));
+				szList.add(vo);
 			}
 			res.put("sh",shList);
 			res.put("sz",szList);
@@ -575,8 +557,8 @@ public class CrawUtil {
 	/**
 	 * 获取东方财富热股
 	 */
-	public static List<BaseStockVo> getHotByDf(String url){
-		List<BaseStockVo> res = new ArrayList<>();
+	public static List<StockPushVo> getHotByDf(String url){
+		List<StockPushVo> res = new ArrayList<>();
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		ResponseEntity<JSONObject> entity = restTemplate.getForEntity(url,JSONObject.class);
@@ -585,7 +567,7 @@ public class CrawUtil {
 		ArrayList<Map> list = (ArrayList<Map>) data.get("diff");
 		for (int i = 0; i < CommonConstant.TEN; i++) {
 			Map map = list.get(i);
-			BaseStockVo vo = new BaseStockVo();
+			StockPushVo vo = new StockPushVo();
 			String code = String.valueOf(map.get("f12"));
 			String stockCode = CodeUtil.numToCode(code);
 			if (stockCode != null){
@@ -594,6 +576,7 @@ public class CrawUtil {
 			vo.setStockName(String.valueOf(map.get("f14")));
 			vo.setNowPrice(String.valueOf(map.get("f2")));
 			vo.setTrend(String.valueOf(map.get("f3"))+"%");
+			vo.fillLink();
 			res.add(vo);
 		}
 		return res;

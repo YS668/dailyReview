@@ -1,6 +1,7 @@
 package com.back.entity.vo;
 
 import com.back.common.constant.CommonConstant;
+import com.back.common.utils.CodeUtil;
 import com.back.common.utils.DateUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -103,6 +104,24 @@ public class StockPushVo extends BaseStockVo  {
         }
         StockPushVo res = CrawUtil.getOneBySinA(stockCode);
         return res;
+    }
+
+    /**
+     * 填充链接
+     */
+    public void fillLink() {
+        //雪球链接
+        //https://xueqiu.com/S/SZ000821
+        this.setXueQiuLink(CrawConstant.XUE_QIU_ONE+this.getStockCode());
+        //淘股吧链接
+        //https://www.taoguba.com.cn/quotes/sz000821
+        this.setTaoGuLink(CrawConstant.TAO_GU_ONE+ CodeUtil.toLow(this.getStockCode()));
+        //东方财富
+        //https://so.eastmoney.com/web/s?keyword=%E4%BA%AC%E5%B1%B1%E8%BD%BB%E6%9C%BA
+        this.setDongFangLink(CrawConstant.DONG_FANG_ONE+this.getStockCode());
+        //同花顺
+        //http://stockpage.10jqka.com.cn/600519
+        this.setTongHLink(CrawConstant.TONG_HU_ONE+CodeUtil.codeToNum(this.getStockCode()));
     }
 
 

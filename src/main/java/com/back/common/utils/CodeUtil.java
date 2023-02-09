@@ -1,5 +1,6 @@
 package com.back.common.utils;
 
+import com.back.common.constant.CommonConstant;
 import com.back.common.constant.CrawConstant;
 import com.back.entity.pojo.Up;
 
@@ -26,6 +27,11 @@ public class CodeUtil {
             return CrawConstant.SH+stockCode;
         }
         return null;
+    }
+
+    //SH600586 -- 600586
+    public static String codeToNum( String stockCode){
+        return stockCode.substring(CommonConstant.TWO);
     }
 
 }
