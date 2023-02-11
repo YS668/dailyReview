@@ -61,7 +61,7 @@ public class CrawConstant {
 
     /*************************指数****************/
     /** 上证50 */
-    public static String SZ_50_INDEX= "SH000300";
+    public static String SZ_50_INDEX= "SH000016";
     /** 沪深300 */
     public static String HS_300_INDEX= "sh000300";
     /** 科创50 */
