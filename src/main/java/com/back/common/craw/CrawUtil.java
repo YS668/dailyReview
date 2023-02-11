@@ -84,7 +84,7 @@ public class CrawUtil {
 	/**
 	 * 今日主要指数
 	 */
-	public static List<BaseStockVo> indexs = new ArrayList<>();
+	public static List<StockPushVo> indexPercentage = new ArrayList<>();
 	public static int crawSum ;
 
 	@PostConstruct
@@ -93,7 +93,7 @@ public class CrawUtil {
 		vo = reviewdataService.list().stream()
 				.sorted(Comparator.comparing(Reviewdata::getRdid).reversed())
 				.map(ReviewDataVo::of).collect(Collectors.toList()).get(CommonConstant.ZERO);
-		//indexs = ;
+		indexPercentage = getIndexPercentage();
 		crawSum = 0;
 	}
 
@@ -290,6 +290,9 @@ public class CrawUtil {
 		//北向资金
 		NorthVo northVo = getNorthJme();
 		northVo.setShIndex(shTrend);
+
+		//指数拥挤度
+		getIndexPercentage();
 
 		String rdid = DateUtil.getRdid();
 		reviewDataVo.setRdid(rdid);

@@ -124,11 +124,8 @@ public class CrawController {
     }
 
 
-    @GetMapping("/gen")
-    public void gen(){
-        Set<UpLimitVo> upData = CrawUtil.getUpData("2023-02-10" + "涨停，非ST，非4和8开头", CrawConstant.STOCK);
-        upData.forEach(i -> i.setRdid("2023-02-10"));
-        Object o = JSONObject.toJSON(upData);
-        System.out.println(o);
+    @GetMapping("/index/percentage")
+    public Result gen(){
+        return Result.suc(CrawUtil.indexPercentage);
     }
 }
