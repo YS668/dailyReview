@@ -8,12 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
-import java.net.SocketException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,9 +27,7 @@ import com.back.common.constant.CrawConstant;
 import com.back.common.utils.CodeUtil;
 import com.back.common.utils.DateUtil;
 import com.back.common.utils.MathUtil;
-import com.back.entity.pojo.North;
 import com.back.entity.pojo.Reviewdata;
-import com.back.entity.pojo.Up;
 import com.back.entity.vo.BaseStockVo;
 import com.back.entity.vo.NorthVo;
 import com.back.entity.vo.ReviewDataVo;
@@ -40,15 +35,11 @@ import com.back.entity.vo.StockPushVo;
 
 import com.back.entity.vo.UpLimitVo;
 import com.back.entity.vo.UpVo;
-import com.back.service.NorthService;
 import com.back.service.ReviewdataService;
-import com.back.service.UpService;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.sun.org.apache.regexp.internal.RE;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
@@ -62,7 +53,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -91,7 +81,10 @@ public class CrawUtil {
 	 * 复盘数据
 	 */
 	public static ReviewDataVo vo = new ReviewDataVo();
-
+	/**
+	 * 今日主要指数
+	 */
+	public static List<BaseStockVo> indexs = new ArrayList<>();
 	public static int crawSum ;
 
 	@PostConstruct
@@ -100,8 +93,10 @@ public class CrawUtil {
 		vo = reviewdataService.list().stream()
 				.sorted(Comparator.comparing(Reviewdata::getRdid).reversed())
 				.map(ReviewDataVo::of).collect(Collectors.toList()).get(CommonConstant.ZERO);
+		//indexs = ;
 		crawSum = 0;
 	}
+
 
 	/**
 	 * 周一到周五凌晨5点 初始化股票map缓存及每日更新 避免新股出现
@@ -409,6 +404,37 @@ public class CrawUtil {
 		return vo;
 	}
 
+
+	/**
+	 * 获取主要指数
+	 */
+	public static List<StockPushVo> getIndexPercentage(){
+		List<StockPushVo> res = new ArrayList<>();
+		String all = "8927.11亿元";
+		StockPushVo sz_50 = getOneBySinA(CrawConstant.SZ_50_INDEX);
+		sz_50.setPercentage(MathUtil.calPerPercentage(all,sz_50.getTurnover()));
+		StockPushVo hs_300 = getOneBySinA(CrawConstant.HS_300_INDEX);
+		hs_300.setPercentage(MathUtil.calPerPercentage(all,hs_300.getTurnover()));
+		StockPushVo kc_50 = getOneBySinA(CrawConstant.KC_50_INDEX);
+		kc_50.setPercentage(MathUtil.calPerPercentage(all,kc_50.getTurnover()));
+		StockPushVo zz_500 = getOneBySinA(CrawConstant.ZZ_500_INDEX);
+		zz_500.setPercentage(MathUtil.calPerPercentage(all,zz_500.getTurnover()));
+		StockPushVo zz_1000 = getOneBySinA(CrawConstant.ZZ_1000_INDEX);
+		zz_1000.setPercentage(MathUtil.calPerPercentage(all,zz_1000.getTurnover()));
+		StockPushVo gz_2000 = getOneBySinA(CrawConstant.GZ_2000_INDEX);
+		gz_2000.setPercentage(MathUtil.calPerPercentage(all,gz_2000.getTurnover()));
+		res.add(sz_50);
+		res.add(hs_300);
+		res.add(kc_50);
+		res.add(zz_500);
+		res.add(zz_1000);
+		res.add(gz_2000);
+		return res;
+	}
+
+	public static void main(String[] args) {
+		getIndexPercentage();
+	}
 	/**
 	 * 爬取雪球个股信息
 	 *
@@ -468,7 +494,7 @@ public class CrawUtil {
 	public static List<StockPushVo>  getHotByXueQiu(String url) {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Cookie","device_id=34cff051773e8c372c1bcd3d177c0c13; s=bt12lj4g4l; bid=55f98a025015352661adabaed55fe6c2_lc43l8ar; Hm_lvt_1db88642e346389874251b5a1eded6e3=1675253209,1675253477,1675299587,1675386828; snbim_minify=true; xq_a_token=06c970814873215375f1cd02e4c8e64b740f6704; xqat=06c970814873215375f1cd02e4c8e64b740f6704; xq_r_token=9546eea976a2e2f78e2667bb2221518d5306c5b6; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOi0xLCJpc3MiOiJ1YyIsImV4cCI6MTY3NzM3MDg0NiwiY3RtIjoxNjc1NzY4MTQ0Nzg1LCJjaWQiOiJkOWQwbjRBWnVwIn0.YTmROb47LZSFJ5c3stxIF_ar0bVCsNmKZ0yOZyoAwPaGFlqK6J2EpmH_BMjs2fmrTDLJaLthmwYtj_cysm47fY7sMF6jRAgrh5Ze58NqThDYzXwWuek7IvrgCGfh8WWgjNzNCWGt5EDsbmySoJg1hI9kSakSl2rzUbcfhMDS-H16t52XcwdGRU_WBun8Tih82pzgGsHB1-6DMHQtweVSpgKf8vrDtv1GBDVUXE2tCgtm1k5dEoZldXLUciqjnRB5OP0cbxOmFTfUMKVWZT1DZAtMkQyr-9O2IEqvxgetIHOmydTWFHh0sBMazOQJ5-m6zpWzZw_EGBD68Syd8ZxAXg; u=571675768192753; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1675768216");
+		headers.set("Cookie","device_id=34cff051773e8c372c1bcd3d177c0c13; s=bt12lj4g4l; bid=55f98a025015352661adabaed55fe6c2_lc43l8ar; __utmz=1.1672016728.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_1db88642e346389874251b5a1eded6e3=1675253477,1675299587,1675386828,1675908455; snbim_minify=true; __utmc=1; __utma=1.620435929.1672016728.1676080675.1676086225.16; remember=1; xq_a_token=d15a7c032b8c277762fa24d0648efdf835ed0d15; xqat=d15a7c032b8c277762fa24d0648efdf835ed0d15; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOjkzMTQ0NDEzNzcsImlzcyI6InVjIiwiZXhwIjoxNjc4Njc4MjkwLCJjdG0iOjE2NzYwOTAzMjU3NDAsImNpZCI6ImQ5ZDBuNEFadXAifQ.jvAEAMHSYBVZWMIV2RiEkeKPpDu76RF6kd_TrOhxhj0dGJF26G3xMBc-qDzYVqmLzIdeiUT2WwewcNjw2A-ot82S_VXaZ2tX2UgRYLh1n3iY5t898nnwYSUyluKJmQRO98nZzR8vLwGreO7clywWGDIjexuy3G0fU7ZfnN6ZuHZaE-VgeS6pfa1xOyQpqqhZrtZOqv4hTTwbnyr_ZducazVTvf9SO82rZAL-r7620nyb3xXoBMClcPU3M2R1cJsL5-QF9WB4TftJa-xiheCDeOH4MZYmMyJ8DWyJs1GPEQBDleqteDU3qa1ctTcz03RDHs9aakvxeSjbj9DvecFutw; xq_r_token=7f1315875e427b0377cf3c6a90f637f189d67303; xq_is_login=1; u=9314441377; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1676090494; acw_tc=2760826e16758248052264816ec1d2609468ab31a11edfc4dba6c064863108");
 		HttpEntity httpEntity = new HttpEntity(null, headers);
 		ResponseEntity<JSONObject> entity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, JSONObject.class);
 		JSONObject body = entity.getBody();

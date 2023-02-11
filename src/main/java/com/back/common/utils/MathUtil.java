@@ -1,8 +1,10 @@
 package com.back.common.utils;
 
 import java.math.BigDecimal;
+import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.StringUtils;
+import com.back.common.constant.CommonConstant;
 
 public class MathUtil {
 
@@ -64,7 +66,24 @@ public class MathUtil {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        MathUtil.formatNum("6.2324368176E8",false);
+    /**
+     * 计算占比
+     */
+    public static String calPerPercentage(String allTurnover,String turnover) {
+        float allNum;
+        float num;
+        if (allTurnover.contains("万亿")){
+             allNum = Float.valueOf(allTurnover.substring(0, allTurnover.length() - 3))*10000;
+        }else {
+            allNum = Float.valueOf(allTurnover.substring(0, allTurnover.length() - 2));
+        }
+        if (turnover.contains("万亿")){
+             num = Float.valueOf(turnover.substring(0, turnover.length() - 3))*1000;
+        }else{
+            num = Float.valueOf(turnover.substring(0, turnover.length() - 2));
+        }
+        float res = (num /allNum) * 100;
+        return String.valueOf(res).substring(0,5)+"%";
     }
+
 }

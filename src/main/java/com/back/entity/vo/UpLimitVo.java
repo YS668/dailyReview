@@ -51,18 +51,18 @@ public class UpLimitVo extends StockPushVo{
     public static UpLimitVo ofUp(Map map) {
         UpLimitVo vo = new UpLimitVo(StockPushVo.of(map));
         String rdid = DateUtil.getRdid();
-        vo.setValue(MathUtil.formatNum((String) map.get(CrawConstant.VALUE+"["+rdid+"]"),false));
+        vo.setValue(MathUtil.formatNum((map.get(CrawConstant.VALUE+"["+rdid+"]").toString()),false));
         vo.setDay((Integer) map.get(CrawConstant.DAY+"["+rdid+"]"));
-        vo.setDayNum((String) map.get(CrawConstant.DAY_NUM+"["+rdid+"]"));
-        vo.setReason((String) map.get(CrawConstant.REASON+"["+rdid+"]"));
-        vo.setUpNum((String) map.get(CrawConstant.UP_NUM+"["+rdid+"]"));
-        vo.setUpValue(MathUtil.formatNum((String) map.get(CrawConstant.UP_VALUE+"["+rdid+"]"),false));
+        vo.setDayNum((map.get(CrawConstant.DAY_NUM+"["+rdid+"]")).toString());
+        vo.setReason((map.get(CrawConstant.REASON+"["+rdid+"]")).toString());
+        vo.setUpNum((map.get(CrawConstant.UP_NUM+"["+rdid+"]")).toString());
+        vo.setUpValue(MathUtil.formatNum(map.get(CrawConstant.UP_VALUE+"["+rdid+"]").toString(),false));
         vo.setCirculationPercentage((BigDecimal) map.get(CrawConstant.CIRCULATION_PERCENTAGE+"["+rdid+"]"));
         vo.setAllPercentage((BigDecimal) map.get(CrawConstant.ALL_PERCENTAGE+"["+rdid+"]"));
-        vo.setOpenNum((String) map.get(CrawConstant.OPEN_NUM+"["+rdid+"]"));
-        vo.setUpType((String) map.get(CrawConstant.UP_TYPE+"["+rdid+"]"));
-        vo.setFirstUp((String) map.get(CrawConstant.FIRST_UP+"["+rdid+"]"));
-        vo.setLastUp((String) map.get(CrawConstant.LAST_UP+"["+rdid+"]"));
+        vo.setOpenNum(map.get(CrawConstant.OPEN_NUM+"["+rdid+"]").toString());
+        vo.setUpType(map.get(CrawConstant.UP_TYPE+"["+rdid+"]").toString());
+        vo.setFirstUp(map.get(CrawConstant.FIRST_UP+"["+rdid+"]").toString());
+        vo.setLastUp(map.get(CrawConstant.LAST_UP+"["+rdid+"]").toString());
         return vo;
     }
 

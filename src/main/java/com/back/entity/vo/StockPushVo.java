@@ -26,6 +26,8 @@ public class StockPushVo extends BaseStockVo  {
 
     /** 成交额 */
     private String  turnover;
+    /** 占比 */
+    private String percentage;
     /** 雪球链接 */
     private String  xueQiuLink;
     /** 同花顺链接 */
@@ -35,7 +37,7 @@ public class StockPushVo extends BaseStockVo  {
     /** 东方财富链接 */
     private String dongFangLink;
 
-    public StockPushVo(String stockCode, String stockName, String trend, String nowPrice, String rdid, String turnover, String xueQiuLink, String tongHLink, String taoGuLink, String dongFangLink) {
+    public StockPushVo(String rdid, String stockCode, String stockName, String trend, String nowPrice, String turnover, String xueQiuLink, String tongHLink, String taoGuLink, String dongFangLink) {
         super(stockCode, stockName, trend, nowPrice);
         this.rdid = rdid;
         this.turnover = turnover;

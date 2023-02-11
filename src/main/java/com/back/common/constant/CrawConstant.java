@@ -59,6 +59,20 @@ public class CrawConstant {
     /** 同花顺24小时热榜 */
     public static String HOT_TF_TH= "https://eq.10jqka.com.cn/open/api/hot_list/v1/hot_stock/a/day/data.txt";
 
+    /*************************指数****************/
+    /** 上证50 */
+    public static String SZ_50_INDEX= "SH000300";
+    /** 沪深300 */
+    public static String HS_300_INDEX= "sh000300";
+    /** 科创50 */
+    public static String KC_50_INDEX= "SH000688";
+    /** 中证500 */
+    public static String ZZ_500_INDEX= "SH000905";
+    /** 中证1000 */
+    public static String ZZ_1000_INDEX= "SH000852";
+    /** 国证2000 */
+    public static String GZ_2000_INDEX= "SZ399303";
+
     /*************************复盘数据条件*****************/
     public static String QUESTION_HISTORY_HIGH = "今日创历史新高，非ST，非4和8开头";
     public static String QUESTION_YEAR_HIGH = "今日创一年新高，非ST，非4和8开头";

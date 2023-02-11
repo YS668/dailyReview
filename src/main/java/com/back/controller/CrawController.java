@@ -3,6 +3,7 @@ package com.back.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
@@ -12,11 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.alibaba.fastjson.JSONObject;
 import com.back.common.Result;
 import com.back.common.constant.CrawConstant;
 import com.back.common.craw.CrawUtil;
+import com.back.common.utils.DateUtil;
 import com.back.entity.vo.BaseStockVo;
 import com.back.entity.vo.StockPushVo;
+import com.back.entity.vo.UpLimitVo;
 
 /**
  * 定时任务控制器
@@ -117,5 +121,14 @@ public class CrawController {
         map.put("th_one",thOne);
         map.put("th_tf",thTfUp);
         return Result.suc(map);
+    }
+
+
+    @GetMapping("/gen")
+    public void gen(){
+        Set<UpLimitVo> upData = CrawUtil.getUpData("2023-02-10" + "涨停，非ST，非4和8开头", CrawConstant.STOCK);
+        upData.forEach(i -> i.setRdid("2023-02-10"));
+        Object o = JSONObject.toJSON(upData);
+        System.out.println(o);
     }
 }
