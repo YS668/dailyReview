@@ -85,6 +85,11 @@ public class CrawUtil {
 	 * 今日主要指数
 	 */
 	public static List<StockPushVo> indexPercentage = new ArrayList<>();
+	/**
+	 * 今日成交额从高到低
+	 */
+	public static List<StockPushVo> turnOverSort = new ArrayList<>();
+
 	public static int crawSum ;
 
 	@PostConstruct
@@ -434,6 +439,18 @@ public class CrawUtil {
 		res.add(gz_2000);
 		return res;
 	}
+
+	/**
+	 * 获取成交额高->低
+	 */
+	public static List<StockPushVo> getTurnOverSort(){
+		List<StockPushVo> res = new ArrayList<>();
+		ResponseEntity<String> entity = getWenCai(CrawConstant.TURNOVER_SORT, CrawConstant.STOCK, CommonConstant.FIFTEEN);
+		List<Map> resolution = resolution(entity);
+
+		return res;
+	}
+
 
 	public static void main(String[] args) {
 		getIndexPercentage();

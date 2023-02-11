@@ -72,6 +72,8 @@ public class CrawConstant {
     public static String ZZ_1000_INDEX= "SH000852";
     /** 国证2000 */
     public static String GZ_2000_INDEX= "SZ399303";
+    /** 今日成交额从高到低 */
+    public static String TURNOVER_SORT = "今日成交额从高到低";
 
     /*************************复盘数据条件*****************/
     public static String QUESTION_HISTORY_HIGH = "今日创历史新高，非ST，非4和8开头";
