@@ -70,20 +70,27 @@ public class MathUtil {
      * 计算占比
      */
     public static String calPerPercentage(String allTurnover,String turnover) {
-        float allNum;
-        float num;
-        if (allTurnover.contains("万亿")){
-             allNum = Float.valueOf(allTurnover.substring(0, allTurnover.length() - 3))*10000;
-        }else {
-            allNum = Float.valueOf(allTurnover.substring(0, allTurnover.length() - 2));
+        float allNum = 0;
+        float num = 0;
+        for (int i = 0; i < allTurnover.length(); i++) {
+            if (!Character.isDigit(allTurnover.charAt(i)) && allTurnover.charAt(i) != '.'){
+                if (allTurnover.charAt(i) == '万'){
+                    allNum = Float.valueOf(allTurnover.substring(0, i))*10000;
+                    break;
+                }else {
+                    allNum = Float.valueOf(allTurnover.substring(0, i));
+                }
+                break;
+            }
         }
-        if (turnover.contains("万亿")){
-             num = Float.valueOf(turnover.substring(0, turnover.length() - 3))*1000;
-        }else{
-            num = Float.valueOf(turnover.substring(0, turnover.length() - 2));
+        for (int i = 0; i < turnover.length(); i++) {
+            if (!Character.isDigit(turnover.charAt(i)) && turnover.charAt(i) != '.'){
+                num = Float.valueOf(turnover.substring(0, i));
+                break;
+            }
         }
         float res = (num /allNum) * 100;
-        return String.valueOf(res).substring(0,5)+"%";
+        return BigDecimal.valueOf(res).setScale(CommonConstant.TWO,BigDecimal.ROUND_HALF_DOWN).toString()+"%";
     }
 
 }
