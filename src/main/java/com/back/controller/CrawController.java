@@ -136,11 +136,11 @@ public class CrawController {
 
     @GetMapping("/industry/sort")
     public Result getIndustrySort(){
-        return Result.suc(CrawUtil.turnOverSort);
+        return Result.suc(CrawUtil.industrySort);
     }
 
     @GetMapping("/concept/sort")
     public Result getConceptSort(){
-        return Result.suc(CrawUtil.turnOverSort);
+        return Result.suc(CrawUtil.conceptSort);
     }
 }
