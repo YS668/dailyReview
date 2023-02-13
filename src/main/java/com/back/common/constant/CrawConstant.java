@@ -8,6 +8,8 @@ public class CrawConstant {
     public static String SZ_URL = "http://www.szse.cn/api/report/ShowReport?SHOWTYPE=xlsx&CATALOGID=1110&TABKEY=tab1&random=0.29676899312443084";
     /** 问财URL*/
     public static String WENCAI_URL = "http://www.iwencai.com/customized/chart/get-robot-data";
+    /** 问财指数 */
+    public static String WENCAI_ZHI_SHU = "https://www.iwencai.com/unifiedwap/result?w=$&querytype=zhishu";
     /** 雪球个股链接 */
     public static String XUE_QIU_ONE = "https://xueqiu.com/S/";
     /** 新浪个股链接 */
@@ -74,6 +76,10 @@ public class CrawConstant {
     public static String GZ_2000_INDEX= "SZ399303";
     /** 今日成交额从高到低 */
     public static String TURNOVER_SORT = "今日成交额从大到小排名前20";
+    /** 今日行业板块涨幅从高到低前20 */
+    public static String INDUSTRY_PLATE_SORT = "今日行业板块涨幅从大到小前";
+    /** 今日概念板块涨幅从高到低前20 */
+    public static String CONCEPT_PLATE_SORT = "今日概念板块涨幅从大到小前";
 
     /*************************复盘数据条件*****************/
     public static String QUESTION_HISTORY_HIGH = "今日创历史新高，非ST，非4和8开头";
@@ -110,6 +116,11 @@ public class CrawConstant {
     public static String STOCK = "stock";
     public static String ZHI_SHU = "zhishu";
     public static String YI = "亿";
+
+
+    public static String ZHI_SHU_NAME = "指数简称";
+    public static String ZHI_SHU_TREND = "指数@涨跌幅:前复权";
+    public static String ZHI_SHU_TRUNOVER = "指数@成交额";
 
 
     /**涨停相关*/

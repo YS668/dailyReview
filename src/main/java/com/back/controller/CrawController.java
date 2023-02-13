@@ -133,4 +133,14 @@ public class CrawController {
     public Result genTurnOverSort(){
         return Result.suc(CrawUtil.turnOverSort);
     }
+
+    @GetMapping("/industry/sort")
+    public Result getIndustrySort(){
+        return Result.suc(CrawUtil.turnOverSort);
+    }
+
+    @GetMapping("/concept/sort")
+    public Result getConceptSort(){
+        return Result.suc(CrawUtil.turnOverSort);
+    }
 }

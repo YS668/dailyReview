@@ -89,6 +89,14 @@ public class CrawUtil {
 	 * 今日成交额从高到低
 	 */
 	public static List<StockPushVo> turnOverSort = new ArrayList<>();
+	/**
+	 * 今日行业板块从高到低
+	 */
+	public static List<StockPushVo> industrySort = new ArrayList<>();
+	/**
+	 * 今日概念板块从高到低
+	 */
+	public static List<StockPushVo> conceptSort = new ArrayList<>();
 
 	public static int crawSum ;
 
@@ -100,6 +108,8 @@ public class CrawUtil {
 				.map(ReviewDataVo::of).collect(Collectors.toList()).get(CommonConstant.ZERO);
 		indexPercentage = getIndexPercentage();
 		turnOverSort = getTurnOverSort();
+		industrySort = getIndustrySort();
+		conceptSort = getConceptSort();
 		crawSum = 0;
 	}
 
@@ -278,6 +288,7 @@ public class CrawUtil {
 		//上涨家数
 		Integer upAll = CrawUtil.getNum(CrawConstant.QUESTION_DAY + CrawConstant.QUESTION_UP_ALL, CrawConstant.STOCK);
 		reviewDataVo.setUpAll(upAll);
+		vo = reviewDataVo;
 
 		upVo.setFifteenup(upAll);
 		// 09:25上涨家数
@@ -299,15 +310,19 @@ public class CrawUtil {
 
 		//指数拥挤度
 		indexPercentage = getIndexPercentage();
-		//成交额排行前20
+		//个股成交额排行前20
 		turnOverSort = getTurnOverSort();
+		//行业板块成交额排行前20
+		industrySort = getIndustrySort();
+		//概念板块个股成交额排行前20
+		conceptSort = getConceptSort();
 
 		String rdid = DateUtil.getRdid();
 		reviewDataVo.setRdid(rdid);
 		northVo.setRdid(rdid);
 		upVo.setRdid(rdid);
 
-		vo = reviewDataVo;
+
 		//复盘数据
 		res.put(CrawConstant.REVIEW,reviewDataVo);
 		//北向资金
@@ -421,7 +436,7 @@ public class CrawUtil {
 	 */
 	public static List<StockPushVo> getIndexPercentage(){
 		List<StockPushVo> res = new ArrayList<>();
-		String all = "8927.11亿元";
+		String all = vo.getTurnOver();
 		StockPushVo sz_50 = getOneBySinA(CrawConstant.SZ_50_INDEX);
 		sz_50.setPercentage(MathUtil.calPerPercentage(all,sz_50.getTurnover()));
 		StockPushVo hs_300 = getOneBySinA(CrawConstant.HS_300_INDEX);
@@ -444,13 +459,13 @@ public class CrawUtil {
 	}
 
 	/**
-	 * 获取成交额高->低
+	 * 获取个股成交额高->低
 	 */
 	public static List<StockPushVo> getTurnOverSort(){
 		List<StockPushVo> res = new ArrayList<>();
 		ResponseEntity<String> entity = getWenCai(CrawConstant.TURNOVER_SORT, CrawConstant.STOCK);
 		List<Map> resolution = resolution(entity);
-		res.addAll(resolution(entity).stream().map(
+		res.addAll(resolution.stream().map(
 				e ->{
 					StockPushVo vo = new StockPushVo();
 					vo.setStockCode(CodeUtil.numToCode(e.get("code").toString()));
@@ -467,10 +482,58 @@ public class CrawUtil {
 		return res;
 	}
 
-
-	public static void main(String[] args) {
-		getIndexPercentage();
+	/**
+	 * 获取行业板块成交额高->低
+	 */
+	public static List<StockPushVo> getIndustrySort(){
+		List<StockPushVo> res = new ArrayList<>();
+		//总成交额
+		String all = vo.getTurnOver();
+		ResponseEntity<String> entity = getWenCai(CrawConstant.INDUSTRY_PLATE_SORT, CrawConstant.ZHI_SHU);
+		List<Map> resolution = resolution(entity);
+		res.addAll(resolution.stream().limit(CommonConstant.TWENTY).map(
+						e ->{
+							StockPushVo vo = new StockPushVo();
+							vo.setStockCode(CodeUtil.numToCode(e.get("code").toString()));
+							vo.setStockName(e.get(CrawConstant.ZHI_SHU_NAME).toString());
+							vo.setTrend(e.get(CrawConstant.ZHI_SHU_TREND+"["+DateUtil.getRdid()+"]").toString()+"%");
+							vo.setTurnover(MathUtil.formatNum(e.get(CrawConstant.ZHI_SHU_TRUNOVER+"["+DateUtil.getRdid()+"]").toString(),false));
+							vo.setRdid(DateUtil.getRdid());
+							vo.setPercentage(MathUtil.calPerPercentage(all,vo.getTurnover()));
+							vo.setTongHLink(CrawConstant.WENCAI_ZHI_SHU.replace("$",vo.getStockName()));
+							return vo;
+						}
+				).filter(e -> e != null)
+				.collect(Collectors.toList()));
+		return res;
 	}
+
+	/**
+	 * 获取概念板块成交额高->低
+	 */
+	public static List<StockPushVo> getConceptSort(){
+		List<StockPushVo> res = new ArrayList<>();
+		//总成交额
+		String all = vo.getTurnOver();
+		ResponseEntity<String> entity = getWenCai(CrawConstant.CONCEPT_PLATE_SORT, CrawConstant.ZHI_SHU);
+		List<Map> resolution = resolution(entity);
+		res.addAll(resolution(entity).stream().limit(CommonConstant.TWENTY).map(
+						e ->{
+							StockPushVo vo = new StockPushVo();
+							vo.setStockCode(CodeUtil.numToCode(e.get("code").toString()));
+							vo.setStockName(e.get(CrawConstant.ZHI_SHU_NAME).toString());
+							vo.setTrend(e.get(CrawConstant.ZHI_SHU_TREND+"["+DateUtil.getRdid()+"]").toString()+"%");
+							vo.setTurnover(MathUtil.formatNum(e.get(CrawConstant.ZHI_SHU_TRUNOVER+"["+DateUtil.getRdid()+"]").toString(),false));
+							vo.setRdid(DateUtil.getRdid());
+							vo.setPercentage(MathUtil.calPerPercentage(all,vo.getTurnover()));
+							vo.setTongHLink(CrawConstant.WENCAI_ZHI_SHU.replace("$",vo.getStockName()));
+							return vo;
+						}
+				).filter(e -> e != null)
+				.collect(Collectors.toList()));
+		return res;
+	}
+
 	/**
 	 * 爬取雪球个股信息
 	 *
