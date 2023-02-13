@@ -500,7 +500,7 @@ public class CrawUtil {
 							vo.setTurnover(MathUtil.formatNum(e.get(CrawConstant.ZHI_SHU_TRUNOVER+"["+DateUtil.getRdid()+"]").toString(),false));
 							vo.setRdid(DateUtil.getRdid());
 							vo.setPercentage(MathUtil.calPerPercentage(all,vo.getTurnover()));
-							vo.setTongHLink(CrawConstant.WENCAI_ZHI_SHU.replace("$",vo.getStockName()));
+							vo.setTongHLink(CrawConstant.TONGHUA_INDUSTRY+vo.getStockCode());
 							return vo;
 						}
 				).filter(e -> e != null)
@@ -526,7 +526,7 @@ public class CrawUtil {
 							vo.setTurnover(MathUtil.formatNum(e.get(CrawConstant.ZHI_SHU_TRUNOVER+"["+DateUtil.getRdid()+"]").toString(),false));
 							vo.setRdid(DateUtil.getRdid());
 							vo.setPercentage(MathUtil.calPerPercentage(all,vo.getTurnover()));
-							vo.setTongHLink(CrawConstant.WENCAI_ZHI_SHU.replace("$",vo.getStockName()));
+							vo.setTongHLink(CrawConstant.WENCAI_LINK.replace("$",vo.getStockName()));
 							return vo;
 						}
 				).filter(e -> e != null)

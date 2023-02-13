@@ -8,8 +8,10 @@ public class CrawConstant {
     public static String SZ_URL = "http://www.szse.cn/api/report/ShowReport?SHOWTYPE=xlsx&CATALOGID=1110&TABKEY=tab1&random=0.29676899312443084";
     /** 问财URL*/
     public static String WENCAI_URL = "http://www.iwencai.com/customized/chart/get-robot-data";
-    /** 问财指数 */
-    public static String WENCAI_ZHI_SHU = "https://www.iwencai.com/unifiedwap/result?w=$&querytype=zhishu";
+    /** 问财链接 */
+    public static String WENCAI_LINK = "https://www.iwencai.com/unifiedwap/result?w=$&querytype=stock";
+    /** 同花顺行业 */
+    public static String TONGHUA_INDUSTRY = "http://q.10jqka.com.cn/thshy/detail/code/";
     /** 雪球个股链接 */
     public static String XUE_QIU_ONE = "https://xueqiu.com/S/";
     /** 新浪个股链接 */
