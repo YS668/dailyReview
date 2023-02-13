@@ -450,7 +450,19 @@ public class CrawUtil {
 		List<StockPushVo> res = new ArrayList<>();
 		ResponseEntity<String> entity = getWenCai(CrawConstant.TURNOVER_SORT, CrawConstant.STOCK);
 		List<Map> resolution = resolution(entity);
-		res.addAll(resolution(entity).stream().map(StockPushVo::of).filter(e -> e != null)
+		res.addAll(resolution(entity).stream().map(
+				e ->{
+					StockPushVo vo = new StockPushVo();
+					vo.setStockCode(CodeUtil.numToCode(e.get("code").toString()));
+					vo.setStockName(e.get(CrawConstant.STOCK_NAME).toString());
+					vo.setNowPrice(e.get(CrawConstant.NOW_PRICE).toString());
+					vo.setTrend(e.get(CrawConstant.NOW_TREND).toString()+"%");
+					vo.setTurnover(e.get("成交量"+"["+DateUtil.getRdid()+"]").toString());
+					vo.setRdid(DateUtil.getRdid());
+					vo.fillLink();
+					return vo;
+				}
+				).filter(e -> e != null)
 				.collect(Collectors.toList()));
 		return res;
 	}
