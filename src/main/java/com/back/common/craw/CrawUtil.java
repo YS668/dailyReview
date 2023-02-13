@@ -457,7 +457,7 @@ public class CrawUtil {
 					vo.setStockName(e.get(CrawConstant.STOCK_NAME).toString());
 					vo.setNowPrice(e.get(CrawConstant.NOW_PRICE).toString());
 					vo.setTrend(e.get(CrawConstant.NOW_TREND).toString()+"%");
-					vo.setTurnover(e.get("成交量"+"["+DateUtil.getRdid()+"]").toString());
+					vo.setTurnover(MathUtil.formatNum(e.get(CrawConstant.TURNOVER+"["+DateUtil.getRdid()+"]").toString(),false));
 					vo.setRdid(DateUtil.getRdid());
 					vo.fillLink();
 					return vo;
