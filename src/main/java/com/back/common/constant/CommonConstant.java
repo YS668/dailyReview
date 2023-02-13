@@ -14,6 +14,7 @@ public class CommonConstant {
     public static final Integer NINE = 9;
     public static final Integer TEN = 10;
     public static final Integer FIFTEEN = 15;
+    public static final Integer TWENTY = 20;
     public static final Integer One_Hundred = 100;
 
     /** 编码 */

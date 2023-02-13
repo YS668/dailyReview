@@ -125,7 +125,12 @@ public class CrawController {
 
 
     @GetMapping("/index/percentage")
-    public Result gen(){
+    public Result getIndexPercentage(){
         return Result.suc(CrawUtil.indexPercentage);
+    }
+
+    @GetMapping("/turnover/sort")
+    public Result genTurnOverSort(){
+        return Result.suc(CrawUtil.turnOverSort);
     }
 }

@@ -99,6 +99,7 @@ public class CrawUtil {
 				.sorted(Comparator.comparing(Reviewdata::getRdid).reversed())
 				.map(ReviewDataVo::of).collect(Collectors.toList()).get(CommonConstant.ZERO);
 		indexPercentage = getIndexPercentage();
+		turnOverSort = getTurnOverSort();
 		crawSum = 0;
 	}
 
@@ -297,7 +298,9 @@ public class CrawUtil {
 		northVo.setShIndex(shTrend);
 
 		//指数拥挤度
-		getIndexPercentage();
+		indexPercentage = getIndexPercentage();
+		//成交额排行前20
+		turnOverSort = getTurnOverSort();
 
 		String rdid = DateUtil.getRdid();
 		reviewDataVo.setRdid(rdid);
@@ -445,9 +448,10 @@ public class CrawUtil {
 	 */
 	public static List<StockPushVo> getTurnOverSort(){
 		List<StockPushVo> res = new ArrayList<>();
-		ResponseEntity<String> entity = getWenCai(CrawConstant.TURNOVER_SORT, CrawConstant.STOCK, CommonConstant.FIFTEEN);
+		ResponseEntity<String> entity = getWenCai(CrawConstant.TURNOVER_SORT, CrawConstant.STOCK);
 		List<Map> resolution = resolution(entity);
-
+		res.addAll(resolution(entity).stream().map(StockPushVo::of).filter(e -> e != null)
+				.collect(Collectors.toList()));
 		return res;
 	}
 
@@ -626,6 +630,10 @@ public class CrawUtil {
 			res.add(vo);
 		}
 		return res;
+	}
+
+	public static ResponseEntity<String> getWenCai(String question, String secondary_intent){
+		return getWenCai(question, secondary_intent,CommonConstant.ONE);
 	}
 
 	/**
