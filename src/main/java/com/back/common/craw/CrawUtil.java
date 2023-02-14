@@ -494,7 +494,7 @@ public class CrawUtil {
 		res.addAll(resolution.stream().limit(CommonConstant.TWENTY).map(
 						e ->{
 							StockPushVo vo = new StockPushVo();
-							vo.setStockCode(CodeUtil.numToCode(e.get("code").toString()));
+							vo.setStockCode(e.get("code").toString());
 							vo.setStockName(e.get(CrawConstant.ZHI_SHU_NAME).toString());
 							vo.setTrend(e.get(CrawConstant.ZHI_SHU_TREND+"["+DateUtil.getRdid()+"]").toString()+"%");
 							vo.setTurnover(MathUtil.formatNum(e.get(CrawConstant.ZHI_SHU_TRUNOVER+"["+DateUtil.getRdid()+"]").toString(),false));
