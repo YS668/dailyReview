@@ -19,6 +19,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 @Mapper
 public interface StockgroupMapper extends BaseMapper<Stockgroup> {
 
-    @Select("select groupName from stockGroup where uid = #{uid} and dr = 0")
+    @Select("select groupName from stockgroup where uid = #{uid} and dr = 0")
     List<String> getAllGroup(@Param("uid") Long uid);
 }
