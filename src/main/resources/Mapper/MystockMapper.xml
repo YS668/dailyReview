@@ -10,7 +10,7 @@
         <result column="openId" property="openid" />
         <result column="stockCode" property="stockcode" />
         <result column="stockName" property="stockname" />
-        <result column="group" property="group" />
+        <result column="groupName" property="groupName" />
         <result column="note" property="note" />
         <result column="extra" property="extra" />
         <result column="create_person" property="createPerson" />

@@ -47,7 +47,8 @@ public class Mystock extends basePojo implements Serializable {
     private String stockname;
 
     @ApiModelProperty(value = "分组")
-    private String group;
+    @TableField("groupName")
+    private String groupName;
 
     @ApiModelProperty(value = "备注")
     private String note;

@@ -1,5 +1,6 @@
 package com.back.entity.vo;
 
+import com.back.common.craw.CrawUtil;
 import com.back.entity.pojo.Mystock;
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MyStockVo {
+public class MyStockVo extends StockPushVo {
 
     @ApiModelProperty(value = "自选日期标识")
     private String rdid;
@@ -47,9 +48,14 @@ public class MyStockVo {
         vo.setOpenid(val.getOpenid());
         vo.setStockcode(val.getStockcode());
         vo.setStockname(val.getStockname());
-        vo.setGroup(val.getGroup());
+        vo.setGroup(val.getGroupName());
         vo.setNote(vo.getGroup());
         vo.setExtra(vo.getExtra());
+        StockPushVo temp = CrawUtil.getOneBySinA(vo.getStockCode());
+        vo.setNowPrice(temp.getNowPrice());
+        vo.setTrend(temp.getTrend());
+        vo.setTurnover(temp.getTurnover());
+        vo.fillLink();
         return vo;
     }
 }

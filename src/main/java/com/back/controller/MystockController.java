@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.back.common.QueryPageParam;
 import com.back.common.Result;
+import com.back.common.craw.CrawUtil;
+import com.back.common.utils.DateUtil;
 import com.back.entity.pojo.Mystock;
 import com.back.entity.vo.MyStockVo;
 import com.back.service.MystockService;
@@ -53,12 +55,12 @@ public class MystockController {
 
         HashMap param = query.getParam();
         //分组
-        String group = (String) param.get("group");
+        String groupName = (String) param.get("group");
         //名称
         String stockName = (String) param.get("stockName");
         //查询条件
-        if (group != null){
-            wrapper.eq(Mystock::getGroup,group);
+        if (groupName != null){
+            wrapper.eq(Mystock::getGroupName,groupName);
         }
         if (stockName != null){
             wrapper.eq(Mystock::getStockname,stockName);
@@ -90,6 +92,12 @@ public class MystockController {
     //新增
     @PostMapping("/save")
     public Result save(@RequestBody Mystock mystock){
+        if (!CrawUtil.StockNameCodeMap.containsKey(mystock.getStockname())){
+            return Result.fail("该股票不存在，请重新输入");
+        }
+        String stockCode = CrawUtil.StockNameCodeMap.get(mystock.getStockname());
+        mystock.setStockcode(stockCode);
+        mystock.setRdid(DateUtil.getRdid());
         mystockService.save(mystock);
         return Result.suc();
     }
