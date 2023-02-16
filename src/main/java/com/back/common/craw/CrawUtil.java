@@ -487,24 +487,10 @@ public class CrawUtil {
 	 */
 	public static List<StockPushVo> getIndustrySort(){
 		List<StockPushVo> res = new ArrayList<>();
-		//总成交额
-		String all = vo.getTurnOver();
-		ResponseEntity<String> entity = getWenCai(CrawConstant.INDUSTRY_PLATE_SORT, CrawConstant.ZHI_SHU);
-		List<Map> resolution = resolution(entity);
-		res.addAll(resolution.stream().limit(CommonConstant.TWENTY).map(
-						e ->{
-							StockPushVo vo = new StockPushVo();
-							vo.setStockCode(e.get("code").toString());
-							vo.setStockName(e.get(CrawConstant.ZHI_SHU_NAME).toString());
-							vo.setTrend(e.get(CrawConstant.ZHI_SHU_TREND+"["+DateUtil.getRdid()+"]").toString()+"%");
-							vo.setTurnover(MathUtil.formatNum(e.get(CrawConstant.ZHI_SHU_TRUNOVER+"["+DateUtil.getRdid()+"]").toString(),false));
-							vo.setRdid(DateUtil.getRdid());
-							vo.setPercentage(MathUtil.calPerPercentage(all,vo.getTurnover()));
-							vo.setTongHLink(CrawConstant.TONGHUA_INDUSTRY+vo.getStockCode());
-							return vo;
-						}
-				).filter(e -> e != null)
-				.collect(Collectors.toList()));
+		ResponseEntity<String> up = getWenCai(CrawConstant.INDUSTRY_PLATE_UP_SORT, CrawConstant.ZHI_SHU);
+		ResponseEntity<String> down = getWenCai(CrawConstant.INDUSTRY_PLATE_DOWN_SORT, CrawConstant.ZHI_SHU);
+		res.addAll(resolutionPlate(up));
+		res.addAll(resolutionPlate(down));
 		return res;
 	}
 
@@ -513,25 +499,37 @@ public class CrawUtil {
 	 */
 	public static List<StockPushVo> getConceptSort(){
 		List<StockPushVo> res = new ArrayList<>();
+		ResponseEntity<String> up = getWenCai(CrawConstant.CONCEPT_PLATE_UP_SORT, CrawConstant.ZHI_SHU);
+		ResponseEntity<String> down = getWenCai(CrawConstant.CONCEPT_PLATE_DOWN_SORT, CrawConstant.ZHI_SHU);
+		res.addAll(resolutionPlate(up));
+		res.addAll(resolutionPlate(down));
+		return res;
+	}
+
+	/**
+	 * 解析板块
+	 *
+	 */
+	public static List<StockPushVo> resolutionPlate(ResponseEntity<String> entity){
 		//总成交额
 		String all = vo.getTurnOver();
-		ResponseEntity<String> entity = getWenCai(CrawConstant.CONCEPT_PLATE_SORT, CrawConstant.ZHI_SHU);
-		List<Map> resolution = resolution(entity);
-		res.addAll(resolution(entity).stream().limit(CommonConstant.TWENTY).map(
+		return resolution(entity).stream().map(
 						e ->{
 							StockPushVo vo = new StockPushVo();
 							vo.setStockCode(CodeUtil.numToCode(e.get("code").toString()));
 							vo.setStockName(e.get(CrawConstant.ZHI_SHU_NAME).toString());
 							vo.setTrend(e.get(CrawConstant.ZHI_SHU_TREND+"["+DateUtil.getRdid()+"]").toString()+"%");
-							vo.setTurnover(MathUtil.formatNum(e.get(CrawConstant.ZHI_SHU_TRUNOVER+"["+DateUtil.getRdid()+"]").toString(),false));
+							Object turnOver = e.get(CrawConstant.ZHI_SHU_TRUNOVER + "[" + DateUtil.getRdid() + "]");
+							if (turnOver != null){
+								vo.setTurnover(MathUtil.formatNum(turnOver.toString(),false));
+								vo.setPercentage(MathUtil.calPerPercentage(all,vo.getTurnover()));
+							}
 							vo.setRdid(DateUtil.getRdid());
-							vo.setPercentage(MathUtil.calPerPercentage(all,vo.getTurnover()));
 							vo.setTongHLink(CrawConstant.WENCAI_LINK.replace("$",vo.getStockName()));
 							return vo;
 						}
 				).filter(e -> e != null)
-				.collect(Collectors.toList()));
-		return res;
+				.collect(Collectors.toList());
 	}
 
 	/**
