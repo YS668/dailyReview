@@ -51,18 +51,55 @@ public class UpLimitVo extends StockPushVo{
     public static UpLimitVo ofUp(Map map) {
         UpLimitVo vo = new UpLimitVo(StockPushVo.of(map));
         String rdid = DateUtil.getRdid();
-        vo.setValue(MathUtil.formatNum((map.get(CrawConstant.VALUE+"["+rdid+"]").toString()),false));
-        vo.setDay((Integer) map.get(CrawConstant.DAY+"["+rdid+"]"));
-        vo.setDayNum((map.get(CrawConstant.DAY_NUM+"["+rdid+"]")).toString());
-        vo.setReason((map.get(CrawConstant.REASON+"["+rdid+"]")).toString());
-        vo.setUpNum((map.get(CrawConstant.UP_NUM+"["+rdid+"]")).toString());
-        vo.setUpValue(MathUtil.formatNum(map.get(CrawConstant.UP_VALUE+"["+rdid+"]").toString(),false));
-        vo.setCirculationPercentage((BigDecimal) map.get(CrawConstant.CIRCULATION_PERCENTAGE+"["+rdid+"]"));
-        vo.setAllPercentage((BigDecimal) map.get(CrawConstant.ALL_PERCENTAGE+"["+rdid+"]"));
-        vo.setOpenNum(map.get(CrawConstant.OPEN_NUM+"["+rdid+"]").toString());
-        vo.setUpType(map.get(CrawConstant.UP_TYPE+"["+rdid+"]").toString());
-        vo.setFirstUp(map.get(CrawConstant.FIRST_UP+"["+rdid+"]").toString());
-        vo.setLastUp(map.get(CrawConstant.LAST_UP+"["+rdid+"]").toString());
+        //判空处理
+        Object value = map.get(CrawConstant.VALUE+"["+rdid+"]");
+        if (value != null){
+            vo.setValue(MathUtil.formatNum(value.toString(),false));
+        }
+        Object day = map.get(CrawConstant.DAY + "[" + rdid + "]");
+        if (day != null){
+            vo.setDay((Integer) day);
+        }
+        Object dayNum = (map.get(CrawConstant.DAY_NUM+"["+rdid+"]"));
+        if (dayNum != null){
+            vo.setDayNum(dayNum.toString());
+        }
+        Object reason = map.get(CrawConstant.REASON + "[" + rdid + "]");
+        if (reason != null){
+            vo.setReason(reason.toString());
+        }
+        Object upNum = map.get(CrawConstant.UP_NUM + "[" + rdid + "]");
+        if (upNum != null){
+            vo.setUpNum(upNum.toString());
+        }
+        Object upValue = map.get(CrawConstant.UP_VALUE + "[" + rdid + "]");
+        if (upValue != null){
+            vo.setUpValue(MathUtil.formatNum(upValue.toString(),false));
+        }
+        Object circulationPercentage = map.get(CrawConstant.CIRCULATION_PERCENTAGE + "[" + rdid + "]");
+        if (circulationPercentage != null){
+            vo.setCirculationPercentage((BigDecimal) circulationPercentage);
+        }
+        Object allPercentageo = map.get(CrawConstant.ALL_PERCENTAGE + "[" + rdid + "]");
+        if (allPercentageo != null){
+            vo.setAllPercentage((BigDecimal) allPercentageo);
+        }
+        Object openNum = map.get(CrawConstant.OPEN_NUM + "[" + rdid + "]");
+        if (openNum != null){
+            vo.setOpenNum(openNum.toString());
+        }
+        Object upType = map.get(CrawConstant.UP_TYPE + "[" + rdid + "]");
+        if (upType != null){
+            vo.setUpType(upType.toString());
+        }
+        Object firstUp = map.get(CrawConstant.FIRST_UP + "[" + rdid + "]");
+        if (firstUp != null){
+            vo.setFirstUp(firstUp.toString());
+        }
+        Object lastUp = map.get(CrawConstant.LAST_UP + "[" + rdid + "]");
+        if (lastUp != null){
+            vo.setLastUp(lastUp.toString());
+        }
         return vo;
     }
 

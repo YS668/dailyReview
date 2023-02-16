@@ -79,9 +79,9 @@ public class CrawConstant {
     /** 今日成交额从高到低 */
     public static String TURNOVER_SORT = "今日成交额从大到小排名前20";
     /** 今日行业板块涨幅从高到低前20 */
-    public static String INDUSTRY_PLATE_SORT = "今日行业板块涨幅从大到小前";
+    public static String INDUSTRY_PLATE_SORT = "今日行业板块涨跌幅从大到小前";
     /** 今日概念板块涨幅从高到低前20 */
-    public static String CONCEPT_PLATE_SORT = "今日概念板块涨幅从大到小前";
+    public static String CONCEPT_PLATE_SORT = "今日概念板块涨跌幅从大到小前";
 
     /*************************复盘数据条件*****************/
     public static String QUESTION_HISTORY_HIGH = "今日创历史新高，非ST，非4和8开头";

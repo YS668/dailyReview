@@ -55,7 +55,7 @@ public class AnnouncementController {
 
         //查询条件：公告编码、发公告的人、主题、时间
         String code = (String) param.get("code");
-        String uid = (String) param.get("uid");
+        Integer uid = (Integer) param.get("uid");
         String topic = (String) param.get("topic");
         String time = (String) param.get("time");
         if (code != null){

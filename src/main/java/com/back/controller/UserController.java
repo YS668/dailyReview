@@ -78,7 +78,7 @@ public class UserController {
 
     //删除
     @GetMapping("/del")
-    public Result del(@RequestParam String uid){
+    public Result del(@RequestParam Integer uid){
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getUid,uid);
         userService.remove(wrapper);
@@ -123,7 +123,7 @@ public class UserController {
 
     //登出
     @GetMapping("/logout")
-    public Result logout(@RequestParam String uid){
+    public Result logout(@RequestParam Integer uid){
         return Result.suc();
     }
 }

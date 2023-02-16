@@ -38,7 +38,7 @@ public class StockGroupController {
 
     //获取所有分组
     @GetMapping("/all/{uid}")
-    public Result getAll(@PathVariable Long uid){
+    public Result getAll(@PathVariable("uid") Long uid){
         List<String> res = stockgroupService.getAllGroup(uid);
         return Result.suc(res);
     }

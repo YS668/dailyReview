@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,15 +55,22 @@ public class MystockController {
         page.setSize(query.getPageSize());
 
         HashMap param = query.getParam();
+        //uid
+        Integer uid = (Integer) param.get("uid");
         //分组
-        String groupName = (String) param.get("group");
+        String groupName = (String) param.get("groupName");
         //名称
         String stockName = (String) param.get("stockName");
         //查询条件
-        if (groupName != null){
+        if (uid != null){
+            wrapper.eq(Mystock::getUid,uid);
+        }else if (uid == null){
+            return Result.fail();
+        }
+        if (groupName != null && groupName.length() > 0){
             wrapper.eq(Mystock::getGroupName,groupName);
         }
-        if (stockName != null){
+        if (stockName != null && groupName.length() > 0){
             wrapper.eq(Mystock::getStockname,stockName);
         }
 
@@ -72,10 +80,10 @@ public class MystockController {
     }
 
     //删除
-    @GetMapping("/del")
-    public Result del(@RequestParam String rdid){
+    @GetMapping("/del/{stockCode}")
+    public Result del(@PathVariable("stockCode") String stockCode){
         LambdaQueryWrapper<Mystock> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Mystock::getRdid,rdid);
+        wrapper.eq(Mystock::getStockcode,stockCode);
         mystockService.remove(wrapper);
         return Result.suc();
     }
@@ -84,7 +92,7 @@ public class MystockController {
     @PostMapping("/update")
     public Result update(@RequestBody Mystock mystock){
         LambdaQueryWrapper<Mystock> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Mystock::getRdid,mystock.getRdid());
+        wrapper.eq(Mystock::getStockcode,mystock.getStockcode());
         mystockService.update(mystock,wrapper);
         return Result.suc();
     }

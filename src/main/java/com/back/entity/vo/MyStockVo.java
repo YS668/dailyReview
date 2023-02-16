@@ -25,14 +25,8 @@ public class MyStockVo extends StockPushVo {
     @ApiModelProperty(value = "微信标识")
     private String openid;
 
-    @ApiModelProperty(value = "股票代码")
-    private String stockcode;
-
-    @ApiModelProperty(value = "股票名称")
-    private String stockname;
-
     @ApiModelProperty(value = "分组")
-    private String group;
+    private String groupName;
 
     @ApiModelProperty(value = "备注")
     private String note;
@@ -46,11 +40,11 @@ public class MyStockVo extends StockPushVo {
         vo.setRdid(val.getRdid());
         vo.setUid(val.getUid());
         vo.setOpenid(val.getOpenid());
-        vo.setStockcode(val.getStockcode());
-        vo.setStockname(val.getStockname());
-        vo.setGroup(val.getGroupName());
-        vo.setNote(vo.getGroup());
-        vo.setExtra(vo.getExtra());
+        vo.setStockCode(val.getStockcode());
+        vo.setStockName(val.getStockname());
+        vo.setGroupName(val.getGroupName());
+        vo.setNote(val.getNote());
+        vo.setExtra(val.getExtra());
         StockPushVo temp = CrawUtil.getOneBySinA(vo.getStockCode());
         vo.setNowPrice(temp.getNowPrice());
         vo.setTrend(temp.getTrend());
