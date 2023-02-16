@@ -83,7 +83,7 @@ public class CrawConstant {
     /** 今日行业板块跌幅从低到高 */
     public static String INDUSTRY_PLATE_DOWN_SORT = "今日行业板块跌幅从小到大前";
     /** 今日概念板块涨幅从高到低 */
-    public static String CONCEPT_PLATE_UP_SORT = "今日概念板块涨跌幅从大到小前";
+    public static String CONCEPT_PLATE_UP_SORT = "今日概念板块涨幅从大到小前";
     /** 今日概念板块跌幅从低到高 */
     public static String CONCEPT_PLATE_DOWN_SORT = "今日概念板块跌幅从小到大前";
 
