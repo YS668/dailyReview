@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.back.common.QueryPageParam;
+import com.back.common.utils.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.back.common.Result;
 import com.back.entity.pojo.Reviewdata;
@@ -85,6 +86,7 @@ public class ReviewdataController {
     //新增
     @PostMapping("/save")
     public Result save(@RequestBody Reviewdata reviewdata){
+        reviewdata.setRdid(DateUtil.getRdid());
         reviewdataService.save(reviewdata);
         return Result.suc();
     }

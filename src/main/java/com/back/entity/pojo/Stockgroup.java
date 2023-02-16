@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 自选股表
+ * 自选分组
  * </p>
  *
  * @author DR-back
@@ -20,8 +20,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Mystock对象", description="自选股表")
-public class Mystock extends basePojo implements Serializable {
+@ApiModel(value="Stockgroup对象", description="自选分组")
+public class Stockgroup extends basePojo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,19 +38,9 @@ public class Mystock extends basePojo implements Serializable {
     @TableField("openId")
     private String openid;
 
-    @ApiModelProperty(value = "股票代码")
-    @TableField("stockCode")
-    private String stockcode;
-
-    @ApiModelProperty(value = "股票名称")
-    @TableField("stockName")
-    private String stockname;
-
-    @ApiModelProperty(value = "分组")
-    private String group;
-
-    @ApiModelProperty(value = "备注")
-    private String note;
+    @ApiModelProperty(value = "分组名称")
+    @TableField("groupName")
+    private String groupname;
 
     @ApiModelProperty(value = "额外字段")
     private String extra;

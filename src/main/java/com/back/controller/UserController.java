@@ -1,6 +1,7 @@
 package com.back.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.back.common.QueryPageParam;
 import com.back.common.Result;
+import com.back.common.constant.CommonConstant;
 import com.back.entity.pojo.User;
 import com.back.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -102,7 +104,21 @@ public class UserController {
     //登录
     @PostMapping("/login")
     public Result login(@RequestBody Map<String,String> map){
-        return Result.suc();
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        //账号密码
+        String username = (String) map.get("username");
+        String password = (String) map.get("password");
+        if (username != null){
+            wrapper.eq(User::getUsername,username);
+        }
+        if (password != null){
+            wrapper.eq(User::getPassword,password);
+        }
+        List<User> list = userService.list(wrapper);
+        if (list.isEmpty()){
+            return  Result.fail();
+        }
+        return Result.suc(list.get(CommonConstant.ZERO));
     }
 
     //登出

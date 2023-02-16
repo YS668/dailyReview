@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author DR-back
- * @since 2023-01-07
+ * @since 2023-02-16
  */
-@Service("mystockService")
+@Service
 public class MystockServiceImpl extends ServiceImpl<MystockMapper, Mystock> implements MystockService {
 
 }

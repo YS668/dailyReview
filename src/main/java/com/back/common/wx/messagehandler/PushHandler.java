@@ -3,15 +3,14 @@ package com.back.common.wx.messagehandler;
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.WXConstant;
 import com.back.common.craw.CrawUtil;
-import com.back.common.wx.Wxutils.TextMessageUtil;
 import com.back.entity.pojo.Mystock;
 import com.back.entity.vo.StockPushVo;
-import com.back.mapper.MystockMapper;
 import com.back.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
+import com.back.service.MystockService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
 public class PushHandler extends HandlerAdapter {
 
     @Resource
-    private  MystockMapper mystockMapper;
+    private MystockService mystockService;
     @Resource
     private UserMapper userMapper;
 
@@ -31,7 +30,9 @@ public class PushHandler extends HandlerAdapter {
             //回复模板
             String resContent = WXConstant.PUSH_TEXT;
             //自选股
-            List<Mystock> list = mystockMapper.getByOpenId(openId);
+            LambdaQueryWrapper<Mystock> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Mystock::getOpenid,openId);
+            List<Mystock> list = mystockService.list(wrapper);
             if (list == null || list.size() == CommonConstant.ZERO)
             //没有自选股
             if(list == null || list.size() == CommonConstant.ZERO){

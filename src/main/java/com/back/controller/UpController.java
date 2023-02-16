@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.back.common.QueryPageParam;
 import com.back.common.Result;
+import com.back.common.utils.DateUtil;
 import com.back.entity.pojo.North;
 import com.back.entity.pojo.Reviewdata;
 import com.back.entity.pojo.Up;
@@ -87,6 +88,7 @@ public class UpController {
     //新增
     @PostMapping("/save")
     public Result save(@RequestBody Up up){
+        up.setRdid(DateUtil.getRdid());
         upService.save(up);
         return Result.suc();
     }

@@ -63,8 +63,8 @@ public class CodeGenerator {
         dsc.setUrl("jdbc:mysql://localhost:3306/DailyReview?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("12345678");
+        dsc.setUsername("dev");
+        dsc.setPassword("123666");
         mpg.setDataSource(dsc);
         // 包配置
         PackageConfig pc = new PackageConfig();

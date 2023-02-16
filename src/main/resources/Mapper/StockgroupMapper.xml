@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.back.mapper.MystockMapper">
+<mapper namespace="com.back.mapper.StockgroupMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.back.entity.pojo.Mystock">
+    <resultMap id="BaseResultMap" type="com.back.entity.pojo.Stockgroup">
         <id column="id" property="id" />
         <result column="rdid" property="rdid" />
         <result column="uid" property="uid" />
         <result column="openId" property="openid" />
-        <result column="stockCode" property="stockcode" />
-        <result column="stockName" property="stockname" />
-        <result column="group" property="group" />
-        <result column="note" property="note" />
+        <result column="groupName" property="groupname" />
         <result column="extra" property="extra" />
         <result column="create_person" property="createPerson" />
         <result column="create_time" property="createTime" />
@@ -22,7 +19,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, rdid, uid, openId, stockCode, stockName, group, note, extra, create_person, create_time, update_person, update_time, dr
+        id, rdid, uid, openId, groupName, extra, create_person, create_time, update_person, update_time, dr
     </sql>
 
 </mapper>
