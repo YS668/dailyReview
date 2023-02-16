@@ -18,6 +18,7 @@ import com.back.common.constant.CommonConstant;
 import com.back.entity.pojo.User;
 import com.back.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
@@ -70,7 +71,7 @@ public class UserController {
         if (phone != null){
             wrapper.eq(User::getPhone,phone);
         }
-
+        page.addOrder(OrderItem.desc("rdid"));
         Page<User> result = userService.page(page, wrapper);
 
         return Result.suc(result.getTotal(),result.getRecords());

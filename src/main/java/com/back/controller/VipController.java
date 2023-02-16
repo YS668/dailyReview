@@ -18,6 +18,7 @@ import com.back.entity.pojo.User;
 import com.back.entity.pojo.Vip;
 import com.back.service.VipService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
@@ -57,7 +58,7 @@ public class VipController {
         if (expired != null){
             wrapper.eq(Vip::getExpired,expired);
         }
-
+        page.addOrder(OrderItem.desc("rdid"));
         Page<Vip> result = vipService.page(page, wrapper);
 
         return Result.suc(result.getTotal(),result.getRecords());

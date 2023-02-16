@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.back.common.QueryPageParam;
 import com.back.common.utils.DateUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.back.common.Result;
 import com.back.entity.pojo.Reviewdata;
@@ -40,7 +41,7 @@ public class ReviewdataController {
     //获取所有数据
     @GetMapping("/all")
     public Result getAll(){
-        return Result.suc(reviewdataService.list().stream().map(ReviewDataVo::of).collect(Collectors.toSet()));
+        return Result.suc(reviewdataService.list().stream().map(ReviewDataVo::of).collect(Collectors.toList()));
     }
 
     //分页查询
@@ -59,7 +60,7 @@ public class ReviewdataController {
         if (rdid != null){
             wrapper.eq(Reviewdata::getRdid,rdid);
         }
-
+        page.addOrder(OrderItem.desc("rdid"));
         Page<Reviewdata> result = reviewdataService.page(page, wrapper);
 
         return Result.suc(result.getTotal(),result.getRecords().stream().map(ReviewDataVo::of).collect(Collectors.toList()));

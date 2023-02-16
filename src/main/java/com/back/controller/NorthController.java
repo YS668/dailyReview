@@ -22,6 +22,7 @@ import com.back.entity.vo.NorthVo;
 import com.back.entity.vo.UpVo;
 import com.back.service.NorthService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
@@ -42,7 +43,7 @@ public class NorthController {
     //获取所有数据
     @GetMapping("/all")
     public Result getAll(){
-        return Result.suc(northService.list().stream().map(NorthVo::of).collect(Collectors.toSet()));
+        return Result.suc(northService.list().stream().map(NorthVo::of).collect(Collectors.toList()));
     }
 
     //分页查询
@@ -61,10 +62,10 @@ public class NorthController {
         if (rdid != null){
             wrapper.eq(North::getRdid,rdid);
         }
-
+        page.addOrder(OrderItem.desc("rdid"));
         Page<North> result = northService.page(page, wrapper);
 
-        return Result.suc(result.getTotal(),result.getRecords().stream().map(NorthVo::of).collect(Collectors.toSet()));
+        return Result.suc(result.getTotal(),result.getRecords().stream().map(NorthVo::of).collect(Collectors.toList()));
     }
 
     //删除

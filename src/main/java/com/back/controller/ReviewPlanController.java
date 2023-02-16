@@ -19,6 +19,7 @@ import com.back.entity.pojo.ReviewPlan;
 import com.back.entity.vo.ReviewPlanVo;
 import com.back.service.ReviewPlanService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
@@ -58,7 +59,7 @@ public class ReviewPlanController {
         if (rdid != null){
             wrapper.eq(ReviewPlan::getRdid,rdid);
         }
-
+        page.addOrder(OrderItem.desc("rdid"));
         Page<ReviewPlan> result = reviewPlanService.page(page, wrapper);
 
         return Result.suc(result.getTotal(),result.getRecords().stream().map(ReviewPlanVo::of).collect(Collectors.toList()));

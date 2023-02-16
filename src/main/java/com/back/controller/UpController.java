@@ -22,6 +22,7 @@ import com.back.entity.vo.ReviewDataVo;
 import com.back.entity.vo.UpVo;
 import com.back.service.UpService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
@@ -42,7 +43,7 @@ public class UpController {
     //获取所有数据
     @GetMapping("/all")
     public Result getAll(){
-        return Result.suc(upService.list().stream().map(UpVo::of).collect(Collectors.toSet()));
+        return Result.suc(upService.list().stream().map(UpVo::of).collect(Collectors.toList()));
     }
 
     //分页查询
@@ -61,10 +62,10 @@ public class UpController {
         if (rdid != null){
             wrapper.eq(Up::getRdid,rdid);
         }
-
+        page.addOrder(OrderItem.desc("rdid"));
         Page<Up> result = upService.page(page, wrapper);
 
-        return Result.suc(result.getTotal(),result.getRecords().stream().map(UpVo::of).collect(Collectors.toSet()));
+        return Result.suc(result.getTotal(),result.getRecords().stream().map(UpVo::of).collect(Collectors.toList()));
     }
 
     //删除
