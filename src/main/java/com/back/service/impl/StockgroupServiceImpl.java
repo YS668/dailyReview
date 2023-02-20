@@ -27,4 +27,9 @@ public class StockgroupServiceImpl extends ServiceImpl<StockgroupMapper, Stockgr
     public List<String> getAllGroup(Long uid) {
         return stockgroupMapper.getAllGroup(uid);
     }
+
+    @Override
+    public String getOneByUidGroupName(Long uid, String groupName) {
+        return stockgroupMapper.getOneByUidGroupName(uid,groupName);
+    }
 }

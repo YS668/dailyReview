@@ -16,4 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface StockgroupService extends IService<Stockgroup> {
 
     List<String> getAllGroup(Long uid);
+
+    String getOneByUidGroupName(Long uid,String groupName);
 }

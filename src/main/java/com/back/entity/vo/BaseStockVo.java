@@ -1,5 +1,7 @@
 package com.back.entity.vo;
 
+import java.util.Objects;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,5 +27,18 @@ public class BaseStockVo {
         vo.setNowPrice(put.getNowPrice());
         vo.setTrend(put.getTrend());
         return vo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseStockVo that = (BaseStockVo) o;
+        return stockCode.equals(that.stockCode) && stockName.equals(that.stockName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stockCode, stockName);
     }
 }

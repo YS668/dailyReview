@@ -1,5 +1,7 @@
 package com.back.entity.vo;
 
+import java.util.Objects;
+
 import com.back.common.craw.CrawUtil;
 import com.back.entity.pojo.Mystock;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -51,5 +53,19 @@ public class MyStockVo extends StockPushVo {
         vo.setTurnover(temp.getTurnover());
         vo.fillLink();
         return vo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MyStockVo that = (MyStockVo) o;
+        //股票名称及分组及用户一致既相等
+        return this.getStockName().equals(that.getStockName()) && groupName.equals(that.groupName) && uid.equals(that.uid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getStockName(), groupName,uid);
     }
 }

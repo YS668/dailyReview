@@ -25,4 +25,40 @@
         id, rdid, uid, openId, stockCode, stockName, group, note, extra, create_person, create_time, update_person, update_time, dr
     </sql>
 
+    <!--批量删除-->
+    <update id="removeBatch" parameterType="java.util.List">
+        <foreach collection="param"  separator=";"   item="val">
+        update mystock
+        set dr = 1
+        where
+            uid =#{val.uid} AND groupName =  #{val.groupName} AND stockName = #{val.stockName} AND dr = 0
+        </foreach>
+    </update>
+
+    <!--换组-->
+    <update id="changeGroup" parameterType="java.util.List">
+        <foreach collection="param"  separator=";"   item="val">
+            update mystock
+            set groupName = #{val.newGroup}
+            where
+            uid =#{val.uid} AND groupName =  #{val.groupName} AND stockName = #{val.stockName} AND dr = 0
+        </foreach>
+    </update>
+
+    <!--修改备注-->
+    <update id="updateNote" parameterType="com.back.entity.req.MyStockReq">
+            update mystock
+            set note = #{val.note}
+            where
+            uid = #{val.uid} AND groupName =  #{val.groupName} AND stockName = #{val.stockName} AND dr = 0
+    </update>
+
+
+    <!--修改备注-->
+    <select id="getOneByUidStockNameGroupName" resultType="java.util.Map" >
+        select uid,stockName
+        from mystock
+        where
+            uid = #{uid} AND groupName =  #{groupName} AND stockName = #{stockName} AND dr = 0
+    </select>
 </mapper>
