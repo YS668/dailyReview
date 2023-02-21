@@ -50,6 +50,8 @@ public class CrawConstant {
     /*************************热股****************/
     /** 雪球1小时热榜 */
     public static String HOT_ONE_XUEQIU= "https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=10&_type=10&type=10";
+    /** 雪球热股榜 cookie*/
+    public static String HOT_ONE_XUEQIU_Cookie= "device_id=34cff051773e8c372c1bcd3d177c0c13; s=bt12lj4g4l; bid=55f98a025015352661adabaed55fe6c2_lc43l8ar; __utmz=1.1672016728.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_1db88642e346389874251b5a1eded6e3=1675253477,1675299587,1675386828,1675908455; snbim_minify=true; __utmc=1; __utma=1.620435929.1672016728.1676080675.1676086225.16; remember=1; xq_a_token=d15a7c032b8c277762fa24d0648efdf835ed0d15; xqat=d15a7c032b8c277762fa24d0648efdf835ed0d15; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOjkzMTQ0NDEzNzcsImlzcyI6InVjIiwiZXhwIjoxNjc4Njc4MjkwLCJjdG0iOjE2NzYwOTAzMjU3NDAsImNpZCI6ImQ5ZDBuNEFadXAifQ.jvAEAMHSYBVZWMIV2RiEkeKPpDu76RF6kd_TrOhxhj0dGJF26G3xMBc-qDzYVqmLzIdeiUT2WwewcNjw2A-ot82S_VXaZ2tX2UgRYLh1n3iY5t898nnwYSUyluKJmQRO98nZzR8vLwGreO7clywWGDIjexuy3G0fU7ZfnN6ZuHZaE-VgeS6pfa1xOyQpqqhZrtZOqv4hTTwbnyr_ZducazVTvf9SO82rZAL-r7620nyb3xXoBMClcPU3M2R1cJsL5-QF9WB4TftJa-xiheCDeOH4MZYmMyJ8DWyJs1GPEQBDleqteDU3qa1ctTcz03RDHs9aakvxeSjbj9DvecFutw; xq_r_token=7f1315875e427b0377cf3c6a90f637f189d67303; xq_is_login=1; u=9314441377; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1676090494; acw_tc=2760826e16758248052264816ec1d2609468ab31a11edfc4dba6c064863108";
     /** 雪球24小时热榜 */
     public static String HOT_TF_XUEQIU= "https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=10&_type=10&type=20";
     /** 淘股吧热榜 */
@@ -62,7 +64,14 @@ public class CrawConstant {
     public static String HOT_ONE_TH= "https://eq.10jqka.com.cn/open/api/hot_list/v1/hot_stock/a/hour/data.txt";
     /** 同花顺24小时热榜 */
     public static String HOT_TF_TH= "https://eq.10jqka.com.cn/open/api/hot_list/v1/hot_stock/a/day/data.txt";
-
+    /** 微信开放平台URL*/
+    public static String WX_OPEN_URL = "https://mp.weixin.qq.com/";
+    /** 微信开放平台cookie*/
+    public static String WX_OPEN_COOKIE = "appmsglist_action_3917391486=card; ua_id=kB2H5Z6GETc8hw6XAAAAACU4c3o2JXQEl5pfe2zxikk=; wxuin=72997200640514; mm_lang=zh_CN; RECENT_CODE=600546_1; pac_uid=0_0588c6732595a; iip=0; pgv_pvid=8765777724; noticeLoginFlag=1; remember_acct=YF_Day; uuid=2c7cb3b0ab4bc4f7265e0eb930bd4e75; rand_info=CAESIDFzK1sBk/w8PgAIPfF2XlFJ+LZoSAZ6vUr26PHjP1is; slave_bizuin=3917391486; data_bizuin=3917391486; bizuin=3917391486; data_ticket=9mug4YZo+wy/CBg4Fjjc4roWvb14iGAxcUR3HUB+c3+H5z1MC6/yOne47XCvYMSw; slave_sid=b2JXN0lyVWlRZlB2elk4THVEVUlObnhVVENqdGVKY1ZoMTIwX1pkZzBmWWtrRWhvdkVzYzNpRU9Bc3E0SGF1NnJKVjBNZmZST1FIOUZyVVViaEg3TDNrSklZalRzSUx5MjJEUmhCT3BScnhreHNnT2VZd0syblM5NGFDY3lYYVlQRmFJOVNBcWNrOFVtMHFh; slave_user=gh_7fb109892ad9; xid=cc32b79d1af05a7816375f74723bc29a";
+    /** 微信开放平台token*/
+    public static String WX_OPEN_TOKEN ="848123839";
+    /** 爬取微信公众号最新文章*/
+    public static String WX_ARTICLE = "https://mp.weixin.qq.com/cgi-bin/appmsg?action=list_ex&begin=0&count=5&fakeid=$==&type=9&query=&lang=zh_CN&f=json&ajax=1&token=";
     /*************************指数****************/
     /** 上证50 */
     public static String SZ_50_INDEX= "SH000016";

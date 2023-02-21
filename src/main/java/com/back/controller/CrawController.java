@@ -123,24 +123,47 @@ public class CrawController {
         return Result.suc(map);
     }
 
-
+    /**
+     * 主要指数拥挤度
+     * @return
+     */
     @GetMapping("/index/percentage")
     public Result getIndexPercentage(){
         return Result.suc(CrawUtil.indexPercentage);
     }
 
+    /**
+     * 成交额排行
+     * @return
+     */
     @GetMapping("/turnover/sort")
     public Result genTurnOverSort(){
         return Result.suc(CrawUtil.turnOverSort);
     }
 
+    /**
+     * 行业板块成交额排行
+     * @return
+     */
     @GetMapping("/industry/sort")
     public Result getIndustrySort(){
         return Result.suc(CrawUtil.industrySort);
     }
 
+    /**
+     * 概念板块成交额排行
+     * @return
+     */
     @GetMapping("/concept/sort")
     public Result getConceptSort(){
         return Result.suc(CrawUtil.conceptSort);
+    }
+
+    /**
+     * 爬取微信文章
+     */
+    @GetMapping("/wx/article")
+    public Result getWxArticle(){
+        return Result.suc(CrawUtil.getWxArticle());
     }
 }

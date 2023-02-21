@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,6 +36,7 @@ import com.back.entity.vo.StockPushVo;
 
 import com.back.entity.vo.UpLimitVo;
 import com.back.entity.vo.UpVo;
+import com.back.entity.vo.WxArticleVo;
 import com.back.service.ReviewdataService;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
@@ -53,6 +55,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -112,7 +115,6 @@ public class CrawUtil {
 		conceptSort = getConceptSort();
 		crawSum = 0;
 	}
-
 
 	/**
 	 * 周一到周五凌晨5点 初始化股票map缓存及每日更新 避免新股出现
@@ -591,7 +593,7 @@ public class CrawUtil {
 	public static List<StockPushVo>  getHotByXueQiu(String url) {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Cookie","device_id=34cff051773e8c372c1bcd3d177c0c13; s=bt12lj4g4l; bid=55f98a025015352661adabaed55fe6c2_lc43l8ar; __utmz=1.1672016728.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_1db88642e346389874251b5a1eded6e3=1675253477,1675299587,1675386828,1675908455; snbim_minify=true; __utmc=1; __utma=1.620435929.1672016728.1676080675.1676086225.16; remember=1; xq_a_token=d15a7c032b8c277762fa24d0648efdf835ed0d15; xqat=d15a7c032b8c277762fa24d0648efdf835ed0d15; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOjkzMTQ0NDEzNzcsImlzcyI6InVjIiwiZXhwIjoxNjc4Njc4MjkwLCJjdG0iOjE2NzYwOTAzMjU3NDAsImNpZCI6ImQ5ZDBuNEFadXAifQ.jvAEAMHSYBVZWMIV2RiEkeKPpDu76RF6kd_TrOhxhj0dGJF26G3xMBc-qDzYVqmLzIdeiUT2WwewcNjw2A-ot82S_VXaZ2tX2UgRYLh1n3iY5t898nnwYSUyluKJmQRO98nZzR8vLwGreO7clywWGDIjexuy3G0fU7ZfnN6ZuHZaE-VgeS6pfa1xOyQpqqhZrtZOqv4hTTwbnyr_ZducazVTvf9SO82rZAL-r7620nyb3xXoBMClcPU3M2R1cJsL5-QF9WB4TftJa-xiheCDeOH4MZYmMyJ8DWyJs1GPEQBDleqteDU3qa1ctTcz03RDHs9aakvxeSjbj9DvecFutw; xq_r_token=7f1315875e427b0377cf3c6a90f637f189d67303; xq_is_login=1; u=9314441377; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1676090494; acw_tc=2760826e16758248052264816ec1d2609468ab31a11edfc4dba6c064863108");
+		headers.set("Cookie",CrawConstant.HOT_ONE_XUEQIU_Cookie);
 		HttpEntity httpEntity = new HttpEntity(null, headers);
 		ResponseEntity<JSONObject> entity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, JSONObject.class);
 		JSONObject body = entity.getBody();
@@ -920,5 +922,54 @@ public class CrawUtil {
 		return content.split(CrawConstant.TURNOVER)[CommonConstant.ONE].replace(CrawConstant.PERIOD, "");
 	}
 
+	/**
+	 * 爬取微信文章
+	 * @return
+	 */
+	public static List<WxArticleVo> getWxArticle() {
+		//一小时
+		if (!DateUtil.oneHours()){
+			return null;
+		}
+		List<WxArticleVo> res = new ArrayList<>();
+
+		Map<String,String> fakeidMap = new HashMap<>();
+		fakeidMap.put("MzAwNjY4MjQwMA","看懂龙头股");
+		fakeidMap.put("MzU3MjUwNDczOA","三岁小怪兽");
+		fakeidMap.put("MzU1NzY3NjM4Mg","盘口逻辑拆解");
+		fakeidMap.put("MzU3NjM2OTI0NA","夜间实录盘");
+		fakeidMap.put("MzAwNTMyMTY0MQ","古北路烧烤哥");
+		fakeidMap.put("MzI2NzcyODM1MQ","沙沙复盘");
+		fakeidMap.put("MjM5ODUxMjExMA","财经早餐");
+		fakeidMap.put("Mzg4MzY5NDY4OA","久研公社");
+		fakeidMap.put("MzUzNzI1MjQ1Mg","寻找低估");
+		fakeidMap.put("MzkxMzIyNjE0OA","求实处");
+		fakeidMap.put("MzIxMDYyNzA5MQ","股痴流沙河");
+		fakeidMap.put("Mzg5ODc1MTcwNA","顽主杯实盘大赛");
+
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = restTemplate.getForEntity(CrawConstant.WX_OPEN_URL,String.class);
+		List<String> list = response.getHeaders().get("Set-Cookie");
+		String ua_id = list.get(0).toString().split("Path")[0];
+		// 设置Http的Header
+		HttpHeaders headers = new HttpHeaders();
+		//headers.set("cookie", CrawConstant.WX_OPEN_COOKIE.replace("$",ua_id));
+		headers.set("cookie", CrawConstant.WX_OPEN_COOKIE);
+		HttpEntity entity = new HttpEntity(null, headers);
+		String url = CrawConstant.WX_ARTICLE+CrawConstant.WX_OPEN_TOKEN;
+		for (Map.Entry<String, String> entry : fakeidMap.entrySet()) {
+			ResponseEntity<JSONObject> result = restTemplate.exchange(
+					url.replace("$",entry.getKey()),
+					HttpMethod.GET, entity, JSONObject.class);
+			WxArticleVo vo = new WxArticleVo();
+			vo.setAuthor(entry.getValue());
+			JSONObject body = result.getBody();
+			ArrayList<Map> mapList = (ArrayList) body.get("app_msg_list");
+			List<WxArticleVo.ArticleVo> collect = mapList.stream().map(WxArticleVo.ArticleVo::of).limit(CommonConstant.THREE).collect(Collectors.toList());
+			vo.setArticleVos(collect);
+			res.add(vo);
+		}
+		return res;
+	}
 
 }

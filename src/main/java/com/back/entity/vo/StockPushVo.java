@@ -66,7 +66,7 @@ public class StockPushVo extends BaseStockVo  {
     }
 
     public  String show() {
-        return  "日期："+ DateUtil.getFlmat() + "\n"+
+        return  "日期："+ DateUtil.getRdidFlmat() + "\n"+
                 "股票名称：" + this.getStockName()+"\n"+
                 "涨跌：" + this.getTrend()+"\n"+
                 "现价：" + this.getNowPrice()+"\n"+

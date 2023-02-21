@@ -22,6 +22,6 @@ public interface StockgroupMapper extends BaseMapper<Stockgroup> {
     @Select("select groupName from stockgroup where uid = #{uid} and dr = 0")
     List<String> getAllGroup(@Param("uid") Long uid);
 
-    @Select("select groupName from stockgroup where uid = #{uid} and groupName = #{groupName}")
+    @Select("select groupName from stockgroup where uid = #{uid} and groupName = #{groupName} and dr = 0")
     String getOneByUidGroupName(@Param("uid") Long uid,@Param("groupName") String groupName);
 }

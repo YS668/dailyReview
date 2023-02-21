@@ -58,7 +58,7 @@ public class ReviewDataVo {
 
     public String show() {
 
-        return  "日期："+ DateUtil.getByRdid(rdid) + "\n"+
+        return  "日期："+ DateUtil.toFormatRdid(rdid) + "\n"+
                 "今日历史新高数：" + historyHigh.size() + "\n"+
                 "今日一年新高数：" + yearHigh.size() + "\n"+
                 "今日一年新低数：" + yearLow.size() + "\n"+
