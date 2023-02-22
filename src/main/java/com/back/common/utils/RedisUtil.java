@@ -33,7 +33,7 @@ public class RedisUtil {
 
     //添加String数据(一小时过期)
     public static void addOneHoursExpireString(String key,String value){
-        template.boundValueOps(key).set(value);
+        template.boundValueOps(key).set(value,1,TimeUnit.HOURS);
     }
 
     //获取String数据
