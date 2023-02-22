@@ -33,7 +33,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @since 2023-02-22
  */
 @RestController
-@RequestMapping("/recomm")
+@RequestMapping("/api/recomm")
 public class RecommController {
 
 
