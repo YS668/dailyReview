@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.back.common.utils.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,13 +25,15 @@ public class WxArticleVo {
 
         private String title;
         private String link;
+        private String date;
 
         public ArticleVo() {
         }
 
-        public ArticleVo(String title, String link) {
+        public ArticleVo(String title, String link, String date) {
             this.title = title;
             this.link = link;
+            this.date = date;
         }
 
         public String getTitle() {
@@ -49,10 +52,19 @@ public class WxArticleVo {
             this.link = link;
         }
 
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
         public static ArticleVo of(Map map){
             ArticleVo vo = new ArticleVo();
             vo.setTitle((String) map.get("title"));
             vo.setLink((String) map.get("link"));
+            vo.setDate(DateUtil.getDateByS((Integer) map.get("update_time")));
             return vo;
         }
     }

@@ -1,9 +1,12 @@
 package com.back.common.utils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import com.back.common.constant.CommonConstant;
+import io.swagger.models.auth.In;
 
 public class DateUtil {
 
@@ -76,5 +79,23 @@ public class DateUtil {
 				return false;
 			}
 		}
+	}
+
+
+	//根据时间戳，返回格式时间 秒
+	public static String getDateByS(Integer time){
+		long lt = new Long(time.toString()+"000");;
+		Date date = new Date(lt);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+		String format = dateFormat.format(date);
+		return format;
+	}
+
+	//根据时间戳，返回格式时间 毫秒
+	public static String getDateByMs(Long time){
+		Date date = new Date(time);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+		String format = dateFormat.format(date);
+		return format;
 	}
 }

@@ -925,12 +925,13 @@ public class CrawUtil {
 	 * 爬取微信文章
 	 * @return
 	 */
-	public static List<WxArticleVo> getWxArticle() {
+	public static Map<String,Object> getWxArticle() {
 		//一小时
-		List<WxArticleVo> res = new ArrayList<>();
-		String str = RedisUtil.getString("wxArticle");
+		Map<String,Object> articleMap = new HashMap<>();
+		List<WxArticleVo> list = new ArrayList<>();
+		String str = RedisUtil.getString("articleMap");
 		if (str != null && str.length() > 0){
-			return JSONObject.parseObject(str, res.getClass());
+			return JSONObject.parseObject(str, articleMap.getClass());
 		}
 
 		Map<String,String> fakeidMap = new HashMap<>();
@@ -949,8 +950,6 @@ public class CrawUtil {
 
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.getForEntity(CrawConstant.WX_OPEN_URL,String.class);
-		List<String> list = response.getHeaders().get("Set-Cookie");
-		String ua_id = list.get(0).toString().split("Path")[0];
 		// 设置Http的Header
 		HttpHeaders headers = new HttpHeaders();
 		//headers.set("cookie", CrawConstant.WX_OPEN_COOKIE.replace("$",ua_id));
@@ -967,11 +966,13 @@ public class CrawUtil {
 			ArrayList<Map> mapList = (ArrayList) body.get("app_msg_list");
 			List<WxArticleVo.ArticleVo> collect = mapList.stream().map(WxArticleVo.ArticleVo::of).limit(CommonConstant.THREE).collect(Collectors.toList());
 			vo.setArticleVos(collect);
-			res.add(vo);
+			list.add(vo);
 		}
 		//一小时缓存redis
-		RedisUtil.addOneHoursExpireString("wxArticle",JSONObject.toJSONString(res));
-		return res;
+		articleMap.put("list",list);
+		articleMap.put("time",DateUtil.getDateByMs(System.currentTimeMillis()));
+		RedisUtil.addOneHoursExpireString("articleMap",JSONObject.toJSONString(articleMap));
+		return articleMap;
 	}
 
 }
