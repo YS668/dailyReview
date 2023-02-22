@@ -11,7 +11,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +20,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.back.common.constant.CommonConstant;
@@ -28,8 +28,8 @@ import com.back.common.constant.CrawConstant;
 import com.back.common.utils.CodeUtil;
 import com.back.common.utils.DateUtil;
 import com.back.common.utils.MathUtil;
+import com.back.common.utils.RedisUtil;
 import com.back.entity.pojo.Reviewdata;
-import com.back.entity.vo.BaseStockVo;
 import com.back.entity.vo.NorthVo;
 import com.back.entity.vo.ReviewDataVo;
 import com.back.entity.vo.StockPushVo;
@@ -55,7 +55,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -928,10 +927,11 @@ public class CrawUtil {
 	 */
 	public static List<WxArticleVo> getWxArticle() {
 		//一小时
-		if (!DateUtil.oneHours()){
-			return null;
-		}
 		List<WxArticleVo> res = new ArrayList<>();
+		String str = RedisUtil.getString("wxArticle");
+		if (str != null && str.length() > 0){
+			return JSONObject.parseObject(str, res.getClass());
+		}
 
 		Map<String,String> fakeidMap = new HashMap<>();
 		fakeidMap.put("MzAwNjY4MjQwMA","看懂龙头股");
@@ -969,6 +969,8 @@ public class CrawUtil {
 			vo.setArticleVos(collect);
 			res.add(vo);
 		}
+		//一小时缓存redis
+		RedisUtil.addOneHoursExpireString("wxArticle",JSONObject.toJSONString(res));
 		return res;
 	}
 

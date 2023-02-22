@@ -35,9 +35,10 @@ spring:
 
   #Redis配置
   redis:
-    host: 192.168.88.110
-    port: 6379
+    host: www.yifuday.top
+    port: 6793
     timeout: 5000ms
+    password: 123666
 
   #rabbitMQ
   #  rabbitmq:
