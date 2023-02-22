@@ -1,5 +1,6 @@
 package com.back.service;
 
+import org.apache.ibatis.annotations.Param;
 import com.back.entity.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-01-05
  */
 public interface UserService extends IService<User> {
+
+    User getOneByUserName(String userName);
+
+    User getOneByUid(Long uid);
+
+    int cancelBindByuid( Long uid);
 
 }

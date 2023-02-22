@@ -18,12 +18,12 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
-    @Select("select * from user where userName = #{userName}")
-    User getByuserName(@Param("userName") String userName);
+    @Update("update user set openId = ' ' where uid = #{uid} and dr = 0")
+    int cancelBindByuid(@Param("uid") Long uid);
 
-    @Select("select * from user where openId = #{openId}")
-    User getByOpenId(@Param("openId") String openId);
+    @Select("select * from user where openId = #{openId} and dr = 0")
+    User getOneByUid(@Param("uid")Long uid);
 
-    @Update("update user set openId = ' ' where uid = #{uid}")
-    int cancelBindByuid(@Param("uid")Long uid);
+    @Select("select * from user where userName like CONCAT('%',#{userName},'%') and dr = 0")
+    User getOneByUserName(@Param("userName") String userName);
 }

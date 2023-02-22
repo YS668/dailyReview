@@ -969,8 +969,10 @@ public class CrawUtil {
 			list.add(vo);
 		}
 		//一小时缓存redis
+		String time = DateUtil.getDateByMs(System.currentTimeMillis());
 		articleMap.put("list",list);
-		articleMap.put("time",DateUtil.getDateByMs(System.currentTimeMillis()));
+		articleMap.put("time",time);
+		log.info("爬取微信公众号：time:{}",time);
 		RedisUtil.addOneHoursExpireString("articleMap",JSONObject.toJSONString(articleMap));
 		return articleMap;
 	}
