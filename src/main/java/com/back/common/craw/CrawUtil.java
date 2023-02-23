@@ -21,7 +21,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.back.common.constant.CommonConstant;
@@ -56,6 +55,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -74,6 +74,8 @@ public class CrawUtil {
 
 	@Autowired
 	private ReviewdataService reviewdataService;
+	@Autowired
+	private RedisUtil redisUtil;
 
 	private static final JavaScriptProvider<ShJS> shPr = new JavaScriptProvider<>();
 	/** <股票代码,股票名称> */
@@ -84,22 +86,6 @@ public class CrawUtil {
 	 * 复盘数据
 	 */
 	public static ReviewDataVo vo = new ReviewDataVo();
-	/**
-	 * 今日主要指数
-	 */
-	public static List<StockPushVo> indexPercentage = new ArrayList<>();
-	/**
-	 * 今日成交额从高到低
-	 */
-	public static List<StockPushVo> turnOverSort = new ArrayList<>();
-	/**
-	 * 今日行业板块从高到低
-	 */
-	public static List<StockPushVo> industrySort = new ArrayList<>();
-	/**
-	 * 今日概念板块从高到低
-	 */
-	public static List<StockPushVo> conceptSort = new ArrayList<>();
 
 	public static int crawSum ;
 
@@ -109,10 +95,7 @@ public class CrawUtil {
 		vo = reviewdataService.list().stream()
 				.sorted(Comparator.comparing(Reviewdata::getRdid).reversed())
 				.map(ReviewDataVo::of).collect(Collectors.toList()).get(CommonConstant.ZERO);
-		indexPercentage = getIndexPercentage();
-		turnOverSort = getTurnOverSort();
-		industrySort = getIndustrySort();
-		conceptSort = getConceptSort();
+
 		crawSum = 0;
 	}
 
@@ -311,13 +294,13 @@ public class CrawUtil {
 		northVo.setShIndex(shTrend);
 
 		//指数拥挤度
-		indexPercentage = getIndexPercentage();
+		getIndexPercentage();
 		//个股成交额排行前20
-		turnOverSort = getTurnOverSort();
+		getTurnOverSort();
 		//行业板块成交额排行前20
-		industrySort = getIndustrySort();
+		getIndustrySort();
 		//概念板块个股成交额排行前20
-		conceptSort = getConceptSort();
+		getConceptSort();
 
 		String rdid = DateUtil.getRdid();
 		reviewDataVo.setRdid(rdid);
@@ -457,6 +440,7 @@ public class CrawUtil {
 		res.add(zz_500);
 		res.add(zz_1000);
 		res.add(gz_2000);
+		RedisUtil.addString("indexPercentage",JSONObject.toJSONString(res));
 		return res;
 	}
 
@@ -481,6 +465,7 @@ public class CrawUtil {
 				}
 				).filter(e -> e != null)
 				.collect(Collectors.toList()));
+		RedisUtil.addString("turnOverSort",JSONObject.toJSONString(res));
 		return res;
 	}
 
@@ -493,6 +478,7 @@ public class CrawUtil {
 		ResponseEntity<String> down = getWenCai(CrawConstant.INDUSTRY_PLATE_DOWN_SORT, CrawConstant.ZHI_SHU);
 		res.addAll(resolutionPlate(up));
 		res.addAll(resolutionPlate(down));
+		RedisUtil.addString("industrySort",JSONObject.toJSONString(res));
 		return res;
 	}
 
@@ -505,6 +491,7 @@ public class CrawUtil {
 		ResponseEntity<String> down = getWenCai(CrawConstant.CONCEPT_PLATE_DOWN_SORT, CrawConstant.ZHI_SHU);
 		res.addAll(resolutionPlate(up));
 		res.addAll(resolutionPlate(down));
+		RedisUtil.addString("conceptSort",JSONObject.toJSONString(res));
 		return res;
 	}
 
@@ -929,11 +916,21 @@ public class CrawUtil {
 	public static Map<String,Object> getWxArticle() {
 		//一小时
 		Map<String,Object> articleMap = new HashMap<>();
-		List<WxArticleVo> list = new ArrayList<>();
 		String str = RedisUtil.getString("articleMap");
 		if (str != null && str.length() > 0){
 			return JSONObject.parseObject(str, articleMap.getClass());
 		}
+		return null;
+	}
+
+	@Scheduled(fixedDelay=60*60*1000)   //每隔1小时执行
+	public static void WxArticleTrigger(){
+		//开盘时间不执行
+		if (DateUtil.open()){
+			return;
+		}
+		Map<String,Object> articleMap = new HashMap<>();
+		List<WxArticleVo> list = new ArrayList<>();
 
 		Map<String,String> fakeidMap = new LinkedHashMap<>();
 		fakeidMap.put("MzAwNjY4MjQwMA","看懂龙头股");
@@ -975,7 +972,6 @@ public class CrawUtil {
 		articleMap.put("time",time);
 		log.info("爬取微信公众号：time:{}",time);
 		RedisUtil.addOneHoursExpireString("articleMap",JSONObject.toJSONString(articleMap));
-		return articleMap;
 	}
 
 }

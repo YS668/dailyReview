@@ -10,6 +10,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import com.back.common.Result;
 import com.back.common.constant.CrawConstant;
 import com.back.common.craw.CrawUtil;
 import com.back.common.utils.DateUtil;
+import com.back.common.utils.RedisUtil;
 import com.back.entity.vo.BaseStockVo;
 import com.back.entity.vo.StockPushVo;
 import com.back.entity.vo.UpLimitVo;
@@ -34,6 +36,8 @@ public class CrawController {
     //注入任务调度
     @Autowired
     private Scheduler scheduler;
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 暂停定时任务
@@ -129,7 +133,7 @@ public class CrawController {
      */
     @GetMapping("/index/percentage")
     public Result getIndexPercentage(){
-        return Result.suc(CrawUtil.indexPercentage);
+        return Result.suc(JSONObject.parseObject(RedisUtil.getString("indexPercentage"),List.class));
     }
 
     /**
@@ -138,7 +142,7 @@ public class CrawController {
      */
     @GetMapping("/turnover/sort")
     public Result genTurnOverSort(){
-        return Result.suc(CrawUtil.turnOverSort);
+        return Result.suc(JSONObject.parseObject(RedisUtil.getString("turnOverSort"),List.class));
     }
 
     /**
@@ -147,7 +151,7 @@ public class CrawController {
      */
     @GetMapping("/industry/sort")
     public Result getIndustrySort(){
-        return Result.suc(CrawUtil.industrySort);
+        return Result.suc(JSONObject.parseObject(RedisUtil.getString("industrySort"),List.class));
     }
 
     /**
@@ -156,7 +160,7 @@ public class CrawController {
      */
     @GetMapping("/concept/sort")
     public Result getConceptSort(){
-        return Result.suc(CrawUtil.conceptSort);
+        return Result.suc(JSONObject.parseObject(RedisUtil.getString("conceptSort"),List.class));
     }
 
     /**
