@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -934,19 +935,19 @@ public class CrawUtil {
 			return JSONObject.parseObject(str, articleMap.getClass());
 		}
 
-		Map<String,String> fakeidMap = new HashMap<>();
+		Map<String,String> fakeidMap = new LinkedHashMap<>();
 		fakeidMap.put("MzAwNjY4MjQwMA","看懂龙头股");
-		fakeidMap.put("MzU3MjUwNDczOA","三岁小怪兽");
 		fakeidMap.put("MzU1NzY3NjM4Mg","盘口逻辑拆解");
+		fakeidMap.put("MzU3MjUwNDczOA","三岁小怪兽");
 		fakeidMap.put("MzU3NjM2OTI0NA","夜间实录盘");
 		fakeidMap.put("MzAwNTMyMTY0MQ","古北路烧烤哥");
 		fakeidMap.put("MzI2NzcyODM1MQ","沙沙复盘");
-		fakeidMap.put("MjM5ODUxMjExMA","财经早餐");
-		fakeidMap.put("Mzg4MzY5NDY4OA","久研公社");
-		fakeidMap.put("MzUzNzI1MjQ1Mg","寻找低估");
-		fakeidMap.put("MzkxMzIyNjE0OA","求实处");
 		fakeidMap.put("MzIxMDYyNzA5MQ","股痴流沙河");
 		fakeidMap.put("Mzg5ODc1MTcwNA","顽主杯实盘大赛");
+		fakeidMap.put("MzkxMzIyNjE0OA","求实处");
+		fakeidMap.put("MzUzNzI1MjQ1Mg","寻找低估");
+		fakeidMap.put("Mzg4MzY5NDY4OA","韭研公社");
+		fakeidMap.put("MjM5ODUxMjExMA","财经早餐");
 
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.getForEntity(CrawConstant.WX_OPEN_URL,String.class);
