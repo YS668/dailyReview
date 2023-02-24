@@ -101,10 +101,10 @@ public class CrawConstant {
     public static String QUESTION_YEAR_HIGH = "今日创一年新高，非ST，非4和8开头";
     public static String QUESTION_YEAR_LOW = "今日创一年新低，非ST，非4和8开头";
     public static String QUESTION_DOWN_LIMIT = "今日跌停，非ST，非4和8开头";
-    public static String QUESTION_DOWN_FIVE = "今日跌幅大于5%，非ST，非4和8开头";
+    public static String QUESTION_DOWN_FIVE = "今日的涨跌幅<-5%，非ST，非4和8开头";
     public static String QUESTION_UP_LIMIT = "今日涨停，非ST，非4和8开头";
     public static String QUESTION_NO_ONE_UP = "今日非一字涨停，非ST，非4和8开头";
-    public static String QUESTION_UP_FIVE = "今日涨幅大于5%，非ST，非4和8开头";
+    public static String QUESTION_UP_FIVE = "今日涨跌幅大于5%，非ST，非4和8开头";
     public static String QUESTION_UP_ALL = "上涨个股";
     public static String NINE_TWENTY_FIVE = "9点25分";
     public static String TEN = "10点";
