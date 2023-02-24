@@ -133,7 +133,11 @@ public class CrawController {
      */
     @GetMapping("/index/percentage")
     public Result getIndexPercentage(){
-        return Result.suc(JSONObject.parseObject(RedisUtil.getString("indexPercentage"),List.class));
+        List res = JSONObject.parseObject(RedisUtil.getString("indexPercentage"), List.class);
+        if (res == null){
+            return Result.suc(CrawUtil.getIndexPercentage());
+        }
+        return Result.suc(res);
     }
 
     /**
@@ -142,7 +146,11 @@ public class CrawController {
      */
     @GetMapping("/turnover/sort")
     public Result genTurnOverSort(){
-        return Result.suc(JSONObject.parseObject(RedisUtil.getString("turnOverSort"),List.class));
+        List res = JSONObject.parseObject(RedisUtil.getString("turnOverSort"), List.class);
+        if (res == null){
+            return Result.suc(CrawUtil.getTurnOverSort());
+        }
+        return Result.suc(res);
     }
 
     /**
@@ -151,7 +159,11 @@ public class CrawController {
      */
     @GetMapping("/industry/sort")
     public Result getIndustrySort(){
-        return Result.suc(JSONObject.parseObject(RedisUtil.getString("industrySort"),List.class));
+        List res = JSONObject.parseObject(RedisUtil.getString("industrySort"), List.class);
+        if (res == null){
+            return Result.suc(CrawUtil.getIndustrySort());
+        }
+        return Result.suc(res);
     }
 
     /**
@@ -160,7 +172,11 @@ public class CrawController {
      */
     @GetMapping("/concept/sort")
     public Result getConceptSort(){
-        return Result.suc(JSONObject.parseObject(RedisUtil.getString("conceptSort"),List.class));
+        List res = JSONObject.parseObject(RedisUtil.getString("conceptSort"), List.class);
+        if (res == null){
+            return Result.suc(CrawUtil.getConceptSort());
+        }
+        return Result.suc(res);
     }
 
     /**

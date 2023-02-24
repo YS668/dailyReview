@@ -917,17 +917,19 @@ public class CrawUtil {
 		//一小时
 		Map<String,Object> articleMap = new HashMap<>();
 		String str = RedisUtil.getString("articleMap");
-		if (str != null && str.length() > 0){
-			return JSONObject.parseObject(str, articleMap.getClass());
+		if (str == null || str.length() == 0){
+			return CrawWxArticle();
 		}
-		return null;
+		return JSONObject.parseObject(str, articleMap.getClass());
 	}
 
-	@Scheduled(fixedDelay=60*60*1000)   //每隔1小时执行
-	public static void WxArticleTrigger(){
+	/**
+	 *
+	 */
+	public static Map<String,Object> CrawWxArticle(){
 		//开盘时间不执行
 		if (DateUtil.open()){
-			return;
+			return null;
 		}
 		Map<String,Object> articleMap = new HashMap<>();
 		List<WxArticleVo> list = new ArrayList<>();
@@ -971,7 +973,13 @@ public class CrawUtil {
 		articleMap.put("list",list);
 		articleMap.put("time",time);
 		log.info("爬取微信公众号：time:{}",time);
-		RedisUtil.addOneHoursExpireString("articleMap",JSONObject.toJSONString(articleMap));
+		RedisUtil.addString("articleMap",JSONObject.toJSONString(articleMap));
+		return articleMap;
+	}
+
+	@Scheduled(fixedDelay=60*60*1000)   //每隔1小时执行
+	public static Map<String,Object> WxArticleTrigger(){
+		return CrawWxArticle();
 	}
 
 }
