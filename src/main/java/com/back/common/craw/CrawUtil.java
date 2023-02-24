@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.back.common.ExceptionHander;
 import com.back.common.constant.CommonConstant;
 import com.back.common.constant.CrawConstant;
 import com.back.common.utils.CodeUtil;
@@ -63,6 +64,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -957,18 +959,23 @@ public class CrawUtil {
 		HttpEntity entity = new HttpEntity(null, headers);
 		String url = CrawConstant.WX_ARTICLE+CrawConstant.WX_OPEN_TOKEN;
 		for (Map.Entry<String, String> entry : fakeidMap.entrySet()) {
-			ResponseEntity<JSONObject> result = restTemplate.exchange(
-					url.replace("$",entry.getKey()),
-					HttpMethod.GET, entity, JSONObject.class);
-			WxArticleVo vo = new WxArticleVo();
-			vo.setAuthor(entry.getValue());
-			JSONObject body = result.getBody();
-			ArrayList<Map> mapList = (ArrayList) body.get("app_msg_list");
-			List<WxArticleVo.ArticleVo> collect = mapList.stream().map(WxArticleVo.ArticleVo::of).limit(CommonConstant.THREE).collect(Collectors.toList());
-			vo.setArticleVos(collect);
+			WxArticleVo vo = null;
+			try {
+				ResponseEntity<JSONObject> result = restTemplate.exchange(
+						url.replace("$",entry.getKey()),
+						HttpMethod.GET, entity, JSONObject.class);
+				vo = new WxArticleVo();
+				vo.setAuthor(entry.getValue());
+				JSONObject body = result.getBody();
+				ArrayList<Map> mapList = (ArrayList) body.get("app_msg_list");
+				List<WxArticleVo.ArticleVo> collect = mapList.stream().map(WxArticleVo.ArticleVo::of).limit(CommonConstant.THREE).collect(Collectors.toList());
+				vo.setArticleVos(collect);
+			} catch (Exception e) {
+				ExceptionHander.sendWxException(e);
+				return null;
+			}
 			list.add(vo);
 		}
-		//一小时缓存redis
 		String time = DateUtil.getDateByMs(System.currentTimeMillis());
 		articleMap.put("list",list);
 		articleMap.put("time",time);
